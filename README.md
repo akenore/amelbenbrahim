@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dr. Amel Ben Brahim, orthodontiste à Nabeul
 
-## Getting Started
+Site vitrine du cabinet (Next.js 16, React 19, Tailwind CSS 4, Motion) avec un espace cabinet pour publier les actualités et suivre les demandes de rendez-vous.
 
-First, run the development server:
+## Démarrage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+cp .env.example .env.local   # puis renseigner les valeurs
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Site : http://localhost:3000. Espace cabinet : http://localhost:3000/dashboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables d'environnement
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Rôle |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | URL publique (liens canoniques, sitemap, Open Graph). |
+| `AUTH_SECRET` | Secret de signature des sessions (32 caractères minimum). |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Identifiants de l'espace cabinet. |
+| `DATA_DIR` | Dossier des données (articles, demandes, images envoyées). Par défaut `./.data`. |
 
-## Learn More
+## Espace cabinet
 
-To learn more about Next.js, take a look at the following resources:
+- **Articles** : rédaction en Markdown avec barre d'outils et aperçu, image de couverture (glisser-déposer, optimisée en WebP), catégorie, mise à la une, date de publication (une date future programme l'article), titre et description SEO avec aperçu Google.
+- **Demandes de RDV** : les demandes du formulaire de contact, avec appel, WhatsApp, e-mail, statut « traitée ».
+- Chaque publication rafraîchit automatiquement l'accueil, les actualités et le sitemap.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Hébergement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Le site a besoin d'un serveur Node.js (`bun run build` puis `bun run start`) et d'un **dossier persistant** pour `DATA_DIR` : VPS, hébergement Node.js ou conteneur avec volume. Les plateformes serverless sans disque persistant (Vercel, Netlify) ne conviennent pas au stockage fichier : il faudrait alors brancher une base de données dans `lib/data/store.ts`.
 
-## Deploy on Vercel
+Sauvegarder régulièrement le dossier `DATA_DIR`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contenus à vérifier
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Les informations marquées `VERIFY` dans `lib/site.ts` (étage exact, WhatsApp) et les engagements listés dans `credentials` proviennent d'annuaires et des réseaux sociaux : à faire valider par le docteur. Les textes des traitements sont dans `lib/treatments.ts`, la FAQ dans `lib/faq.ts`.
+
+## Marque
+
+`node scripts/build-brand-assets.mjs` régénère le monogramme et la signature (masques utilisés en CSS) ainsi que l'image Open Graph `public/og/cover.jpg` à partir de `public/img`.
