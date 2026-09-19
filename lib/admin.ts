@@ -1,4 +1,5 @@
 import "server-only";
+import { toTeamMember } from "@/lib/auth/session";
 import { readDatabase } from "@/lib/data/store";
 
 export async function getAllPosts() {
@@ -27,4 +28,12 @@ export async function getOverview() {
     latestRequests: [...db.requests].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 4),
     latestPosts: [...db.posts].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 4),
   };
+}
+
+export async function getTeam() {
+  const db = await readDatabase();
+  const order = { admin: 0, editor: 1, assistant: 2 } as const;
+  return db.users
+    .map(toTeamMember)
+    .sort((a, b) => Number(b.active) - Number(a.active) || order[a.role] - order[b.role] || a.name.localeCompare(b.name));
 }

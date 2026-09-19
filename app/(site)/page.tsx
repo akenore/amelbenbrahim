@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/metadata";
+import { AgeProfiles } from "@/components/home/AgeProfiles";
 import { ClinicMosaic } from "@/components/home/ClinicMosaic";
 import { CtaBlock } from "@/components/home/CtaBlock";
+import { DigitalSection } from "@/components/home/DigitalSection";
 import { DoctorFeature } from "@/components/home/DoctorFeature";
 import { FaqSection } from "@/components/home/FaqSection";
 import { Hero } from "@/components/home/Hero";
@@ -29,8 +31,10 @@ export default function HomePage() {
     <>
       <Hero />
       <Manifesto />
+      <AgeProfiles />
       <TreatmentsBento />
       <DoctorFeature />
+      <DigitalSection />
       <Journey />
       <ClinicMosaic />
       <NewsSection />

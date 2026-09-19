@@ -1,32 +1,28 @@
 import "server-only";
-import { createHash, timingSafeEqual } from "node:crypto";
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { SESSION_COOKIE, SESSION_MAX_AGE, createToken, verifyToken } from "@/lib/auth/token";
+import { can, type Area } from "@/lib/auth/roles";
+import { SESSION_COOKIE, SESSION_MAX_AGE, createToken, readToken } from "@/lib/auth/token";
+import { readDatabase } from "@/lib/data/store";
+import type { AdminUser, TeamMember } from "@/lib/data/types";
 
-function digest(value: string) {
-  return createHash("sha256").update(value).digest();
+export function toTeamMember(user: AdminUser): TeamMember {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    active: user.active,
+    mustChangePassword: user.mustChangePassword,
+    createdAt: user.createdAt,
+    lastLoginAt: user.lastLoginAt,
+  };
 }
 
-function safeEqual(a: string, b: string) {
-  return timingSafeEqual(digest(a), digest(b));
-}
-
-export function checkCredentials(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminEmail || !adminPassword) {
-    throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD must be configured.");
-  }
-  // Evaluate both comparisons to keep timing independent of which one fails.
-  const emailOk = safeEqual(email.trim().toLowerCase(), adminEmail.trim().toLowerCase());
-  const passwordOk = safeEqual(password, adminPassword);
-  return emailOk && passwordOk;
-}
-
-export async function startSession() {
+export async function startSession(user: Pick<AdminUser, "id" | "sessionVersion">) {
   const store = await cookies();
-  store.set(SESSION_COOKIE, createToken(), {
+  store.set(SESSION_COOKIE, createToken(user.id, user.sessionVersion), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -40,12 +36,24 @@ export async function endSession() {
   store.delete(SESSION_COOKIE);
 }
 
-export async function isAdmin() {
+/** The signed-in team member, or null. Cached for the duration of a request. */
+export const getCurrentUser = cache(async (): Promise<TeamMember | null> => {
   const store = await cookies();
-  return verifyToken(store.get(SESSION_COOKIE)?.value);
-}
+  const payload = readToken(store.get(SESSION_COOKIE)?.value);
+  if (!payload) return null;
+  const db = await readDatabase();
+  const user = db.users.find((u) => u.id === payload.sub);
+  if (!user || !user.active || user.sessionVersion !== payload.ver) return null;
+  return toTeamMember(user);
+});
 
-/** Call at the top of every dashboard page and Server Action. */
-export async function requireAdmin() {
-  if (!(await isAdmin())) redirect("/dashboard/connexion");
+/**
+ * Call at the top of every dashboard page and Server Action.
+ * Without `area`, any signed-in member passes.
+ */
+export async function requireUser(area?: Area): Promise<TeamMember> {
+  const user = await getCurrentUser();
+  if (!user) redirect("/dashboard/connexion");
+  if (area && !can(user.role, area)) redirect("/dashboard?acces=refuse");
+  return user;
 }

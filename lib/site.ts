@@ -38,6 +38,7 @@ export const site = {
 export const nav = [
   { href: "/docteur", label: "Le docteur" },
   { href: "/traitements", label: "Traitements" },
+  { href: "/infos-patients", label: "Infos patients" },
   { href: "/actualites", label: "Actualités" },
   { href: "/contact", label: "Contact" },
 ] as const;

@@ -4,6 +4,7 @@ import { ArrowCounterClockwise, CheckCircle, EnvelopeSimple, Phone, Trash, Whats
 import { deleteRequest, setRequestStatus } from "@/app/dashboard/actions";
 import { ConfirmSubmit, PendingSubmit } from "@/components/dashboard/ui";
 import { getRequests } from "@/lib/admin";
+import { requireUser } from "@/lib/auth/session";
 import { patientTypes } from "@/lib/data/types";
 import { formatDateTime } from "@/lib/format";
 
@@ -30,6 +31,7 @@ const chip =
   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[14px] ring-1 ring-line-strong transition-colors hover:bg-gold-soft hover:ring-gold";
 
 export default async function RequestsPage({ searchParams }: PageProps<"/dashboard/demandes">) {
+  await requireUser("requests");
   const sp = await searchParams;
   const key = (typeof sp.onglet === "string" && sp.onglet in tabs ? sp.onglet : "nouvelles") as TabKey;
   const all = await getRequests();

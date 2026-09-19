@@ -1,4 +1,5 @@
 import type { Post } from "@/lib/data/types";
+import { photoUrl } from "@/lib/images";
 import { credentials, site } from "@/lib/site";
 import type { Treatment } from "@/lib/treatments";
 
@@ -36,7 +37,7 @@ export function organizationGraph() {
         telephone: "+216 72 224 452",
         email: site.email,
         address,
-        areaServed: ["Nabeul", "Hammamet", "Dar Chaâbane El Fehri", "Béni Khiar", "Korba", "Cap Bon"].map((name) => ({
+        areaServed: ["Nabeul", "Hammamet", "Dar Chaâbane El Fehri", "Béni Khiar", "Korba", "Grombalia", "Menzel Temime", "Kélibia"].map((name) => ({
           "@type": "City",
           name,
         })),
@@ -124,6 +125,7 @@ export function treatmentSchema(t: Treatment) {
     inLanguage: "fr-TN",
     lastReviewed: "2026-09-18",
     reviewedBy: { "@id": ids.doctor },
+    image: absolute(photoUrl(t.image)),
     about: {
       "@type": "MedicalProcedure",
       name: t.name,

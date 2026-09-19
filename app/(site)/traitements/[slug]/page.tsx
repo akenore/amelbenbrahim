@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/metadata";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, Check } from "@phosphor-icons/react/dist/ssr";
@@ -11,6 +10,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Cta } from "@/components/ui/Cta";
 import { FaqList } from "@/components/ui/FaqList";
+import { Picture } from "@/components/ui/Picture";
+import { photoUrl } from "@/lib/images";
 import { breadcrumbs, faqSchema, treatmentSchema } from "@/lib/seo";
 import { getTreatment, treatments } from "@/lib/treatments";
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/traitements/[slug
     title: t.seo.title,
     description: t.seo.description,
     path: `/traitements/${t.slug}`,
-    image: { url: t.image.src.src, width: t.image.src.width, height: t.image.src.height, alt: t.image.alt },
+    image: { url: photoUrl(t.image), alt: t.image.alt },
   });
 }
 
@@ -53,7 +54,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         <div className="animate-fade rounded-[2.5rem] bg-ink/[0.03] p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
           <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(2.5rem-0.5rem)] md:aspect-[21/9]">
             <Parallax className="absolute inset-0" distance={80} zoom>
-              <Image src={t.image.src} alt={t.image.alt} fill preload placeholder="blur" sizes="100vw" className="object-cover" />
+              <Picture photo={t.image} fill preload sizes="100vw" className="object-cover" />
             </Parallax>
           </div>
         </div>
@@ -128,6 +129,36 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
               </div>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="quotidien" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <Reveal blur={false} className="lg:col-span-5">
+            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+                <Parallax className="absolute inset-0" distance={60} zoom>
+                  <Picture photo={t.secondary} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+                </Parallax>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-7">
+            <h2 id="quotidien" className="font-display text-4xl leading-[1.08] md:text-5xl">
+              Au quotidien
+            </h2>
+            <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-ink-soft">
+              Quelques habitudes simples font toute la différence sur le confort et la durée du traitement.
+            </p>
+            <ul className="mt-10 space-y-6">
+              {t.life.map((tip) => (
+                <li key={tip} className="flex gap-5 border-t border-line pt-6 text-lg leading-relaxed">
+                  <span aria-hidden className="mt-3 h-2 w-2 shrink-0 rotate-45 bg-gold" />
+                  {tip}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </section>
 

@@ -1,13 +1,13 @@
-import Image from "next/image";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
+import { Picture } from "@/components/ui/Picture";
 import { photos, type Photo } from "@/lib/images";
 
 function Frame({ photo, aspect, sizes }: { photo: Photo; aspect: string; sizes: string }) {
   return (
     <figure className="rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
       <div className={`relative overflow-hidden rounded-[calc(2rem-0.375rem)] ${aspect}`}>
-        <Image src={photo.src} alt={photo.alt} fill placeholder="blur" sizes={sizes} className="object-cover" />
+        <Picture photo={photo} fill sizes={sizes} className="object-cover" />
       </div>
     </figure>
   );

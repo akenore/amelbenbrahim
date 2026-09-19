@@ -53,10 +53,14 @@ export default function LegalPage() {
             session strictement nécessaire.
           </p>
 
-          <h2>Propriété intellectuelle</h2>
+          <h2>Propriété intellectuelle et crédits photo</h2>
           <p>
-            Le logo, les photographies et les textes de ce site sont la propriété du cabinet. Toute reproduction sans
-            autorisation préalable est interdite.
+            Le logo, les textes et les photographies du cabinet et de son équipe sont la propriété du cabinet. Toute
+            reproduction sans autorisation préalable est interdite.
+          </p>
+          <p>
+            Certaines photographies d’illustration (sourires, appareils, technologies) proviennent de la banque d’images
+            Unsplash et sont utilisées selon la licence Unsplash. Elles ne représentent pas des patients du cabinet.
           </p>
         </div>
       </section>

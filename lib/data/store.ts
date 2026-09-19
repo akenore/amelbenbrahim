@@ -18,7 +18,9 @@ let writeQueue: Promise<unknown> = Promise.resolve();
 export async function readDatabase(): Promise<Database> {
   try {
     const raw = await readFile(DB_FILE, "utf8");
-    return JSON.parse(raw) as Database;
+    const db = JSON.parse(raw) as Database;
+    db.users ??= []; // databases created before team accounts existed
+    return db;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return seedDatabase();
     throw error;

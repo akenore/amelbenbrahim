@@ -4,13 +4,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Monogram } from "@/components/brand/Monogram";
 import { LoginForm } from "@/components/dashboard/LoginForm";
-import { isAdmin } from "@/lib/auth/session";
+import { getCurrentUser } from "@/lib/auth/session";
 import { photos } from "@/lib/images";
 
 export const metadata: Metadata = { title: "Connexion" };
 
 export default async function LoginPage() {
-  if (await isAdmin()) redirect("/dashboard");
+  if (await getCurrentUser()) redirect("/dashboard");
 
   return (
     <div className="grid min-h-[100dvh] grid-cols-1 lg:grid-cols-2">
@@ -30,7 +30,7 @@ export default async function LoginPage() {
         <div className="w-full max-w-sm">
           <Monogram strokeWidth={24} className="h-10 w-auto text-gold lg:hidden" />
           <h1 className="font-display mt-8 text-4xl leading-tight lg:mt-0">Connexion</h1>
-          <p className="mt-3 text-ink-soft">Accès réservé au cabinet du Dr. Amel Ben Brahim.</p>
+          <p className="mt-3 text-ink-soft">Accès réservé à l’équipe du cabinet du Dr. Amel Ben Brahim.</p>
           <div className="mt-10">
             <LoginForm />
           </div>

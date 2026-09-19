@@ -6,6 +6,7 @@ import { deletePost, setPostStatus } from "@/app/dashboard/actions";
 import { postState, StatusBadge } from "@/components/dashboard/StatusBadge";
 import { ConfirmSubmit, PendingSubmit } from "@/components/dashboard/ui";
 import { getAllPosts } from "@/lib/admin";
+import { requireUser } from "@/lib/auth/session";
 import { postCategories } from "@/lib/data/types";
 import { formatDate } from "@/lib/format";
 
@@ -24,6 +25,7 @@ const iconBtn =
   "flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-line-strong text-ink-soft transition-colors hover:bg-gold-soft hover:text-ink hover:ring-gold";
 
 export default async function ArticlesPage({ searchParams }: PageProps<"/dashboard/articles">) {
+  await requireUser("posts");
   const sp = await searchParams;
   const key = (typeof sp.filtre === "string" && sp.filtre in filters ? sp.filtre : "tous") as FilterKey;
   const all = await getAllPosts();
@@ -98,6 +100,7 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
                       <span>{postCategories[p.category]}</span>
                       <span aria-hidden>·</span>
                       <span>{formatDate(p.publishedAt)}</span>
+                      {p.updatedBy && <span className="hidden sm:inline">· modifié par {p.updatedBy}</span>}
                     </div>
                   </div>
                 </Link>

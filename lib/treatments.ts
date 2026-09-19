@@ -1,4 +1,4 @@
-import { photos, type Photo } from "@/lib/images";
+import { photos, stock, type Photo } from "@/lib/images";
 
 export type Treatment = {
   slug: string;
@@ -6,10 +6,13 @@ export type Treatment = {
   short: string;
   lead: string;
   image: Photo;
+  /** A photo of the practice shown next to the daily-life advice. */
+  secondary: Photo;
   intro: string[];
   forWhom: string[];
   steps: { title: string; text: string }[];
   benefits: { title: string; text: string }[];
+  life: string[];
   faq: { q: string; a: string }[];
   seo: { title: string; description: string };
 };
@@ -20,7 +23,8 @@ export const treatments: Treatment[] = [
     name: "Aligneurs invisibles",
     short: "Des gouttières transparentes sur mesure pour aligner les dents en toute discrétion.",
     lead: "Une série de gouttières transparentes, conçues à partir d’un plan numérique, qui déplacent vos dents étape par étape.",
-    image: photos.doctorScreen,
+    image: stock.alignerFit,
+    secondary: photos.doctorScreen,
     intro: [
       "Les aligneurs sont des gouttières fines et transparentes, fabriquées sur mesure. Chaque série exerce une pression douce et précise qui guide les dents vers leur position idéale.",
       "Le traitement est préparé en amont grâce à une planification numérique : vous visualisez le déplacement prévu de vos dents avant même de commencer.",
@@ -41,6 +45,12 @@ export const treatments: Treatment[] = [
       { title: "Discrétion", text: "Presque invisibles, ils se font oublier au travail comme en photo." },
       { title: "Amovibles", text: "Vous les retirez pour manger et pour vous brosser les dents." },
       { title: "Prévisibilité", text: "La simulation numérique donne une vision claire du résultat visé." },
+    ],
+    life: [
+      "Portez vos gouttières environ 22 heures par jour, y compris la nuit.",
+      "Retirez-les pour manger ; lorsqu’elles sont en place, ne buvez que de l’eau.",
+      "Brossez-vous les dents avant de les remettre pour éviter d’enfermer des résidus.",
+      "Rangez-les toujours dans leur étui : posée sur une serviette, une gouttière est vite jetée par erreur.",
     ],
     faq: [
       {
@@ -64,6 +74,7 @@ export const treatments: Treatment[] = [
     short: "Un appareil fixe posé à l’intérieur des dents, totalement invisible de face.",
     lead: "Des attaches fixées sur la face interne des dents : l’efficacité d’un appareil fixe, sans rien laisser paraître.",
     image: photos.doctorCare,
+    secondary: stock.scan3d,
     intro: [
       "En orthodontie linguale, les attaches et le fil sont collés sur la face interne des dents, côté langue. De l’extérieur, personne ne voit que vous êtes en traitement.",
       "C’est une technique de précision, réalisée sur mesure, qui permet de traiter des cas simples comme des cas plus complexes.",
@@ -83,6 +94,11 @@ export const treatments: Treatment[] = [
       { title: "Invisible", text: "Rien ne se voit de face, même en souriant largement." },
       { title: "Précis", text: "Un contrôle fin du mouvement de chaque dent." },
       { title: "Sans contrainte d’observance", text: "L’appareil est fixe : il travaille en continu." },
+    ],
+    life: [
+      "La langue s’habitue aux attaches en quelques jours ; la parole redevient naturelle rapidement.",
+      "Utilisez des brossettes pour nettoyer autour des attaches, matin et soir.",
+      "Coupez les aliments durs en petits morceaux plutôt que de croquer dedans.",
     ],
     faq: [
       {
@@ -105,7 +121,8 @@ export const treatments: Treatment[] = [
     name: "Bagues céramique et métal",
     short: "L’appareil fixe classique, en métal robuste ou en céramique couleur dent.",
     lead: "La référence de l’orthodontie fixe, disponible en métal pour la robustesse ou en céramique pour la discrétion.",
-    image: photos.doctorChair,
+    image: stock.bracesModels,
+    secondary: photos.doctorChair,
     intro: [
       "Les bagues, ou attaches, sont collées sur la face visible des dents et reliées par un fil qui guide leur déplacement. C’est une technique éprouvée, efficace sur tous les types de malpositions.",
       "Les attaches en céramique, de la couleur des dents, offrent une alternative plus discrète aux attaches métalliques.",
@@ -125,6 +142,12 @@ export const treatments: Treatment[] = [
       { title: "Efficacité", text: "Adapté à la grande majorité des situations cliniques." },
       { title: "Choix esthétique", text: "Céramique couleur dent ou métal, selon vos priorités." },
       { title: "Fiabilité", text: "Une technique maîtrisée depuis des décennies." },
+    ],
+    life: [
+      "Évitez les aliments durs ou collants (caramels, noix entières, chewing-gums).",
+      "Brossez soigneusement après chaque repas, avec une brossette entre les attaches.",
+      "Appliquez un peu de cire orthodontique si une attache frotte contre la joue.",
+      "Portez un protège-dents pour les sports de contact.",
     ],
     faq: [
       {
@@ -147,7 +170,8 @@ export const treatments: Treatment[] = [
     name: "Orthodontie de l’enfant",
     short: "Accompagner la croissance pour corriger tôt et simplifier la suite.",
     lead: "Chez l’enfant, l’orthodontie accompagne la croissance des mâchoires pour corriger tôt ce qui serait plus complexe plus tard.",
-    image: photos.team,
+    image: stock.child,
+    secondary: photos.team,
     intro: [
       "Une première consultation est recommandée vers l’âge de 7 ans. À cet âge, il est possible de repérer un décalage des mâchoires, un manque de place ou une habitude qui perturbe la croissance.",
       "Lorsqu’il est utile, un traitement précoce oriente la croissance et prépare l’arrivée des dents définitives. Parfois, une simple surveillance suffit : nous vous le disons en toute transparence.",
@@ -168,6 +192,11 @@ export const treatments: Treatment[] = [
       { title: "Agir au bon moment", text: "Profiter de la croissance pour obtenir des corrections plus simples." },
       { title: "Traitements plus courts", text: "Une intervention précoce peut alléger le traitement à l’adolescence." },
       { title: "Un climat rassurant", text: "Une équipe habituée à accompagner les plus jeunes." },
+    ],
+    life: [
+      "Encouragez le port de l’appareil exactement comme il a été prescrit.",
+      "Accompagnez le brossage du soir tant que l’enfant n’est pas autonome.",
+      "Signalez-nous toute gêne ou tout appareil abîmé sans attendre le prochain contrôle.",
     ],
     faq: [
       {
@@ -190,7 +219,8 @@ export const treatments: Treatment[] = [
     name: "Orthodontie de l’adulte",
     short: "Il n’y a pas d’âge pour un sourire aligné, avec des solutions discrètes.",
     lead: "Il n’est jamais trop tard pour aligner ses dents. Les techniques discrètes rendent le traitement compatible avec votre vie professionnelle.",
-    image: photos.doctorSmile,
+    image: stock.adult,
+    secondary: photos.doctorSmile,
     intro: [
       "De plus en plus d’adultes choisissent de corriger leur sourire. Au-delà de l’esthétique, des dents bien alignées facilitent le brossage, protègent les gencives et améliorent la mastication.",
       "Chez l’adulte, le traitement est souvent coordonné avec votre dentiste, par exemple avant la pose d’un implant ou d’une prothèse.",
@@ -211,6 +241,11 @@ export const treatments: Treatment[] = [
       { title: "Discrétion", text: "Des options invisibles pour traiter sans vous exposer." },
       { title: "Santé bucco-dentaire", text: "Des dents alignées se nettoient mieux et s’usent moins." },
       { title: "Confiance", text: "Un sourire que l’on a envie de montrer." },
+    ],
+    life: [
+      "Choisissez avec nous la technique la plus compatible avec votre vie professionnelle.",
+      "Renforcez l’hygiène : des gencives saines sont la condition d’un traitement réussi.",
+      "Poursuivez vos contrôles habituels chez votre dentiste pendant le traitement.",
     ],
     faq: [
       {
@@ -233,7 +268,8 @@ export const treatments: Treatment[] = [
     name: "Contention",
     short: "Stabiliser le résultat pour que votre sourire reste aligné dans le temps.",
     lead: "La dernière étape, et l’une des plus importantes : maintenir les dents dans leur nouvelle position.",
-    image: photos.armchairs,
+    image: stock.retainer,
+    secondary: photos.armchairs,
     intro: [
       "Après un traitement, les dents ont naturellement tendance à revenir vers leur position d’origine. La contention les maintient le temps que les tissus se stabilisent.",
       "Elle peut être fixe, avec un fil très fin collé derrière les dents, ou amovible, sous forme de gouttière portée principalement la nuit.",
@@ -251,6 +287,11 @@ export const treatments: Treatment[] = [
       { title: "Résultat durable", text: "La meilleure garantie de garder un sourire aligné." },
       { title: "Discrète", text: "Invisible de face, qu’elle soit fixe ou amovible." },
       { title: "Suivi inclus", text: "Nous restons à vos côtés après la fin du traitement actif." },
+    ],
+    life: [
+      "Respectez le protocole de port : souvent chaque nuit pour une contention amovible.",
+      "Nettoyez votre gouttière chaque matin et rangez-la dans son étui.",
+      "Si un fil de contention se décolle, appelez le cabinet rapidement.",
     ],
     faq: [
       {

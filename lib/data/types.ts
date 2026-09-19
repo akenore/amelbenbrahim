@@ -1,3 +1,5 @@
+import type { Role } from "@/lib/auth/roles";
+
 export const postCategories = {
   cabinet: "Vie du cabinet",
   conseils: "Conseils",
@@ -29,6 +31,8 @@ export type Post = {
   updatedAt: string;
   seoTitle: string;
   seoDescription: string;
+  /** Name of the team member who last saved the article (dashboard only). */
+  updatedBy?: string;
 };
 
 export const patientTypes = {
@@ -52,8 +56,26 @@ export type AppointmentRequest = {
   status: "new" | "handled";
 };
 
+export type AdminUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  passwordHash: string;
+  active: boolean;
+  /** Incremented to revoke every open session of this user. */
+  sessionVersion: number;
+  mustChangePassword: boolean;
+  createdAt: string;
+  lastLoginAt: string | null;
+};
+
+/** User data safe to pass to the dashboard UI. */
+export type TeamMember = Omit<AdminUser, "passwordHash" | "sessionVersion">;
+
 export type Database = {
   version: 1;
   posts: Post[];
   requests: AppointmentRequest[];
+  users: AdminUser[];
 };

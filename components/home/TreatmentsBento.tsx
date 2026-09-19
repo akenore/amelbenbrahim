@@ -1,18 +1,19 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Plant } from "@phosphor-icons/react/dist/ssr";
 import { Monogram } from "@/components/brand/Monogram";
 import { Reveal } from "@/components/motion/Reveal";
+import { Picture } from "@/components/ui/Picture";
+import { photos, stock, type Photo } from "@/lib/images";
 import { getTreatment, type Treatment } from "@/lib/treatments";
 
 type Tone = "photo" | "noir" | "tint" | "plain";
 
-const cells: { slug: string; tone: Tone; span: string; minH: string }[] = [
-  { slug: "aligneurs-invisibles", tone: "photo", span: "lg:col-span-7 lg:row-span-2", minH: "min-h-[440px] lg:min-h-[640px]" },
+const cells: { slug: string; tone: Tone; span: string; minH: string; photo?: Photo }[] = [
+  { slug: "aligneurs-invisibles", tone: "photo", span: "lg:col-span-7 lg:row-span-2", minH: "min-h-[440px] lg:min-h-[640px]", photo: stock.alignerFit },
   { slug: "orthodontie-linguale", tone: "noir", span: "lg:col-span-5", minH: "min-h-[300px]" },
-  { slug: "bagues-ceramique-metal", tone: "photo", span: "lg:col-span-5", minH: "min-h-[320px]" },
+  { slug: "bagues-ceramique-metal", tone: "photo", span: "lg:col-span-5", minH: "min-h-[320px]", photo: photos.doctorChair },
   { slug: "orthodontie-enfant", tone: "tint", span: "lg:col-span-4", minH: "min-h-[320px]" },
-  { slug: "orthodontie-adulte", tone: "photo", span: "lg:col-span-5", minH: "min-h-[320px]" },
+  { slug: "orthodontie-adulte", tone: "photo", span: "lg:col-span-5", minH: "min-h-[320px]", photo: stock.adult },
   { slug: "contention", tone: "plain", span: "lg:col-span-3", minH: "min-h-[320px]" },
 ];
 
@@ -28,7 +29,7 @@ function Arrow({ light }: { light?: boolean }) {
   );
 }
 
-function Cell({ t, tone }: { t: Treatment; tone: Tone }) {
+function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
   const light = tone === "photo" || tone === "noir";
   return (
     <Link
@@ -39,11 +40,10 @@ function Cell({ t, tone }: { t: Treatment; tone: Tone }) {
     >
       {tone === "photo" && (
         <>
-          <Image
-            src={t.image.src}
+          <Picture
+            photo={photo ?? t.image}
             alt=""
             fill
-            placeholder="blur"
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="-z-0 object-cover transition-transform duration-[1.4s] ease-luxe group-hover:scale-[1.05]"
           />
@@ -78,11 +78,11 @@ export function TreatmentsBento() {
     <section aria-labelledby="traitements-titre" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
       <Reveal className="max-w-3xl">
         <h2 id="traitements-titre" className="font-display text-4xl leading-[1.08] md:text-6xl">
-          Des traitements pensés pour chaque âge
+          Des techniques choisies avec précision
         </h2>
         <p className="mt-6 max-w-[60ch] text-lg leading-relaxed text-ink-soft">
-          Du premier bilan de l’enfant aux solutions invisibles de l’adulte, chaque technique est choisie pour votre
-          situation, jamais par défaut.
+          Des aligneurs invisibles à l’orthodontie linguale, chaque technique est choisie pour votre situation, jamais
+          par défaut.
         </p>
       </Reveal>
 
@@ -93,7 +93,7 @@ export function TreatmentsBento() {
           return (
             <Reveal key={cell.slug} delay={(i % 3) * 0.08} blur={false} className={`${cell.span} ${cell.minH}`}>
               <div className="h-full rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-                <Cell t={t} tone={cell.tone} />
+                <Cell t={t} tone={cell.tone} photo={cell.photo} />
               </div>
             </Reveal>
           );

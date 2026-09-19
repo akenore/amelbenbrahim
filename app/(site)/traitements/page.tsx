@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/metadata";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { CtaBlock } from "@/components/home/CtaBlock";
 import { Reveal } from "@/components/motion/Reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHeader } from "@/components/site/PageHeader";
+import { Picture } from "@/components/ui/Picture";
 import { breadcrumbs } from "@/lib/seo";
 import { treatments } from "@/lib/treatments";
 
@@ -40,7 +40,7 @@ export default function TreatmentsPage() {
                   className="group relative grid grid-cols-1 items-center gap-6 py-10 md:grid-cols-12 md:gap-8 md:py-12"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] md:hidden">
-                    <Image src={t.image.src} alt="" fill placeholder="blur" sizes="100vw" className="object-cover" />
+                    <Picture photo={t.image} alt="" fill sizes="100vw" className="object-cover" />
                   </div>
                   <h2 className="font-display text-4xl leading-[1.05] transition-transform duration-700 ease-luxe group-hover:translate-x-2 md:col-span-6 md:text-6xl">
                     {t.name}
@@ -53,7 +53,7 @@ export default function TreatmentsPage() {
                     aria-hidden
                     className="pointer-events-none absolute right-[18%] top-1/2 z-10 hidden aspect-[4/5] w-56 -translate-y-1/2 rotate-3 scale-90 overflow-hidden rounded-[1.5rem] opacity-0 shadow-luxe transition-[opacity,transform] duration-700 ease-luxe group-hover:rotate-0 group-hover:scale-100 group-hover:opacity-100 md:block"
                   >
-                    <Image src={t.image.src} alt="" fill placeholder="blur" sizes="224px" className="object-cover" />
+                    <Picture photo={t.image} alt="" fill sizes="224px" className="object-cover" />
                   </div>
                 </Link>
               </Reveal>

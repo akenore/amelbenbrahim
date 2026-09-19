@@ -7,9 +7,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
 import { z } from "zod";
-import { checkCredentials, endSession, requireAdmin, startSession } from "@/lib/auth/session";
-import { UPLOADS_DIR, mutateDatabase } from "@/lib/data/store";
-import { postCategories, type MediaImage, type Post, type PostCategory } from "@/lib/data/types";
+import { checkBootstrapCredentials } from "@/lib/auth/bootstrap";
+import { burnPasswordCheck, hashPassword, verifyPassword } from "@/lib/auth/password";
+import { endSession, requireUser, startSession } from "@/lib/auth/session";
+import { UPLOADS_DIR, mutateDatabase, readDatabase } from "@/lib/data/store";
+import { postCategories, type AdminUser, type MediaImage, type Post, type PostCategory } from "@/lib/data/types";
 import { fromTunisInput, slugify } from "@/lib/format";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
@@ -24,20 +26,63 @@ function refreshSite() {
 
 export type LoginState = { error?: string };
 
+const landing = { admin: "/dashboard", editor: "/dashboard", assistant: "/dashboard/demandes" } as const;
+
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const ip = await clientIp();
   if (!rateLimit(`login:${ip}`, 6, 15 * 60 * 1000)) {
     return { error: "Trop de tentatives. Réessayez dans quelques minutes." };
   }
-  const email = String(formData.get("email") ?? "");
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
+  if (!email || !password) return { error: "Renseignez votre e-mail et votre mot de passe." };
+
+  let user: AdminUser | undefined;
   try {
-    if (!checkCredentials(email, password)) return { error: "Identifiants incorrects." };
-    await startSession();
+    const db = await readDatabase();
+    user = db.users.find((u) => u.email === email);
+
+    // First run: the ADMIN_EMAIL / ADMIN_PASSWORD pair creates the first administrator.
+    // Once an account exists, these variables no longer grant access.
+    if (!user && db.users.length === 0) {
+      if (!checkBootstrapCredentials(email, password)) {
+        await burnPasswordCheck(password);
+        return { error: "Identifiants incorrects." };
+      }
+      const passwordHash = await hashPassword(password);
+      user = await mutateDatabase((d) => {
+        if (d.users.length > 0) return d.users.find((u) => u.email === email);
+        const created: AdminUser = {
+          id: randomUUID(),
+          name: process.env.ADMIN_NAME?.trim() || "Dr. Amel Ben Brahim",
+          email,
+          role: "admin",
+          passwordHash,
+          active: true,
+          sessionVersion: 1,
+          mustChangePassword: false,
+          createdAt: new Date().toISOString(),
+          lastLoginAt: null,
+        };
+        d.users.push(created);
+        return created;
+      });
+    } else if (!user || !user.active || !(await verifyPassword(password, user.passwordHash))) {
+      if (!user) await burnPasswordCheck(password);
+      return { error: user && !user.active ? "Ce compte est désactivé." : "Identifiants incorrects." };
+    }
+    if (!user) return { error: "Identifiants incorrects." };
+
+    const id = user.id;
+    await mutateDatabase((d) => {
+      const u = d.users.find((x) => x.id === id);
+      if (u) u.lastLoginAt = new Date().toISOString();
+    });
+    await startSession(user);
   } catch {
-    return { error: "L’accès n’est pas configuré sur le serveur (variables AUTH_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD)." };
+    return { error: "L’accès n’est pas configuré sur le serveur (variable AUTH_SECRET)." };
   }
-  redirect("/dashboard");
+  redirect(landing[user.role]);
 }
 
 export async function logout() {
@@ -59,7 +104,8 @@ export type SavePostState = {
 
 const coverSchema = z
   .object({
-    src: z.string().regex(/^\/(media|img)\/[\w.-]+$/),
+    // Uploaded media, practice photos or illustrative Unsplash photos.
+    src: z.string().regex(/^\/(media|img)\/[\w.-]+$|^https:\/\/images\.unsplash\.com\/photo-[\w-]+(\?[\w=&%.-]*)?$/),
     alt: z.string().max(200),
     width: z.number().int().positive(),
     height: z.number().int().positive(),
@@ -88,7 +134,7 @@ function uniqueSlug(base: string, posts: Post[], selfId: string) {
 }
 
 export async function savePost(_prev: SavePostState, formData: FormData): Promise<SavePostState> {
-  await requireAdmin();
+  const me = await requireUser("posts");
 
   const parsed = postSchema.safeParse({
     id: String(formData.get("id") ?? ""),
@@ -147,6 +193,7 @@ export async function savePost(_prev: SavePostState, formData: FormData): Promis
       updatedAt: now,
       seoTitle: data.seoTitle,
       seoDescription: data.seoDescription,
+      updatedBy: me.name,
     };
     if (data.featured) {
       // A single featured post keeps the home page composition intentional.
@@ -164,7 +211,7 @@ export async function savePost(_prev: SavePostState, formData: FormData): Promis
 }
 
 export async function deletePost(formData: FormData) {
-  await requireAdmin();
+  await requireUser("posts");
   const id = String(formData.get("id") ?? "");
   const removed = await mutateDatabase((db) => {
     const index = db.posts.findIndex((p) => p.id === id);
@@ -181,7 +228,7 @@ export async function deletePost(formData: FormData) {
 }
 
 export async function setPostStatus(formData: FormData) {
-  await requireAdmin();
+  const me = await requireUser("posts");
   const id = String(formData.get("id") ?? "");
   const status = formData.get("status") === "published" ? "published" : "draft";
   await mutateDatabase((db) => {
@@ -189,6 +236,7 @@ export async function setPostStatus(formData: FormData) {
     if (!post) return;
     post.status = status;
     post.updatedAt = new Date().toISOString();
+    post.updatedBy = me.name;
     if (status === "published" && post.publishedAt > post.updatedAt) post.publishedAt = post.updatedAt;
   });
   refreshSite();
@@ -205,7 +253,7 @@ const MAX_UPLOAD = 10 * 1024 * 1024;
 const ACCEPTED = new Set(["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"]);
 
 export async function uploadImage(formData: FormData): Promise<UploadResult> {
-  await requireAdmin();
+  await requireUser("posts");
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) return { ok: false, error: "Aucun fichier reçu." };
   if (!ACCEPTED.has(file.type)) return { ok: false, error: "Format non pris en charge (JPG, PNG, WebP ou AVIF)." };
@@ -232,7 +280,7 @@ export async function uploadImage(formData: FormData): Promise<UploadResult> {
 /* ------------------------------------------------------------------ */
 
 export async function setRequestStatus(formData: FormData) {
-  await requireAdmin();
+  await requireUser("requests");
   const id = String(formData.get("id") ?? "");
   const status = formData.get("status") === "handled" ? "handled" : "new";
   await mutateDatabase((db) => {
@@ -243,7 +291,7 @@ export async function setRequestStatus(formData: FormData) {
 }
 
 export async function deleteRequest(formData: FormData) {
-  await requireAdmin();
+  await requireUser("requests");
   const id = String(formData.get("id") ?? "");
   await mutateDatabase((db) => {
     db.requests = db.requests.filter((r) => r.id !== id);

@@ -5,10 +5,12 @@ import { deletePost } from "@/app/dashboard/actions";
 import { PostEditor } from "@/components/dashboard/PostEditor";
 import { ConfirmSubmit } from "@/components/dashboard/ui";
 import { getPostById } from "@/lib/admin";
+import { requireUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Modifier l’article" };
 
 export default async function EditPostPage({ params, searchParams }: PageProps<"/dashboard/articles/[id]">) {
+  await requireUser("posts");
   const [{ id }, sp] = await Promise.all([params, searchParams]);
   const post = await getPostById(id);
   if (!post) notFound();
