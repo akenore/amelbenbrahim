@@ -143,7 +143,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-weight: 380;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -152,7 +152,8 @@
     color: #121212;
   }
   :focus-visible {
-    outline: 1.5px solid var(--gold);
+    /* Deep gold: at least 3:1 against every background (WCAG 2.2 focus appearance). */
+    outline: 2px solid var(--gold-ink);
     outline-offset: 3px;
     border-radius: 6px;
   }
@@ -166,20 +167,14 @@
   }
 }
 
-/* Display type: Bodoni Moda at its display optical size. */
+/* Display type: Bodoni Moda. A fixed text-range optical size and weight 500 keep
+   the hairlines visible at every size (the automatic display cut becomes too
+   thin to read comfortably on standard-density screens). */
 @utility font-display {
   font-family: var(--font-display);
-  /* Optical size follows the font size: sturdier hairlines on small titles. */
-  font-optical-sizing: auto;
-  letter-spacing: -0.015em;
-}
-
-/* Gold foil text, used sparingly on single words. */
-@utility text-foil {
-  background: linear-gradient(100deg, var(--gold-ink) 0%, var(--gold) 45%, var(--gold-ink) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-weight: 500;
+  font-variation-settings: "opsz" 24;
+  letter-spacing: -0.01em;
 }
 
 /* Brand marks tinted through CSS masks so they follow the theme. */
@@ -228,7 +223,8 @@
 }
 .prose-article h2 {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
+  font-weight: 500;
+  font-variation-settings: "opsz" 24;
   color: var(--ink);
   font-size: 2rem;
   line-height: 1.15;
@@ -280,7 +276,8 @@
   border-left: 1px solid var(--gold);
   padding: 0.25em 0 0.25em 1.5em;
   font-family: var(--font-display);
-  font-optical-sizing: auto;
+  font-weight: 500;
+  font-variation-settings: "opsz" 24;
   font-style: italic;
   color: var(--ink);
   font-size: 1.5rem;

@@ -14,7 +14,7 @@ const features = [
 
 export function DigitalSection() {
   return (
-    <section aria-labelledby="numerique-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
+    <section aria-labelledby="numerique-titre" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
       <Reveal className="max-w-3xl">
         <h2 id="numerique-titre" className="font-display text-4xl leading-[1.08] md:text-6xl">
           L’orthodontie à l’ère <em className="text-gold-ink">numérique</em>

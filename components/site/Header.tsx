@@ -56,7 +56,7 @@ export function Header() {
             <Image src="/img/logo.png" alt="" width={40} height={40} className="h-10 w-10 rounded-full" preload />
             <span className="flex flex-col leading-none">
               <span className="font-display text-[17px] tracking-tight">Dr. Amel Ben Brahim</span>
-              <span className="mt-1 text-[10px] uppercase tracking-[0.22em] text-ink-muted">Orthodontiste</span>
+              <span className="mt-1 text-[11px] uppercase tracking-[0.22em] text-ink-muted">Orthodontiste</span>
             </span>
           </Link>
 

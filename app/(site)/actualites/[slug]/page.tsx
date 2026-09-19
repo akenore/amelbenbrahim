@@ -87,7 +87,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
         <div className="mx-auto grid max-w-350 grid-cols-1 gap-10 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
           <aside className="lg:col-span-2 lg:col-start-2">
             <div className="lg:sticky lg:top-32">
-              <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-ink-muted">Partager</p>
+              <p className="mb-4 text-xs uppercase tracking-[0.22em] text-ink-muted">Partager</p>
               <ShareLinks url={absolute(`/actualites/${post.slug}`)} title={post.title} />
             </div>
           </aside>
@@ -99,7 +99,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
 
       {related.length > 0 && (
         <section aria-labelledby="a-lire" className="border-t border-line bg-sunken">
-          <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+          <div className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
             <h2 id="a-lire" className="font-display text-4xl leading-[1.08] md:text-5xl">
               À lire aussi
             </h2>
@@ -112,7 +112,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
         </section>
       )}
 
-      <div className="pt-24 md:pt-32">
+      <div className="pt-16 md:pt-24">
         <CtaBlock />
       </div>
       <JsonLd data={articleSchema(post)} />

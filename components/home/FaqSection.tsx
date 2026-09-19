@@ -6,7 +6,7 @@ import { photos } from "@/lib/images";
 
 export function FaqSection() {
   return (
-    <section aria-labelledby="faq-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
+    <section aria-labelledby="faq-titre" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">

@@ -5,7 +5,7 @@ import { ArrowRightIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import { login, type LoginState } from "@/app/dashboard/actions";
 
 const field =
-  "w-full rounded-2xl bg-elevated px-4 py-3.5 text-[16px] ring-1 ring-line-strong transition-shadow focus:outline-none focus:ring-2 focus:ring-gold";
+  "w-full rounded-2xl bg-elevated px-4 py-3.5 text-[16px] ring-1 ring-line-strong transition-shadow focus:outline-none focus:ring-2 focus:ring-gold-ink";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState<LoginState, FormData>(login, {});

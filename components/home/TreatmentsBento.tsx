@@ -75,7 +75,7 @@ function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
 
 export function TreatmentsBento() {
   return (
-    <section aria-labelledby="traitements-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+    <section aria-labelledby="traitements-titre" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
       <Reveal className="max-w-3xl">
         <h2 id="traitements-titre" className="font-display text-4xl leading-[1.08] md:text-6xl">
           Des techniques choisies avec précision

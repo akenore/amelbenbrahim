@@ -85,7 +85,7 @@ export function AgeProfiles() {
   }
 
   return (
-    <section aria-labelledby="ages-titre" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
+    <section aria-labelledby="ages-titre" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
       <Reveal className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <h2 id="ages-titre" className="font-display max-w-2xl text-4xl leading-[1.08] md:text-6xl">
           Un accompagnement à chaque âge

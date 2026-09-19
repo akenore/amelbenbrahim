@@ -71,7 +71,7 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
             value={member.role}
             disabled={isSelf || pending}
             onChange={(e) => update({ role: e.target.value })}
-            className="rounded-full bg-bg px-4 py-2.5 text-[14px] ring-1 ring-line-strong focus:outline-none focus:ring-2 focus:ring-gold disabled:opacity-60"
+            className="rounded-full bg-bg px-4 py-2.5 text-[14px] ring-1 ring-line-strong focus:outline-none focus:ring-2 focus:ring-gold-ink disabled:opacity-60"
           >
             {(Object.keys(roles) as Role[]).map((key) => (
               <option key={key} value={key}>

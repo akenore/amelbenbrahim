@@ -9,7 +9,7 @@ const TEXT =
 const EMPHASIS = new Set(["fonction", "confiance", "harmonie."]);
 
 function Word({ word, progress, range }: { word: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.14, 1]);
+  const opacity = useTransform(progress, range, [0.35, 1]);
   const emphasis = EMPHASIS.has(word);
   return (
     <motion.span style={{ opacity }} className={emphasis ? "italic text-gold-ink" : undefined}>
@@ -26,7 +26,7 @@ export function Manifesto() {
   const words = TEXT.split(" ");
 
   return (
-    <section aria-label="Notre philosophie" className="mx-auto max-w-350 px-4 py-28 md:px-8 md:py-44">
+    <section aria-label="Notre philosophie" className="mx-auto max-w-350 px-4 pb-16 pt-8 md:px-8 md:pb-24 md:pt-12">
       <p ref={ref} className="font-display max-w-248 text-[2rem] leading-[1.28] md:text-5xl md:leading-[1.22]">
         {reduce
           ? TEXT

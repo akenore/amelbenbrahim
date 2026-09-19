@@ -79,20 +79,41 @@ function Intro() {
   );
 }
 
+type PinLayout = { distance: number; height: number; top: number; start: number };
+
+/**
+ * The pinned block is exactly as tall as its content and stays vertically
+ * centred while pinned, so no empty band appears before or after it.
+ * Horizontal travel = track overflow; vertical scroll length = the same distance.
+ */
 function PinnedJourney() {
   const wrapper = useRef<HTMLElement>(null);
   const track = useRef<HTMLUListElement>(null);
-  const [distance, setDistance] = useState(0);
-  const { scrollYProgress } = useScroll({ target: wrapper, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], [0, -distance]);
+  const [layout, setLayout] = useState<PinLayout>({ distance: 0, height: 0, top: 96, start: 0 });
+  const { scrollY } = useScroll();
+  const end = layout.start + Math.max(1, layout.distance);
+  const x = useTransform(scrollY, [layout.start, end], [0, -layout.distance], { clamp: true });
+  const progress = useTransform(scrollY, [layout.start, end], [0, 1], { clamp: true });
 
   useEffect(() => {
     const el = track.current;
-    if (!el) return;
-    const measure = () => setDistance(Math.max(0, el.scrollWidth - window.innerWidth + 64));
+    const section = wrapper.current;
+    if (!el || !section) return;
+    const measure = () => {
+      const height = el.offsetHeight;
+      const distance = Math.max(0, el.scrollWidth - window.innerWidth + 64);
+      const top = Math.max(96, Math.round((window.innerHeight - height) / 2)); // clear the floating menu
+      const start = Math.round(section.getBoundingClientRect().top + window.scrollY - top);
+      setLayout((prev) =>
+        prev.distance === distance && prev.height === height && prev.top === top && prev.start === start
+          ? prev
+          : { distance, height, top, start },
+      );
+    };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
+    ro.observe(document.body); // content above can change height (images, fonts)
     window.addEventListener("resize", measure);
     return () => {
       ro.disconnect();
@@ -101,14 +122,19 @@ function PinnedJourney() {
   }, []);
 
   return (
-    <section ref={wrapper} aria-labelledby="parcours-titre" className="relative" style={{ height: `calc(100dvh + ${distance}px)` }}>
-      <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
-        <motion.ul ref={track} style={{ x }} className="flex items-stretch gap-6 pl-8 will-change-transform xl:pl-[max(2rem,calc((100vw_-_1400px)_/_2_+_2rem))]">
+    <section
+      ref={wrapper}
+      aria-labelledby="parcours-titre"
+      className="relative"
+      style={{ height: layout.height ? layout.height + layout.distance : undefined }}
+    >
+      <div className="sticky overflow-hidden" style={{ top: layout.top }}>
+        <motion.ul ref={track} style={{ x }} className="flex items-stretch gap-6 pl-8 will-change-transform xl:pl-[max(2rem,calc((100vw-1400px)/2+2rem))]">
           <li className="flex shrink-0 items-center pr-16">
             <Intro />
           </li>
           {steps.map((step, i) => (
-            <Card key={step.title} step={step} index={i} progress={scrollYProgress} />
+            <Card key={step.title} step={step} index={i} progress={progress} />
           ))}
         </motion.ul>
       </div>
@@ -118,7 +144,7 @@ function PinnedJourney() {
 
 function StackedJourney() {
   return (
-    <section aria-labelledby="parcours-titre" className="py-24 md:py-32">
+    <section aria-labelledby="parcours-titre" className="py-16 md:py-24">
       <div className="mx-auto max-w-350 px-4 md:px-8">
         <Intro />
       </div>

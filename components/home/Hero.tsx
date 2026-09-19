@@ -11,7 +11,7 @@ export function Hero() {
       <Monogram
         animate
         strokeWidth={5}
-        className="pointer-events-none absolute left-[-12%] top-[18%] -z-10 hidden w-[62%] text-gold opacity-25 lg:block"
+        className="pointer-events-none absolute left-[-12%] top-[18%] -z-10 hidden w-[62%] text-gold opacity-15 lg:block"
       />
 
       <div className="mx-auto grid min-h-dvh max-w-350 grid-cols-1 items-center gap-12 px-4 pb-16 pt-28 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-12">
@@ -29,7 +29,7 @@ export function Hero() {
             >
               L’art d’aligner
               <br />
-              votre <em className="text-foil pr-2">sourire.</em>
+              votre <em className="pr-2 text-gold-ink">sourire.</em>
             </span>
           </h1>
           <p

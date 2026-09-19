@@ -89,7 +89,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="bio-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
+      <section aria-labelledby="bio-titre" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
             <h2 id="bio-titre" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -117,7 +117,7 @@ export default function DoctorPage() {
       </section>
 
       <section aria-labelledby="formation-titre" className="bg-sunken">
-        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
           <Reveal>
             <h2 id="formation-titre" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
               Formation et engagements
@@ -144,7 +144,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="valeurs-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
+      <section aria-labelledby="valeurs-titre" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
         <Reveal>
           <h2 id="valeurs-titre" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
             Trois engagements envers chaque patient
@@ -163,7 +163,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="equipe-titre" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
+      <section aria-labelledby="equipe-titre" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
             <h2 id="equipe-titre" className="font-display text-4xl leading-[1.08] md:text-5xl">

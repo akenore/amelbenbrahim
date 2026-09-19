@@ -30,7 +30,7 @@ export default function TreatmentsPage() {
         lead="Chaque traitement commence par un bilan complet. Ensemble, nous choisissons la solution la plus juste pour votre situation, votre âge et votre quotidien."
       />
 
-      <section aria-label="Liste des traitements" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
+      <section aria-label="Liste des traitements" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <ul className="border-t border-line-strong">
           {treatments.map((t, i) => (
             <li key={t.slug} className="border-b border-line-strong">

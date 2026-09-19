@@ -12,9 +12,9 @@ export async function NewsSection() {
 
   return (
     <section aria-labelledby="actualites-titre" className="bg-sunken">
-      <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
+      <div className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
         <Reveal className="max-w-3xl">
-          <p className="inline-flex rounded-full px-3.5 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gold-ink ring-1 ring-gold/40">
+          <p className="inline-flex rounded-full px-3.5 py-1.5 text-xs uppercase tracking-[0.22em] text-gold-ink ring-1 ring-gold/40">
             Actualités
           </p>
           <h2 id="actualites-titre" className="font-display mt-7 text-4xl leading-[1.08] md:text-6xl">

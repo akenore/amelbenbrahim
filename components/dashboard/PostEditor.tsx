@@ -26,7 +26,7 @@ import { slugify, toTunisInput } from "@/lib/format";
 import { site } from "@/lib/site";
 
 const field =
-  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold";
+  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold-ink";
 const label = "text-[13px] text-ink-soft";
 const panel = "rounded-3xl bg-elevated p-6 ring-1 ring-line";
 
@@ -290,7 +290,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                 setSlugTouched(true);
                 touch(setSlug)(slugify(e.target.value) || e.target.value.toLowerCase());
               }}
-              className="min-w-48 flex-1 rounded-lg bg-transparent px-2 py-1 text-ink-soft ring-1 ring-line focus:outline-none focus:ring-gold"
+              className="min-w-48 flex-1 rounded-lg bg-transparent px-2 py-1 text-ink-soft ring-1 ring-line focus:outline-none focus:ring-gold-ink"
             />
           </div>
 
@@ -444,7 +444,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                 />
                 <span
                   aria-hidden
-                  className="relative h-7 w-12 shrink-0 rounded-full bg-ink/15 transition-colors duration-300 after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-300 peer-checked:bg-gold peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-gold"
+                  className="relative h-7 w-12 shrink-0 rounded-full bg-ink/15 transition-colors duration-300 after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-300 peer-checked:bg-gold peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-gold-ink"
                 />
               </label>
             </div>

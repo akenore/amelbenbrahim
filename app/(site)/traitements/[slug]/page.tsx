@@ -60,7 +60,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </div>
 
-      <section aria-labelledby="principe" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+      <section aria-labelledby="principe" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-7">
             <h2 id="principe" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -75,7 +75,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
           <Reveal delay={0.1} blur={false} className="lg:col-span-5">
             <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
               <div className="rounded-[1.625rem] bg-elevated p-8 md:p-10">
-                <h2 className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">Indiqué pour</h2>
+                <h2 className="text-xs uppercase tracking-[0.22em] text-ink-muted">Indiqué pour</h2>
                 <ul className="mt-6 space-y-4">
                   {t.forWhom.map((item) => (
                     <li key={item} className="flex gap-4 leading-relaxed">
@@ -93,7 +93,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
       </section>
 
       <section aria-labelledby="deroulement" className="bg-sunken">
-        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
           <Reveal>
             <h2 id="deroulement" className="font-display text-4xl leading-[1.08] md:text-5xl">
               Comment se déroule le traitement
@@ -114,7 +114,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="avantages" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+      <section aria-labelledby="avantages" className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
         <Reveal>
           <h2 id="avantages" className="font-display text-4xl leading-[1.08] md:text-5xl">
             Pourquoi le choisir
@@ -132,7 +132,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="quotidien" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="quotidien" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal blur={false} className="lg:col-span-5">
             <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
@@ -162,7 +162,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="questions" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="questions" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
             <h2 id="questions" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -175,8 +175,8 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="autres" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
-        <h2 id="autres" className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">
+      <section aria-labelledby="autres" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
+        <h2 id="autres" className="text-xs uppercase tracking-[0.22em] text-ink-muted">
           Autres traitements
         </h2>
         <ul className="mt-6 flex flex-wrap gap-3">

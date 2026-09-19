@@ -92,7 +92,7 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
                   </div>
                   <div className="min-w-0">
                     <p className="flex items-center gap-2 truncate font-normal">
-                      {p.featured && <StarIcon size={14} weight="fill" className="shrink-0 text-gold" aria-label="À la une" />}
+                      {p.featured && <StarIcon size={14} weight="fill" className="shrink-0 text-gold-ink" aria-label="À la une" />}
                       <span className="truncate">{p.title}</span>
                     </p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[13px] text-ink-muted">

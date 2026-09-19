@@ -11,7 +11,7 @@ import { treatments } from "@/lib/treatments";
 const initial: AppointmentState = { status: "idle" };
 
 const input =
-  "w-full rounded-2xl bg-bg px-4 py-3.5 text-[16px] text-ink ring-1 ring-line-strong placeholder:text-ink-muted transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-gold aria-invalid:ring-2 aria-invalid:ring-danger";
+  "w-full rounded-2xl bg-bg px-4 py-3.5 text-[16px] text-ink ring-1 ring-line-strong placeholder:text-ink-muted transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-gold-ink aria-invalid:ring-2 aria-invalid:ring-danger";
 
 function Field({
   label,
@@ -125,7 +125,7 @@ export function AppointmentForm() {
               {Object.entries(patientTypes).map(([value, label]) => (
                 <label key={value} className="cursor-pointer">
                   <input type="radio" name="patient" value={value} defaultChecked={v.patient === value} className="peer sr-only" />
-                  <span className="inline-flex rounded-full px-5 py-2.5 text-[15px] ring-1 ring-line-strong transition-colors duration-300 peer-checked:bg-btn peer-checked:text-btn-ink peer-checked:ring-btn peer-focus-visible:ring-2 peer-focus-visible:ring-gold">
+                  <span className="inline-flex rounded-full px-5 py-2.5 text-[15px] ring-1 ring-line-strong transition-colors duration-300 peer-checked:bg-btn peer-checked:text-btn-ink peer-checked:ring-btn peer-focus-visible:ring-2 peer-focus-visible:ring-gold-ink">
                     {label}
                   </span>
                 </label>
@@ -164,7 +164,7 @@ export function AppointmentForm() {
                 name="consent"
                 defaultChecked={v.consent === "on"}
                 aria-invalid={Boolean(e.consent)}
-                className="mt-1 h-4 w-4 shrink-0 accent-(--gold)"
+                className="mt-1 h-4 w-4 shrink-0 accent-(--gold-ink)"
               />
               J’accepte que ces informations soient utilisées par le cabinet uniquement pour me recontacter au sujet de ma
               demande.

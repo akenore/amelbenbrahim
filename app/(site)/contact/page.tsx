@@ -37,7 +37,7 @@ export default function ContactPage() {
         lead="Laissez-nous vos coordonnées : le secrétariat vous rappelle pour fixer votre bilan. Vous pouvez aussi nous joindre directement."
       />
 
-      <section className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+      <section className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           <Reveal blur={false} className="lg:col-span-8">
             <div id="rendez-vous" className="scroll-mt-28 rounded-[2.25rem] bg-ink/3 p-1.5 ring-1 ring-line">

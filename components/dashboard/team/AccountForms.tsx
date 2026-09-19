@@ -7,7 +7,7 @@ import { PASSWORD_MIN } from "@/lib/auth/policy";
 import type { TeamMember } from "@/lib/data/types";
 
 const field =
-  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow focus:outline-none focus:ring-2 focus:ring-gold aria-invalid:ring-danger";
+  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow focus:outline-none focus:ring-2 focus:ring-gold-ink aria-invalid:ring-danger";
 const panel = "rounded-[1.75rem] bg-elevated p-6 ring-1 ring-line md:p-8";
 
 function Feedback({ state }: { state: TeamFormState }) {

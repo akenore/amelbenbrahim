@@ -18,7 +18,7 @@ export default function NotFound() {
             strokeWidth={5}
             className="absolute right-[-10%] top-1/2 -z-10 w-[70%] -translate-y-1/2 text-gold opacity-30"
           />
-          <p className="text-[11px] uppercase tracking-[0.22em] text-gold-ink">Erreur 404</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-gold-ink">Erreur 404</p>
           <h1 className="font-display mt-6 max-w-3xl text-5xl leading-[1.05] md:text-7xl">
             Cette page n’est pas <em className="text-gold-ink">alignée.</em>
           </h1>

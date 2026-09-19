@@ -8,11 +8,11 @@ import { credentials } from "@/lib/site";
 export function DoctorFeature() {
   return (
     <section aria-labelledby="docteur-titre" className="bg-sunken">
-      <div className="mx-auto grid max-w-350 grid-cols-1 gap-14 px-4 py-24 md:px-8 md:py-36 lg:grid-cols-12 lg:gap-10">
+      <div className="mx-auto grid max-w-350 grid-cols-1 gap-14 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">
             <Reveal>
-              <p className="inline-flex rounded-full px-3.5 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gold-ink ring-1 ring-gold/40">
+              <p className="inline-flex rounded-full px-3.5 py-1.5 text-xs uppercase tracking-[0.22em] text-gold-ink ring-1 ring-gold/40">
                 Votre orthodontiste
               </p>
               <h2 id="docteur-titre" className="font-display mt-7 text-4xl leading-[1.06] md:text-6xl">

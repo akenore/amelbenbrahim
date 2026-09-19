@@ -7,7 +7,7 @@ import { site } from "@/lib/site";
 /** The one deliberate colour block of the page: the logo's black and gold. */
 export function CtaBlock() {
   return (
-    <section aria-labelledby="rdv-titre" className="px-4 pb-24 md:px-8 md:pb-32">
+    <section aria-labelledby="rdv-titre" className="px-4 pb-16 md:px-8 md:pb-24">
       <div className="mx-auto max-w-350 rounded-[2.75rem] bg-[#0d0d0e]/4 p-2 ring-1 ring-line">
         <div className="relative isolate overflow-hidden rounded-[2.25rem] bg-[#0d0d0e] px-6 py-20 text-[#f3efe6] md:px-16 md:py-28">
           <MonogramDraw

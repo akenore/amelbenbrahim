@@ -16,7 +16,7 @@ function Frame({ photo, aspect, sizes }: { photo: Photo; aspect: string; sizes: 
 /** Three columns drifting at different speeds: depth without moving the layout. */
 export function ClinicMosaic() {
   return (
-    <section aria-labelledby="cabinet-titre" className="overflow-hidden pb-24 pt-4 md:pb-36 md:pt-8">
+    <section aria-labelledby="cabinet-titre" className="overflow-hidden py-16 md:py-24">
       <div className="mx-auto max-w-350 px-4 md:px-8">
         <Reveal className="max-w-3xl">
           <h2 id="cabinet-titre" className="font-display text-4xl leading-[1.08] md:text-6xl">
@@ -33,7 +33,7 @@ export function ClinicMosaic() {
           <Parallax className="col-span-4" distance={40}>
             <Frame photo={photos.reception} aspect="aspect-4/5" sizes="33vw" />
           </Parallax>
-          <Parallax className="col-span-5 mt-24 space-y-5" distance={-60}>
+          <Parallax className="col-span-5 mt-16 space-y-5" distance={-60}>
             <Frame photo={photos.lounge} aspect="aspect-3/2" sizes="42vw" />
             <Frame photo={photos.desk} aspect="aspect-3/2" sizes="42vw" />
           </Parallax>

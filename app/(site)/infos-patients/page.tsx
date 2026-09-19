@@ -50,7 +50,7 @@ export default function PatientInfoPage() {
       </PageHeader>
 
       {/* First visit */}
-      <section aria-labelledby="premiere" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="premiere" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
             <Reveal>
@@ -81,7 +81,7 @@ export default function PatientInfoPage() {
                   <Picture photo={visitPhoto} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover" />
                 </div>
                 <div className="p-7 md:p-9">
-                  <h3 className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">À apporter</h3>
+                  <h3 className="text-xs uppercase tracking-[0.22em] text-ink-muted">À apporter</h3>
                   <ul className="mt-5 space-y-3.5">
                     {firstVisit.bring.map((item) => (
                       <li key={item} className="flex gap-3.5 leading-relaxed">
@@ -99,7 +99,7 @@ export default function PatientInfoPage() {
 
       {/* Daily life */}
       <section aria-labelledby="quotidien" className="bg-sunken">
-        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-16 md:px-8 md:py-24">
           <Reveal>
             <h2 id="quotidien" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
               Au quotidien avec un appareil
@@ -142,7 +142,7 @@ export default function PatientInfoPage() {
       </section>
 
       {/* Emergencies */}
-      <section id="urgences" aria-labelledby="urgences-titre" className="mx-auto max-w-350 scroll-mt-28 px-4 py-24 md:px-8 md:py-32">
+      <section id="urgences" aria-labelledby="urgences-titre" className="mx-auto max-w-350 scroll-mt-28 px-4 py-16 md:px-8 md:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-32">
@@ -174,7 +174,7 @@ export default function PatientInfoPage() {
       </section>
 
       {/* Access */}
-      <section aria-labelledby="venir" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="venir" className="mx-auto max-w-350 px-4 pb-16 md:px-8 md:pb-24">
         <div className="rounded-[2.25rem] bg-ink/3 p-1.5 ring-1 ring-line">
           <div className="grid grid-cols-1 gap-10 rounded-[1.875rem] bg-elevated p-8 md:p-12 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">

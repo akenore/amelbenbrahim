@@ -8,7 +8,7 @@ import { PASSWORD_MIN } from "@/lib/auth/policy";
 import { roles, type Role } from "@/lib/auth/roles";
 
 const field =
-  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold aria-invalid:ring-danger";
+  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold-ink aria-invalid:ring-danger";
 
 export function NewMemberForm() {
   const [state, action, pending] = useActionState<TeamFormState, FormData>(createUser, { status: "idle" });
