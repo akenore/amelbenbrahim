@@ -87,7 +87,7 @@ export const stock = {
   teen: { src: teenImg, alt: "Adolescente souriante portant des bagues, en noir et blanc" },
   adult: { src: adultImg, alt: "Femme au sourire lumineux", focus: "60% 40%" },
   adultSmile: { src: adultSmileImg, alt: "Gros plan sur un sourire aligné" },
-  scanner: { src: scannerImg, alt: "Empreinte optique en cours, modèle 3D des dents à l’écran", focus: "50% 40%" },
+  scanner: { src: scannerImg, alt: "Empreinte optique en cours, modèle 3D des dents à l’écran", focus: "55% 45%" },
   scan3d: { src: scan3dImg, alt: "Analyse d’une radiographie et d’un modèle dentaire 3D sur tablette" },
   apple: { src: appleImg, alt: "Pomme coupée en fines tranches" },
 } satisfies Record<string, Photo>;

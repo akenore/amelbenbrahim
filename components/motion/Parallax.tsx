@@ -8,7 +8,11 @@ type ParallaxProps = {
   className?: string;
   /** Total travel in px across the element's pass through the viewport. */
   distance?: number;
-  /** Slight zoom-out while scrolling, for images inside a clipped frame. */
+  /**
+   * Image mode: the child is a photo inside a clipped frame. The moving layer is
+   * oversized by the travel distance (plus a slight zoom-out), so its edges never
+   * enter the frame, whatever the scroll position.
+   */
   zoom?: boolean;
 };
 
@@ -20,11 +24,16 @@ export function Parallax({ children, className, distance = 80, zoom = false }: P
   const y = useTransform(scrollYProgress, [0, 1], [distance / 2, -distance / 2]);
   const scale = useTransform(scrollYProgress, [0, 1], [1.12, 1]);
 
+  const overscan = Math.abs(distance) / 2;
+
   return (
     <div ref={ref} className={className}>
       <motion.div
-        className="relative h-full w-full will-change-transform"
-        style={reduce ? undefined : { y, scale: zoom ? scale : 1 }}
+        className={zoom ? "absolute inset-x-0 will-change-transform" : "relative h-full w-full will-change-transform"}
+        style={{
+          ...(zoom ? { top: -overscan, bottom: -overscan } : null),
+          ...(reduce ? null : { y, scale: zoom ? scale : 1 }),
+        }}
       >
         {children}
       </motion.div>

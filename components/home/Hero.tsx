@@ -8,10 +8,11 @@ import { photos } from "@/lib/images";
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden">
+      {/* Drawn behind the portrait so its lines never cross the headline. */}
       <Monogram
         animate
         strokeWidth={5}
-        className="pointer-events-none absolute left-[-12%] top-[18%] -z-10 hidden w-[62%] text-gold opacity-15 lg:block"
+        className="pointer-events-none absolute right-[-7%] top-[9%] -z-10 hidden w-[58%] text-gold opacity-30 lg:block"
       />
 
       <div className="mx-auto grid min-h-dvh max-w-350 grid-cols-1 items-center gap-12 px-4 pb-16 pt-28 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-12">
