@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bodoni_Moda, Jost } from "next/font/google";
 import { headers } from "next/headers";
 import { MotionProvider } from "@/components/motion/MotionProvider";
-import { site } from "@/lib/site";
+import { noIndex, site } from "@/lib/site";
 import "./globals.css";
 
 const bodoni = Bodoni_Moda({
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     images: [{ url: "/og/cover.jpg", width: 1200, height: 630, alt: "Dr. Amel Ben Brahim, orthodontiste à Nabeul" }],
   },
   twitter: { card: "summary_large_image", images: ["/og/cover.jpg"] },
-  robots: { index: true, follow: true, "max-image-preview": "large" },
+  robots: noIndex() ? { index: false, follow: false } : { index: true, follow: true, "max-image-preview": "large" },
 };
 
 export const viewport: Viewport = {

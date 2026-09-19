@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE, readToken } from "@/lib/auth/token";
+import { noIndex } from "@/lib/site";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -54,6 +55,7 @@ export function proxy(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  if (noIndex()) response.headers.set("X-Robots-Tag", "noindex, nofollow");
   return response;
 }
 

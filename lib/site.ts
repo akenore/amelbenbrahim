@@ -2,6 +2,12 @@
 // Sources: amelbenbrahim.com, directory listings (allo-docteur, lerdvmedical, med.tn)
 // and the doctor's Instagram bio. Items marked VERIFY need the doctor's confirmation.
 
+/**
+ * SITE_NOINDEX=true keeps a demo or staging copy (e.g. demo.amelbenbrahim.com) out of search
+ * engines. Read on the server at runtime, so it can be set without rebuilding.
+ */
+export const noIndex = () => process.env.SITE_NOINDEX === "true";
+
 export const site = {
   name: "Dr. Amel Ben Brahim",
   shortName: "Dr. Ben Brahim",

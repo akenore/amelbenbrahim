@@ -26,6 +26,7 @@ Au démarrage, le serveur applique les migrations de la base. Sur une base vide,
 | `ADMIN_NAME` | Nom affiché du premier administrateur (par défaut « Dr. Amel Ben Brahim »). |
 | `WHATSAPP_TOKEN` / `WHATSAPP_PHONE_NUMBER_ID` | Alertes WhatsApp des nouvelles demandes (voir plus bas). Vides : alertes désactivées. |
 | `WHATSAPP_TEMPLATE` / `WHATSAPP_TEMPLATE_LANG` | Modèle de message approuvé par Meta (par défaut `nouvelle_demande_rdv`, `fr`). |
+| `SITE_NOINDEX` | `true` sur une copie de démonstration (ex. `demo.amelbenbrahim.com`) : exclue des moteurs de recherche. Lu à l'exécution. |
 | `DATA_DIR` | Import unique : dossier de l'ancien stockage JSON, lu au premier démarrage sur une base vide. |
 
 ## Espace cabinet
@@ -61,9 +62,10 @@ Crée l'administrateur (ou réinitialise ce compte) et affiche un mot de passe t
 L'application est sans état : tout est dans PostgreSQL, y compris les images envoyées depuis l'espace cabinet. Aucun volume n'est nécessaire pour l'application.
 
 1. **Base de données** : Coolify → *New Resource* → *Database* → **PostgreSQL 17**. Laisser le port privé (pas d'accès public) et activer les **sauvegardes planifiées** (quotidiennes, idéalement vers un stockage S3).
-2. **Application** : renseigner les variables d'environnement, avec pour `DATABASE_URL` l'URL interne de la base (*Postgres URL (internal)*, même serveur Coolify).
-3. **Déploiement** : `bun run build` n'a pas besoin de la base ; au démarrage (`bun run start`), les migrations s'appliquent automatiquement, une instance à la fois.
-4. **Premier accès** : sur une base vide, les identifiants `ADMIN_EMAIL` / `ADMIN_PASSWORD` créent le premier administrateur ; les autres comptes s'ajoutent ensuite depuis « Utilisateurs ».
+2. **Application** : build pack **Railpack** (il détecte Bun et Next.js : `bun install --frozen-lockfile`, `bun run build`, `bun run start`, sans commande à saisir), port **3000**, domaine en `https://…` (certificat Let's Encrypt automatique).
+3. **Variables d'environnement** : `DATABASE_URL` = l'URL interne de la base (*Postgres URL (internal)*, même serveur Coolify). `NEXT_PUBLIC_SITE_URL` est intégrée au build : elle doit être disponible au moment du build. Sur une copie de démonstration, ajouter `SITE_NOINDEX=true`.
+4. **Déploiement** : `bun run build` n'a pas besoin de la base ; au démarrage (`bun run start`), les migrations s'appliquent automatiquement, une instance à la fois.
+5. **Premier accès** : sur une base vide, les identifiants `ADMIN_EMAIL` / `ADMIN_PASSWORD` créent le premier administrateur ; les autres comptes s'ajoutent ensuite depuis « Utilisateurs ».
 
 Après une modification de `lib/db/schema.ts` : `bun run db:generate` crée la migration SQL dans `drizzle/`, à committer avec le code.
 
