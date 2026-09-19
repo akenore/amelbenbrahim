@@ -26,8 +26,8 @@ export function Manifesto() {
   const words = TEXT.split(" ");
 
   return (
-    <section aria-label="Notre philosophie" className="mx-auto max-w-[1400px] px-4 py-28 md:px-8 md:py-44">
-      <p ref={ref} className="font-display max-w-[62rem] text-[2rem] leading-[1.28] md:text-5xl md:leading-[1.22]">
+    <section aria-label="Notre philosophie" className="mx-auto max-w-350 px-4 py-28 md:px-8 md:py-44">
+      <p ref={ref} className="font-display max-w-248 text-[2rem] leading-[1.28] md:text-5xl md:leading-[1.22]">
         {reduce
           ? TEXT
           : words.map((word, i) => (

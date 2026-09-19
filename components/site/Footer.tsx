@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FacebookLogo, InstagramLogo, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { FacebookLogoIcon, InstagramLogoIcon, WhatsappLogoIcon } from "@phosphor-icons/react/dist/ssr";
 import { Monogram } from "@/components/brand/Monogram";
 import { treatments } from "@/lib/treatments";
 import { nav, site } from "@/lib/site";
@@ -8,7 +8,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="relative overflow-hidden border-t border-line bg-sunken">
-      <div className="mx-auto max-w-[1400px] px-4 pb-10 pt-20 md:px-8 md:pt-28">
+      <div className="mx-auto max-w-350 px-4 pb-10 pt-20 md:px-8 md:pt-28">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-12">
           <div className="md:col-span-5">
             <Monogram className="h-12 w-auto text-gold" strokeWidth={30} />
@@ -78,9 +78,9 @@ export function Footer() {
                 <h2 className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">Suivre le cabinet</h2>
                 <div className="mt-5 flex gap-3">
                   {[
-                    { href: site.social.instagram, label: "Instagram", Icon: InstagramLogo },
-                    { href: site.social.facebook, label: "Facebook", Icon: FacebookLogo },
-                    { href: site.whatsapp, label: "WhatsApp", Icon: WhatsappLogo },
+                    { href: site.social.instagram, label: "Instagram", Icon: InstagramLogoIcon },
+                    { href: site.social.facebook, label: "Facebook", Icon: FacebookLogoIcon },
+                    { href: site.whatsapp, label: "WhatsApp", Icon: WhatsappLogoIcon },
                   ].map(({ href, label, Icon }) => (
                     <a
                       key={label}

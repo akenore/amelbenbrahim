@@ -8,7 +8,7 @@ export function postState(post: Post) {
 const styles = {
   published: { label: "Publié", cls: "bg-success/10 text-success ring-success/30" },
   scheduled: { label: "Programmé", cls: "bg-gold-soft text-gold-ink ring-gold/30" },
-  draft: { label: "Brouillon", cls: "bg-ink/[0.05] text-ink-muted ring-line-strong" },
+  draft: { label: "Brouillon", cls: "bg-ink/5 text-ink-muted ring-line-strong" },
 };
 
 export function StatusBadge({ post }: { post: Post }) {

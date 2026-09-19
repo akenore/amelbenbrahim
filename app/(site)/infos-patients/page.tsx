@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Clock, MapPin, Phone, Warning } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, ClockIcon, MapPinIcon, PhoneIcon, WarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { Monogram } from "@/components/brand/Monogram";
 import { CtaBlock } from "@/components/home/CtaBlock";
 import { Parallax } from "@/components/motion/Parallax";
@@ -50,7 +50,7 @@ export default function PatientInfoPage() {
       </PageHeader>
 
       {/* First visit */}
-      <section aria-labelledby="premiere" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="premiere" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
             <Reveal>
@@ -75,9 +75,9 @@ export default function PatientInfoPage() {
           </div>
 
           <Reveal blur={false} delay={0.1} className="lg:col-span-5">
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-              <div className="overflow-hidden rounded-[calc(2.25rem-0.375rem)] bg-elevated">
-                <div className="relative aspect-[16/10]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-1.5 ring-1 ring-line">
+              <div className="overflow-hidden rounded-[1.875rem] bg-elevated">
+                <div className="relative aspect-16/10">
                   <Picture photo={visitPhoto} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover" />
                 </div>
                 <div className="p-7 md:p-9">
@@ -99,7 +99,7 @@ export default function PatientInfoPage() {
 
       {/* Daily life */}
       <section aria-labelledby="quotidien" className="bg-sunken">
-        <div className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
           <Reveal>
             <h2 id="quotidien" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
               Au quotidien avec un appareil
@@ -108,14 +108,14 @@ export default function PatientInfoPage() {
           <div className="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5">
             {dailyLife.map((card, i) => (
               <Reveal key={card.title} delay={(i % 2) * 0.08} blur={false} className={card.span}>
-                <div className="h-full rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
+                <div className="h-full rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
                   <div
-                    className={`relative isolate flex h-full min-h-[300px] flex-col justify-end overflow-hidden rounded-[calc(2rem-0.375rem)] p-8 md:p-10 ${tones[card.tone]}`}
+                    className={`relative isolate flex h-full min-h-75 flex-col justify-end overflow-hidden rounded-[1.625rem] p-8 md:p-10 ${tones[card.tone]}`}
                   >
                     {card.photo && (
                       <>
                         <Picture photo={card.photo} fill sizes="(min-width: 1024px) 40vw, 100vw" className="-z-10 object-cover" />
-                        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/40 to-black/5" />
+                        <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/80 via-black/40 to-black/5" />
                       </>
                     )}
                     {card.tone === "noir" && (
@@ -142,7 +142,7 @@ export default function PatientInfoPage() {
       </section>
 
       {/* Emergencies */}
-      <section id="urgences" aria-labelledby="urgences-titre" className="mx-auto max-w-[1400px] scroll-mt-28 px-4 py-24 md:px-8 md:py-32">
+      <section id="urgences" aria-labelledby="urgences-titre" className="mx-auto max-w-350 scroll-mt-28 px-4 py-24 md:px-8 md:py-32">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-32">
@@ -154,13 +154,13 @@ export default function PatientInfoPage() {
                   La plupart des petits incidents ne sont pas graves. Voici comment réagir en attendant votre rendez-vous.
                 </p>
                 <div className="mt-8 flex items-start gap-4 rounded-2xl bg-gold-soft p-5 text-[15px] leading-relaxed ring-1 ring-gold/30">
-                  <Warning size={22} weight="light" className="mt-0.5 shrink-0 text-gold-ink" />
+                  <WarningIcon size={22} weight="light" className="mt-0.5 shrink-0 text-gold-ink" />
                   <p>
                     En cas de doute, de douleur importante ou de choc sur les dents, appelez le cabinet sans attendre.
                   </p>
                 </div>
                 <div className="mt-8">
-                  <Cta href={site.phones.landline.href} external icon={<Phone size={16} weight="light" />}>
+                  <Cta href={site.phones.landline.href} external icon={<PhoneIcon size={16} weight="light" />}>
                     {site.phones.landline.display}
                   </Cta>
                 </div>
@@ -174,16 +174,16 @@ export default function PatientInfoPage() {
       </section>
 
       {/* Access */}
-      <section aria-labelledby="venir" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
-        <div className="rounded-[2.25rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-          <div className="grid grid-cols-1 gap-10 rounded-[calc(2.25rem-0.375rem)] bg-elevated p-8 md:p-12 lg:grid-cols-12">
+      <section aria-labelledby="venir" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
+        <div className="rounded-[2.25rem] bg-ink/3 p-1.5 ring-1 ring-line">
+          <div className="grid grid-cols-1 gap-10 rounded-[1.875rem] bg-elevated p-8 md:p-12 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
               <h2 id="venir" className="font-display text-4xl leading-[1.08] md:text-5xl">
                 Venir au cabinet
               </h2>
               <div className="mt-8 space-y-5 text-lg">
                 <p className="flex gap-4">
-                  <MapPin size={24} weight="light" className="mt-1 shrink-0 text-gold-ink" />
+                  <MapPinIcon size={24} weight="light" className="mt-1 shrink-0 text-gold-ink" />
                   <span className="leading-relaxed">
                     {site.address.building}, {site.address.street}
                     <br />
@@ -191,7 +191,7 @@ export default function PatientInfoPage() {
                   </span>
                 </p>
                 <p className="flex gap-4">
-                  <Clock size={24} weight="light" className="mt-1 shrink-0 text-gold-ink" />
+                  <ClockIcon size={24} weight="light" className="mt-1 shrink-0 text-gold-ink" />
                   <span>{site.hours}</span>
                 </p>
               </div>
@@ -201,7 +201,7 @@ export default function PatientInfoPage() {
                 rel="noopener noreferrer"
                 className="mt-8 inline-flex items-center gap-2 text-gold-ink underline decoration-gold/40 underline-offset-4 hover:decoration-gold"
               >
-                Itinéraire Google Maps <ArrowUpRight size={14} weight="light" />
+                Itinéraire Google Maps <ArrowUpRightIcon size={14} weight="light" />
               </a>
             </Reveal>
             <Reveal delay={0.1} className="lg:col-span-7">
@@ -216,7 +216,7 @@ export default function PatientInfoPage() {
                   </li>
                 ))}
               </ul>
-              <div className="relative mt-8 aspect-[21/9] overflow-hidden rounded-2xl">
+              <div className="relative mt-8 aspect-21/9 overflow-hidden rounded-2xl">
                 <Parallax className="absolute inset-0" distance={40} zoom>
                   <Picture photo={photos.lounge} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[50%_40%]" />
                 </Parallax>

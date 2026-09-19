@@ -2,7 +2,7 @@
 
 import { useActionState, useId, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, CheckCircle, WarningCircle } from "@phosphor-icons/react";
+import { ArrowUpRightIcon, CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import { requestAppointment, type AppointmentState } from "@/app/(site)/contact/actions";
 import { patientTypes } from "@/lib/data/types";
 import { site } from "@/lib/site";
@@ -11,7 +11,7 @@ import { treatments } from "@/lib/treatments";
 const initial: AppointmentState = { status: "idle" };
 
 const input =
-  "w-full rounded-2xl bg-bg px-4 py-3.5 text-[16px] text-ink ring-1 ring-line-strong placeholder:text-ink-muted transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-gold aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger";
+  "w-full rounded-2xl bg-bg px-4 py-3.5 text-[16px] text-ink ring-1 ring-line-strong placeholder:text-ink-muted transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-gold aria-invalid:ring-2 aria-invalid:ring-danger";
 
 function Field({
   label,
@@ -60,7 +60,7 @@ export function AppointmentForm() {
     Object.entries(state.errors ?? {}).filter(([name]) => !editedNames.has(name)),
   ) as NonNullable<AppointmentState["errors"]>;
 
-  function markEdited(event: React.FormEvent<HTMLFormElement>) {
+  function markEdited(event: React.SyntheticEvent<HTMLFormElement>) {
     const name = (event.target as HTMLInputElement).name;
     if (!name || !state.errors?.[name as keyof NonNullable<AppointmentState["errors"]>]) return;
     setEdited((prev) => ({ for: state, names: new Set(prev.for === state ? prev.names : []).add(name) }));
@@ -74,10 +74,10 @@ export function AppointmentForm() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex min-h-[420px] flex-col items-start justify-center"
+          className="flex min-h-105 flex-col items-start justify-center"
           role="status"
         >
-          <CheckCircle size={56} weight="thin" className="text-gold-ink" />
+          <CheckCircleIcon size={56} weight="thin" className="text-gold-ink" />
           <h3 className="font-display mt-6 text-4xl leading-tight">Demande bien reçue.</h3>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
             Merci. Le secrétariat vous rappelle rapidement pour convenir d’un rendez-vous. Pour une demande urgente,
@@ -150,7 +150,7 @@ export function AppointmentForm() {
           </div>
 
           {/* Honeypot */}
-          <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+          <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
             <label>
               Site web
               <input type="text" name="website" tabIndex={-1} autoComplete="off" />
@@ -164,7 +164,7 @@ export function AppointmentForm() {
                 name="consent"
                 defaultChecked={v.consent === "on"}
                 aria-invalid={Boolean(e.consent)}
-                className="mt-1 h-4 w-4 shrink-0 accent-[var(--gold)]"
+                className="mt-1 h-4 w-4 shrink-0 accent-(--gold)"
               />
               J’accepte que ces informations soient utilisées par le cabinet uniquement pour me recontacter au sujet de ma
               demande.
@@ -175,7 +175,7 @@ export function AppointmentForm() {
           <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center md:justify-between">
             {state.status === "error" && state.message ? (
               <p role="alert" className="flex items-center gap-2 text-[14px] text-danger">
-                <WarningCircle size={18} weight="light" /> {state.message}
+                <WarningCircleIcon size={18} weight="light" /> {state.message}
               </p>
             ) : (
               <p className="text-[13px] text-ink-muted">Réponse du secrétariat par téléphone.</p>
@@ -187,7 +187,7 @@ export function AppointmentForm() {
             >
               {pending ? "Envoi en cours…" : "Envoyer la demande"}
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-btn-icon transition-transform duration-500 ease-luxe group-hover:-translate-y-px group-hover:translate-x-0.5">
-                <ArrowUpRight size={16} weight="light" />
+                <ArrowUpRightIcon size={16} weight="light" />
               </span>
             </button>
           </div>

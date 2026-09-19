@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Eye, EyeSlash, NotePencil, Plus, Star, Trash } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, EyeIcon, EyeSlashIcon, NotePencilIcon, PlusIcon, StarIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { deletePost, setPostStatus } from "@/app/dashboard/actions";
 import { postState, StatusBadge } from "@/components/dashboard/StatusBadge";
 import { ConfirmSubmit, PendingSubmit } from "@/components/dashboard/ui";
@@ -46,7 +46,7 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
         >
           Nouvel article
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-btn-icon">
-            <Plus size={16} weight="light" />
+            <PlusIcon size={16} weight="light" />
           </span>
         </Link>
       </header>
@@ -85,14 +85,14 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
           {posts.map((p) => {
             const state = postState(p);
             return (
-              <li key={p.id} className="flex flex-col gap-4 rounded-[1.5rem] bg-elevated p-4 ring-1 ring-line sm:flex-row sm:items-center">
+              <li key={p.id} className="flex flex-col gap-4 rounded-3xl bg-elevated p-4 ring-1 ring-line sm:flex-row sm:items-center">
                 <Link href={`/dashboard/articles/${p.id}`} className="flex min-w-0 flex-1 items-center gap-4">
                   <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-sunken">
                     {p.cover && <Image src={p.cover.src} alt="" fill sizes="80px" className="object-cover" />}
                   </div>
                   <div className="min-w-0">
                     <p className="flex items-center gap-2 truncate font-normal">
-                      {p.featured && <Star size={14} weight="fill" className="shrink-0 text-gold" aria-label="À la une" />}
+                      {p.featured && <StarIcon size={14} weight="fill" className="shrink-0 text-gold" aria-label="À la une" />}
                       <span className="truncate">{p.title}</span>
                     </p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[13px] text-ink-muted">
@@ -106,18 +106,18 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
                 </Link>
                 <div className="flex items-center gap-2 sm:shrink-0">
                   <Link href={`/dashboard/articles/${p.id}`} className={iconBtn} aria-label="Modifier">
-                    <NotePencil size={17} weight="light" />
+                    <NotePencilIcon size={17} weight="light" />
                   </Link>
                   {state === "published" && (
                     <a href={`/actualites/${p.slug}`} target="_blank" className={iconBtn} aria-label="Voir sur le site">
-                      <ArrowUpRight size={17} weight="light" />
+                      <ArrowUpRightIcon size={17} weight="light" />
                     </a>
                   )}
                   <form action={setPostStatus}>
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="status" value={p.status === "published" ? "draft" : "published"} />
                     <PendingSubmit className={iconBtn} ariaLabel={p.status === "published" ? "Repasser en brouillon" : "Publier"}>
-                      {p.status === "published" ? <EyeSlash size={17} weight="light" /> : <Eye size={17} weight="light" />}
+                      {p.status === "published" ? <EyeSlashIcon size={17} weight="light" /> : <EyeIcon size={17} weight="light" />}
                     </PendingSubmit>
                   </form>
                   <form action={deletePost}>
@@ -125,9 +125,9 @@ export default async function ArticlesPage({ searchParams }: PageProps<"/dashboa
                     <ConfirmSubmit
                       message={`Supprimer définitivement « ${p.title} » ?`}
                       ariaLabel="Supprimer"
-                      className={`${iconBtn} hover:!bg-danger/10 hover:!text-danger hover:!ring-danger`}
+                      className={`${iconBtn} hover:bg-danger/10! hover:text-danger! hover:ring-danger!`}
                     >
-                      <Trash size={17} weight="light" />
+                      <TrashIcon size={17} weight="light" />
                     </ConfirmSubmit>
                   </form>
                 </div>

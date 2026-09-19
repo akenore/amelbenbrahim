@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, FacebookLogo, LinkSimple, WhatsappLogo } from "@phosphor-icons/react";
+import { CheckIcon, FacebookLogoIcon, LinkSimpleIcon, WhatsappLogoIcon } from "@phosphor-icons/react";
 
 export function ShareLinks({ url, title }: { url: string; title: string }) {
   const [copied, setCopied] = useState(false);
@@ -20,13 +20,13 @@ export function ShareLinks({ url, title }: { url: string; title: string }) {
   return (
     <div className="flex gap-2 lg:flex-col" aria-label="Partager l’article">
       <a className={item} href={`https://www.facebook.com/sharer/sharer.php?u=${encoded}`} target="_blank" rel="noopener noreferrer" aria-label="Partager sur Facebook">
-        <FacebookLogo size={18} weight="light" />
+        <FacebookLogoIcon size={18} weight="light" />
       </a>
       <a className={item} href={`https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`} target="_blank" rel="noopener noreferrer" aria-label="Partager sur WhatsApp">
-        <WhatsappLogo size={18} weight="light" />
+        <WhatsappLogoIcon size={18} weight="light" />
       </a>
       <button type="button" onClick={copy} className={item} aria-label={copied ? "Lien copié" : "Copier le lien"}>
-        {copied ? <Check size={18} weight="light" /> : <LinkSimple size={18} weight="light" />}
+        {copied ? <CheckIcon size={18} weight="light" /> : <LinkSimpleIcon size={18} weight="light" />}
       </button>
       <span role="status" className="sr-only">
         {copied ? "Lien copié" : ""}

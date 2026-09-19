@@ -1,14 +1,14 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { UserPlus } from "@phosphor-icons/react";
+import { UserPlusIcon } from "@phosphor-icons/react";
 import { createUser, type TeamFormState } from "@/app/dashboard/team-actions";
 import { SecretNotice } from "@/components/dashboard/team/SecretNotice";
 import { PASSWORD_MIN } from "@/lib/auth/policy";
 import { roles, type Role } from "@/lib/auth/roles";
 
 const field =
-  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold aria-[invalid=true]:ring-danger";
+  "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold aria-invalid:ring-danger";
 
 export function NewMemberForm() {
   const [state, action, pending] = useActionState<TeamFormState, FormData>(createUser, { status: "idle" });
@@ -20,7 +20,7 @@ export function NewMemberForm() {
   return (
     <div className="rounded-[1.75rem] bg-elevated p-6 ring-1 ring-line md:p-8">
       <h2 className="font-display flex items-center gap-3 text-2xl">
-        <UserPlus size={24} weight="light" className="text-gold-ink" /> Ajouter un membre
+        <UserPlusIcon size={24} weight="light" className="text-gold-ink" /> Ajouter un membre
       </h2>
 
       {showSecret && state.secret ? (

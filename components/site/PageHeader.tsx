@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CaretRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 type Crumb = { name: string; href: string };
 
@@ -14,7 +14,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
         </li>
         {items.map((item, i) => (
           <li key={item.href} className="flex items-center gap-1.5">
-            <CaretRight size={11} weight="light" aria-hidden />
+            <CaretRightIcon size={11} weight="light" aria-hidden />
             {i === items.length - 1 ? (
               <span aria-current="page" className="text-ink-soft">
                 {item.name}
@@ -44,7 +44,7 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <header className="mx-auto max-w-[1400px] px-4 pb-14 pt-32 md:px-8 md:pb-20 md:pt-40">
+    <header className="mx-auto max-w-350 px-4 pb-14 pt-32 md:px-8 md:pb-20 md:pt-40">
       <Breadcrumbs items={crumbs} />
       <h1
         className="font-display animate-rise mt-8 max-w-5xl text-[2.9rem] leading-[1.04] md:text-7xl xl:text-[5.2rem]"
@@ -54,7 +54,7 @@ export function PageHeader({
       </h1>
       {lead && (
         <p
-          className="animate-rise mt-7 max-w-[46rem] text-lg leading-relaxed text-ink-soft md:text-xl"
+          className="animate-rise mt-7 max-w-184 text-lg leading-relaxed text-ink-soft md:text-xl"
           style={{ animationDelay: "0.25s" }}
         >
           {lead}

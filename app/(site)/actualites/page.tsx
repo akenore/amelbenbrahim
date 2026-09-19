@@ -28,7 +28,7 @@ export default async function NewsPage() {
         }
         lead="La vie du cabinet, des conseils pour prendre soin de votre sourire et les temps forts de la formation continue."
       />
-      <section aria-label="Articles" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-36">
+      <section aria-label="Articles" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
         <NewsGrid posts={posts} />
       </section>
       <JsonLd data={breadcrumbs([{ name: "Actualités", path: "/actualites" }])} />

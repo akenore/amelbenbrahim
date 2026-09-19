@@ -13,10 +13,10 @@ export default async function LoginPage() {
   if (await getCurrentUser()) redirect("/dashboard");
 
   return (
-    <div className="grid min-h-[100dvh] grid-cols-1 lg:grid-cols-2">
+    <div className="grid min-h-dvh grid-cols-1 lg:grid-cols-2">
       <div className="relative hidden overflow-hidden bg-[#0d0d0e] lg:block">
         <Image src={photos.reception.src} alt="" fill preload placeholder="blur" sizes="50vw" className="object-cover opacity-45" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0e] via-[#0d0d0e]/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#0d0d0e] via-[#0d0d0e]/40 to-transparent" />
         <div className="absolute bottom-14 left-14 right-14 text-[#f3efe6]">
           <Monogram animate strokeWidth={22} className="h-16 w-auto text-[#e4c68a]" />
           <p className="font-display mt-8 text-5xl leading-[1.08]">Espace cabinet</p>

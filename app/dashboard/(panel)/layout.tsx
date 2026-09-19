@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldWarning } from "@phosphor-icons/react/dist/ssr";
+import { ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { getOverview } from "@/lib/admin";
 import { can } from "@/lib/auth/roles";
@@ -17,7 +17,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
             href="/dashboard/compte#mot-de-passe"
             className="mx-auto mb-8 flex max-w-6xl items-center gap-3 rounded-2xl bg-gold-soft px-5 py-4 text-[14px] text-gold-ink ring-1 ring-gold/30"
           >
-            <ShieldWarning size={20} weight="light" className="shrink-0" />
+            <ShieldWarningIcon size={20} weight="light" className="shrink-0" />
             Vous utilisez un mot de passe temporaire. Choisissez votre mot de passe personnel dans « Mon compte ».
           </Link>
         )}

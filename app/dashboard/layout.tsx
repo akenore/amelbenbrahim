@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardRootLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-[100dvh] bg-sunken">{children}</div>;
+  return <div className="min-h-dvh bg-sunken">{children}</div>;
 }

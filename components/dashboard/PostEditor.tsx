@@ -4,20 +4,20 @@ import { startTransition, useActionState, useEffect, useRef, useState, useTransi
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowLeft,
-  ArrowUpRight,
-  ImageSquare,
-  LinkSimple,
-  ListBullets,
-  ListNumbers,
-  Quotes,
-  TextB,
-  TextHTwo,
-  TextHThree,
-  TextItalic,
-  UploadSimple,
-  WarningCircle,
-  X,
+  ArrowLeftIcon,
+  ArrowUpRightIcon,
+  ImageSquareIcon,
+  LinkSimpleIcon,
+  ListBulletsIcon,
+  ListNumbersIcon,
+  QuotesIcon,
+  TextBIcon,
+  TextHTwoIcon,
+  TextHThreeIcon,
+  TextItalicIcon,
+  UploadSimpleIcon,
+  WarningCircleIcon,
+  XIcon,
 } from "@phosphor-icons/react";
 import { savePost, uploadImage, type SavePostState } from "@/app/dashboard/actions";
 import { Markdown } from "@/components/news/Markdown";
@@ -28,27 +28,27 @@ import { site } from "@/lib/site";
 const field =
   "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold";
 const label = "text-[13px] text-ink-soft";
-const panel = "rounded-[1.5rem] bg-elevated p-6 ring-1 ring-line";
+const panel = "rounded-3xl bg-elevated p-6 ring-1 ring-line";
 
 function Counter({ value, max }: { value: number; max: number }) {
   return <span className={`text-[12px] ${value > max ? "text-danger" : "text-ink-muted"}`}>{value}/{max}</span>;
 }
 
-type Tool = { label: string; Icon: typeof TextB } & (
+type Tool = { label: string; Icon: typeof TextBIcon } & (
   | { kind: "wrap"; before: string; after: string; placeholder: string }
   | { kind: "prefix"; prefix: string; placeholder: string; numbered?: boolean }
   | { kind: "link" }
 );
 
 const TOOLS: Tool[] = [
-  { label: "Gras", Icon: TextB, kind: "wrap", before: "**", after: "**", placeholder: "texte en gras" },
-  { label: "Italique", Icon: TextItalic, kind: "wrap", before: "*", after: "*", placeholder: "texte en italique" },
-  { label: "Titre de section", Icon: TextHTwo, kind: "prefix", prefix: "## ", placeholder: "Titre de section" },
-  { label: "Sous-titre", Icon: TextHThree, kind: "prefix", prefix: "### ", placeholder: "Sous-titre" },
-  { label: "Liste à puces", Icon: ListBullets, kind: "prefix", prefix: "- ", placeholder: "Élément" },
-  { label: "Liste numérotée", Icon: ListNumbers, kind: "prefix", prefix: "", placeholder: "Élément", numbered: true },
-  { label: "Citation", Icon: Quotes, kind: "prefix", prefix: "> ", placeholder: "Citation" },
-  { label: "Lien", Icon: LinkSimple, kind: "link" },
+  { label: "Gras", Icon: TextBIcon, kind: "wrap", before: "**", after: "**", placeholder: "texte en gras" },
+  { label: "Italique", Icon: TextItalicIcon, kind: "wrap", before: "*", after: "*", placeholder: "texte en italique" },
+  { label: "Titre de section", Icon: TextHTwoIcon, kind: "prefix", prefix: "## ", placeholder: "Titre de section" },
+  { label: "Sous-titre", Icon: TextHThreeIcon, kind: "prefix", prefix: "### ", placeholder: "Sous-titre" },
+  { label: "Liste à puces", Icon: ListBulletsIcon, kind: "prefix", prefix: "- ", placeholder: "Élément" },
+  { label: "Liste numérotée", Icon: ListNumbersIcon, kind: "prefix", prefix: "", placeholder: "Élément", numbered: true },
+  { label: "Citation", Icon: QuotesIcon, kind: "prefix", prefix: "> ", placeholder: "Citation" },
+  { label: "Lien", Icon: LinkSimpleIcon, kind: "link" },
 ];
 
 function FieldError({ message }: { message?: string }) {
@@ -207,9 +207,9 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
       <input type="hidden" name="status" value={post?.status ?? "draft"} />
 
       {/* Action bar */}
-      <div className="sticky top-[68px] z-10 -mx-4 mb-8 flex flex-wrap items-center gap-3 border-b border-line bg-sunken/90 px-4 py-3 backdrop-blur-xl md:-mx-10 md:px-10 lg:top-0">
+      <div className="sticky top-17 z-10 -mx-4 mb-8 flex flex-wrap items-center gap-3 border-b border-line bg-sunken/90 px-4 py-3 backdrop-blur-xl md:-mx-10 md:px-10 lg:top-0">
         <Link href="/dashboard/articles" className="flex items-center gap-2 text-[14px] text-ink-soft hover:text-ink">
-          <ArrowLeft size={16} weight="light" /> Articles
+          <ArrowLeftIcon size={16} weight="light" /> Articles
         </Link>
         <p role="status" className="ml-2 hidden text-[13px] text-ink-muted md:block">
           {saving
@@ -231,7 +231,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
               target="_blank"
               className="hidden items-center gap-1.5 rounded-full px-4 py-2.5 text-[14px] text-ink-soft ring-1 ring-line-strong hover:text-ink sm:flex"
             >
-              Voir <ArrowUpRight size={14} weight="light" />
+              Voir <ArrowUpRightIcon size={14} weight="light" />
             </a>
           )}
           <button
@@ -258,7 +258,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
 
       {state.status === "error" && state.message && (
         <p role="alert" className="mb-6 flex items-center gap-2 rounded-2xl bg-danger/10 px-5 py-3 text-[14px] text-danger">
-          <WarningCircle size={18} weight="light" /> {state.message}
+          <WarningCircleIcon size={18} weight="light" /> {state.message}
         </p>
       )}
 
@@ -275,7 +275,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
             value={title}
             onChange={(e) => touch(setTitle)(e.target.value.replace(/\n/g, " "))}
             placeholder="Titre de l’article"
-            className="font-display w-full resize-none bg-transparent text-4xl leading-tight [field-sizing:content] placeholder:text-ink-muted/60 focus:outline-none md:text-5xl"
+            className="font-display w-full resize-none bg-transparent text-4xl leading-tight field-sizing-content placeholder:text-ink-muted/60 focus:outline-none md:text-5xl"
           />
           <FieldError message={errors.title} />
 
@@ -290,7 +290,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                 setSlugTouched(true);
                 touch(setSlug)(slugify(e.target.value) || e.target.value.toLowerCase());
               }}
-              className="min-w-[12rem] flex-1 rounded-lg bg-transparent px-2 py-1 text-ink-soft ring-1 ring-line focus:outline-none focus:ring-gold"
+              className="min-w-48 flex-1 rounded-lg bg-transparent px-2 py-1 text-ink-soft ring-1 ring-line focus:outline-none focus:ring-gold"
             />
           </div>
 
@@ -313,7 +313,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
             <FieldError message={errors.excerpt} />
           </div>
 
-          <div className="mt-8 overflow-hidden rounded-[1.5rem] bg-elevated ring-1 ring-line">
+          <div className="mt-8 overflow-hidden rounded-3xl bg-elevated ring-1 ring-line">
             <div className="flex flex-wrap items-center gap-1 border-b border-line px-3 py-2">
               <div role="tablist" aria-label="Mode d’édition" className="mr-2 flex rounded-full bg-sunken p-1">
                 {(["write", "preview"] as const).map((t) => (
@@ -347,7 +347,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                   title="Insérer une image"
                   className="flex h-9 cursor-pointer items-center gap-2 rounded-lg px-2 text-[13px] text-ink-soft hover:bg-gold-soft hover:text-ink"
                 >
-                  <ImageSquare size={18} weight="light" />
+                  <ImageSquareIcon size={18} weight="light" />
                   <span className="hidden sm:inline">{uploadingInline ? "Envoi…" : "Image"}</span>
                   <input
                     type="file"
@@ -372,10 +372,10 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
               value={content}
               onChange={(e) => touch(setContent)(e.target.value)}
               placeholder={"Rédigez votre article ici.\n\n## Un titre de section\n\nUn paragraphe, une **mise en valeur**, une liste :\n- premier point\n- second point"}
-              className={`min-h-[520px] w-full resize-y bg-transparent p-6 font-mono text-[14.5px] leading-7 focus:outline-none ${tab === "write" ? "block" : "hidden"}`}
+              className={`min-h-130 w-full resize-y bg-transparent p-6 font-mono text-[14.5px] leading-7 focus:outline-none ${tab === "write" ? "block" : "hidden"}`}
             />
             {tab === "preview" && (
-              <div className="min-h-[520px] p-6 md:p-10">
+              <div className="min-h-130 p-6 md:p-10">
                 {content.trim() ? (
                   <Markdown>{content}</Markdown>
                 ) : (
@@ -456,7 +456,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
             </h2>
             {cover ? (
               <div className="mt-5">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-sunken">
+                <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-sunken">
                   <Image src={cover.src} alt={cover.alt} fill sizes="340px" className="object-cover" />
                   <button
                     type="button"
@@ -467,7 +467,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                     aria-label="Retirer l’image"
                     className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur hover:bg-black/75"
                   >
-                    <X size={16} weight="light" />
+                    <XIcon size={16} weight="light" />
                   </button>
                 </div>
                 <label htmlFor="coverAlt" className={`${label} mt-4 block`}>
@@ -496,11 +496,11 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
                   setDragging(false);
                   onCoverFile(e.dataTransfer.files?.[0]);
                 }}
-                className={`mt-5 flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-dashed text-center transition-colors ${
+                className={`mt-5 flex aspect-4/3 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-dashed text-center transition-colors ${
                   dragging ? "border-gold bg-gold-soft" : "border-line-strong hover:border-gold hover:bg-gold-soft"
                 }`}
               >
-                <UploadSimple size={28} weight="thin" className="text-gold-ink" />
+                <UploadSimpleIcon size={28} weight="thin" className="text-gold-ink" />
                 <span className="px-6 text-[14px] text-ink-soft">
                   {uploadingCover ? "Envoi en cours…" : "Glissez une photo ici ou cliquez pour choisir"}
                 </span>

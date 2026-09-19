@@ -14,8 +14,8 @@ export function NewsGrid({ posts }: { posts: Post[] }) {
 
   if (posts.length === 0) {
     return (
-      <div className="rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-        <div className="rounded-[calc(2rem-0.375rem)] bg-elevated px-8 py-20 text-center">
+      <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+        <div className="rounded-[1.625rem] bg-elevated px-8 py-20 text-center">
           <p className="font-display text-3xl">Aucune actualité pour le moment.</p>
           <p className="mx-auto mt-4 max-w-md text-ink-soft">Les prochains articles du cabinet apparaîtront ici.</p>
         </div>

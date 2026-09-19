@@ -21,7 +21,7 @@ export function PostMeta({ post, className = "", compact = false }: { post: Post
 
 export function PostCover({ post, sizes, className = "" }: { post: Post; sizes: string; className?: string }) {
   return (
-    <div className={`relative overflow-hidden rounded-[calc(2rem-0.375rem)] bg-sunken ${className}`}>
+    <div className={`relative overflow-hidden rounded-[1.625rem] bg-sunken ${className}`}>
       {post.cover ? (
         <Image
           src={post.cover.src}
@@ -41,11 +41,11 @@ export function PostCard({ post, priority = false }: { post: Post; priority?: bo
   return (
     <article className="group">
       <Link href={`/actualites/${post.slug}`} className="block">
-        <div className="rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
+        <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
           <PostCover
             post={post}
             sizes={priority ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
-            className={priority ? "aspect-[4/3] md:aspect-[16/9]" : "aspect-[4/3]"}
+            className={priority ? "aspect-4/3 md:aspect-video" : "aspect-4/3"}
           />
         </div>
         <div className="px-2 pt-6">

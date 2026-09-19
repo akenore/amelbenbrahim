@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 type CtaProps = {
   href: string;
@@ -30,7 +30,7 @@ export function Cta({ href, children, variant = "solid", className = "", externa
       <span
         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-transform duration-500 ease-luxe group-hover:translate-x-0.5 group-hover:-translate-y-px group-hover:scale-105 ${iconStyles[variant]}`}
       >
-        {icon ?? <ArrowUpRight size={16} weight="light" />}
+        {icon ?? <ArrowUpRightIcon size={16} weight="light" />}
       </span>
     </>
   );

@@ -11,10 +11,10 @@ export function Hero() {
       <Monogram
         animate
         strokeWidth={5}
-        className="pointer-events-none absolute -left-[12%] top-[18%] -z-10 hidden w-[62%] text-gold opacity-25 lg:block"
+        className="pointer-events-none absolute left-[-12%] top-[18%] -z-10 hidden w-[62%] text-gold opacity-25 lg:block"
       />
 
-      <div className="mx-auto grid min-h-[100dvh] max-w-[1400px] grid-cols-1 items-center gap-12 px-4 pb-16 pt-28 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-12">
+      <div className="mx-auto grid min-h-dvh max-w-350 grid-cols-1 items-center gap-12 px-4 pb-16 pt-28 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-12">
         <div className="lg:col-span-7 lg:pr-8">
           <h1>
             <span
@@ -33,7 +33,7 @@ export function Hero() {
             </span>
           </h1>
           <p
-            className="animate-rise mt-7 max-w-[34rem] text-lg leading-relaxed text-ink-soft md:text-xl"
+            className="animate-rise mt-7 max-w-136 text-lg leading-relaxed text-ink-soft md:text-xl"
             style={{ animationDelay: "0.35s" }}
           >
             Aligneurs invisibles, orthodontie linguale et suivi sur mesure pour enfants et adultes, au cœur de Nabeul.
@@ -47,8 +47,8 @@ export function Hero() {
         </div>
 
         <div className="animate-fade relative lg:col-span-5" style={{ animationDelay: "0.3s" }}>
-          <div className="rounded-[2.5rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2.5rem-0.5rem)] lg:aspect-auto lg:h-[min(76dvh,720px)]">
+          <div className="rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line">
+            <div className="relative aspect-4/5 overflow-hidden rounded-4xl lg:aspect-auto lg:h-[min(76dvh,720px)]">
               <Parallax className="absolute inset-0" distance={60} zoom>
                 <Image
                   src={photos.doctorSmile.src}

@@ -12,11 +12,11 @@ export default function NotFound() {
     <>
       <Header />
       <main id="contenu">
-        <section className="relative isolate mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center overflow-hidden px-4 py-32 md:px-8">
+        <section className="relative isolate mx-auto flex min-h-dvh max-w-350 flex-col justify-center overflow-hidden px-4 py-32 md:px-8">
           <Monogram
             animate
             strokeWidth={5}
-            className="absolute -right-[10%] top-1/2 -z-10 w-[70%] -translate-y-1/2 text-gold opacity-30"
+            className="absolute right-[-10%] top-1/2 -z-10 w-[70%] -translate-y-1/2 text-gold opacity-30"
           />
           <p className="text-[11px] uppercase tracking-[0.22em] text-gold-ink">Erreur 404</p>
           <h1 className="font-display mt-6 max-w-3xl text-5xl leading-[1.05] md:text-7xl">

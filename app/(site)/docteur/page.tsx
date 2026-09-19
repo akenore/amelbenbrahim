@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/metadata";
 import Image from "next/image";
-import { Handshake, Medal, Heart } from "@phosphor-icons/react/dist/ssr";
+import { HandshakeIcon, MedalIcon, HeartIcon } from "@phosphor-icons/react/dist/ssr";
 import { CtaBlock } from "@/components/home/CtaBlock";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
@@ -24,17 +24,17 @@ const values = [
   {
     title: "Intégrité",
     text: "Des explications honnêtes, un devis clair et un traitement proposé seulement lorsqu’il est utile.",
-    Icon: Handshake,
+    Icon: HandshakeIcon,
   },
   {
     title: "Excellence",
     text: "Une formation continue et des outils numériques au service de la précision de chaque traitement.",
-    Icon: Medal,
+    Icon: MedalIcon,
   },
   {
     title: "Bienveillance",
     text: "Prendre le temps d’écouter, de rassurer et d’accompagner chaque patient, quel que soit son âge.",
-    Icon: Heart,
+    Icon: HeartIcon,
   },
 ];
 
@@ -51,11 +51,11 @@ export default function DoctorPage() {
         lead="Spécialiste en orthopédie dento-faciale, elle accompagne enfants, adolescents et adultes à Nabeul avec une exigence : un résultat beau, fonctionnel et durable."
       />
 
-      <section className="mx-auto max-w-[1400px] px-4 md:px-8">
+      <section className="mx-auto max-w-350 px-4 md:px-8">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
           <Reveal blur={false} className="md:col-span-5">
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+              <div className="relative aspect-4/5 overflow-hidden rounded-[1.75rem]">
                 <Parallax className="absolute inset-0" distance={50} zoom>
                   <Image
                     src={photos.doctorSmile.src}
@@ -71,8 +71,8 @@ export default function DoctorPage() {
             </div>
           </Reveal>
           <Reveal blur={false} delay={0.1} className="md:col-span-7 md:mt-24">
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+              <div className="relative aspect-4/3 overflow-hidden rounded-[1.75rem]">
                 <Parallax className="absolute inset-0" distance={70} zoom>
                   <Image
                     src={photos.doctorScreen.src}
@@ -89,7 +89,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="bio-titre" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-36">
+      <section aria-labelledby="bio-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
             <h2 id="bio-titre" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -117,7 +117,7 @@ export default function DoctorPage() {
       </section>
 
       <section aria-labelledby="formation-titre" className="bg-sunken">
-        <div className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
           <Reveal>
             <h2 id="formation-titre" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
               Formation et engagements
@@ -131,8 +131,8 @@ export default function DoctorPage() {
                 blur={false}
                 className={i < 2 ? "md:col-span-3" : "md:col-span-2"}
               >
-                <div className="h-full rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-                  <div className="flex h-full flex-col rounded-[calc(2rem-0.375rem)] bg-elevated p-8 md:p-10">
+                <div className="h-full rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+                  <div className="flex h-full flex-col rounded-[1.625rem] bg-elevated p-8 md:p-10">
                     <span aria-hidden className="h-2 w-2 rotate-45 bg-gold" />
                     <h3 className="font-display mt-8 text-2xl leading-tight md:text-[1.75rem]">{c.title}</h3>
                     <p className="mt-3 leading-relaxed text-ink-soft">{c.detail}</p>
@@ -144,7 +144,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="valeurs-titre" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-36">
+      <section aria-labelledby="valeurs-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
         <Reveal>
           <h2 id="valeurs-titre" className="font-display max-w-3xl text-4xl leading-[1.08] md:text-5xl">
             Trois engagements envers chaque patient
@@ -163,7 +163,7 @@ export default function DoctorPage() {
         </div>
       </section>
 
-      <section aria-labelledby="equipe-titre" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-36">
+      <section aria-labelledby="equipe-titre" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
         <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
             <h2 id="equipe-titre" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -180,8 +180,8 @@ export default function DoctorPage() {
             </div>
           </Reveal>
           <Reveal blur={false} delay={0.1} className="lg:col-span-8">
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-              <div className="relative aspect-[3/2] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+              <div className="relative aspect-3/2 overflow-hidden rounded-[1.75rem]">
                 <Image src={photos.team.src} alt={photos.team.alt} fill placeholder="blur" sizes="(min-width: 1024px) 65vw, 100vw" className="object-cover" />
               </div>
             </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowCounterClockwise, CheckCircle, EnvelopeSimple, Phone, Trash, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwiseIcon, CheckCircleIcon, EnvelopeSimpleIcon, PhoneIcon, TrashIcon, WhatsappLogoIcon } from "@phosphor-icons/react/dist/ssr";
 import { deleteRequest, setRequestStatus } from "@/app/dashboard/actions";
 import { ConfirmSubmit, PendingSubmit } from "@/components/dashboard/ui";
 import { getRequests } from "@/lib/admin";
@@ -65,7 +65,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
 
       {requests.length === 0 ? (
         <div className="mt-8 rounded-[1.75rem] bg-elevated px-8 py-16 text-center ring-1 ring-line">
-          <CheckCircle size={40} weight="thin" className="mx-auto text-gold-ink" />
+          <CheckCircleIcon size={40} weight="thin" className="mx-auto text-gold-ink" />
           <p className="font-display mt-4 text-2xl">{key === "nouvelles" ? "Tout est à jour." : "Aucune demande."}</p>
           <p className="mt-2 text-ink-muted">Les nouvelles demandes apparaîtront ici dès leur envoi.</p>
         </div>
@@ -80,7 +80,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
                 </div>
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-[12px] ring-1 ${
-                    r.status === "new" ? "bg-gold-soft text-gold-ink ring-gold/30" : "bg-ink/[0.05] text-ink-muted ring-line-strong"
+                    r.status === "new" ? "bg-gold-soft text-gold-ink ring-gold/30" : "bg-ink/5 text-ink-muted ring-line-strong"
                   }`}
                 >
                   {r.status === "new" ? "À traiter" : "Traitée"}
@@ -114,14 +114,14 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
 
               <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-5">
                 <a href={`tel:${r.phone}`} className={chip}>
-                  <Phone size={16} weight="light" /> Appeler
+                  <PhoneIcon size={16} weight="light" /> Appeler
                 </a>
                 <a href={whatsappLink(r.phone)} target="_blank" rel="noopener noreferrer" className={chip}>
-                  <WhatsappLogo size={16} weight="light" /> WhatsApp
+                  <WhatsappLogoIcon size={16} weight="light" /> WhatsApp
                 </a>
                 {r.email && (
                   <a href={`mailto:${r.email}`} className={chip}>
-                    <EnvelopeSimple size={16} weight="light" /> E-mail
+                    <EnvelopeSimpleIcon size={16} weight="light" /> E-mail
                   </a>
                 )}
                 <div className="ml-auto flex gap-2">
@@ -131,11 +131,11 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
                     <PendingSubmit className={`${chip} ${r.status === "new" ? "bg-btn text-btn-ink ring-transparent hover:bg-btn" : ""}`}>
                       {r.status === "new" ? (
                         <>
-                          <CheckCircle size={16} weight="light" /> Marquer traitée
+                          <CheckCircleIcon size={16} weight="light" /> Marquer traitée
                         </>
                       ) : (
                         <>
-                          <ArrowCounterClockwise size={16} weight="light" /> Rouvrir
+                          <ArrowCounterClockwiseIcon size={16} weight="light" /> Rouvrir
                         </>
                       )}
                     </PendingSubmit>
@@ -147,7 +147,7 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
                       ariaLabel="Supprimer la demande"
                       className="flex h-10 w-10 items-center justify-center rounded-full text-ink-muted ring-1 ring-line-strong transition-colors hover:bg-danger/10 hover:text-danger hover:ring-danger"
                     >
-                      <Trash size={16} weight="light" />
+                      <TrashIcon size={16} weight="light" />
                     </ConfirmSubmit>
                   </form>
                 </div>

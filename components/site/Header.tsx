@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { ArrowUpRight, InstagramLogo, FacebookLogo, Phone } from "@phosphor-icons/react";
+import { ArrowUpRightIcon, InstagramLogoIcon, FacebookLogoIcon, PhoneIcon } from "@phosphor-icons/react";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { nav, site } from "@/lib/site";
 
@@ -46,7 +46,7 @@ export function Header() {
         <motion.header
           animate={{ y: hidden && !open ? -110 : 0 }}
           transition={{ duration: 0.7, ease }}
-          className={`pointer-events-auto flex w-full max-w-[1180px] items-center justify-between gap-4 rounded-full py-2 pl-2 pr-2 transition-[background-color,box-shadow] duration-700 ease-luxe lg:w-max lg:justify-start ${
+          className={`pointer-events-auto flex w-full max-w-295 items-center justify-between gap-4 rounded-full py-2 pl-2 pr-2 transition-[background-color,box-shadow] duration-700 ease-luxe lg:w-max lg:justify-start ${
             scrolled || open
               ? "bg-elevated/75 shadow-luxe ring-1 ring-line backdrop-blur-xl"
               : "bg-elevated/40 ring-1 ring-line backdrop-blur-md"
@@ -94,7 +94,7 @@ export function Header() {
             >
               Prendre rendez-vous
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-btn-icon transition-transform duration-500 ease-luxe group-hover:translate-x-0.5 group-hover:-translate-y-px">
-                <ArrowUpRight size={14} weight="light" />
+                <ArrowUpRightIcon size={14} weight="light" />
               </span>
             </Link>
             <button
@@ -106,10 +106,10 @@ export function Header() {
               className="relative flex h-11 w-11 items-center justify-center rounded-full ring-1 ring-line lg:hidden"
             >
               <span
-                className={`absolute h-px w-5 bg-ink transition-transform duration-500 ease-luxe ${open ? "rotate-45" : "-translate-y-[4px]"}`}
+                className={`absolute h-px w-5 bg-ink transition-transform duration-500 ease-luxe ${open ? "rotate-45" : "-translate-y-1"}`}
               />
               <span
-                className={`absolute h-px w-5 bg-ink transition-transform duration-500 ease-luxe ${open ? "-rotate-45" : "translate-y-[4px]"}`}
+                className={`absolute h-px w-5 bg-ink transition-transform duration-500 ease-luxe ${open ? "-rotate-45" : "translate-y-1"}`}
               />
             </button>
           </div>
@@ -166,19 +166,19 @@ export function Header() {
               >
                 Prendre rendez-vous
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-btn-icon">
-                  <ArrowUpRight size={16} weight="light" />
+                  <ArrowUpRightIcon size={16} weight="light" />
                 </span>
               </Link>
               <div className="flex items-center justify-between text-sm text-ink-soft">
                 <a href={site.phones.landline.href} className="flex items-center gap-2">
-                  <Phone size={18} weight="light" /> {site.phones.landline.display}
+                  <PhoneIcon size={18} weight="light" /> {site.phones.landline.display}
                 </a>
                 <div className="flex gap-4">
                   <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                    <InstagramLogo size={22} weight="light" />
+                    <InstagramLogoIcon size={22} weight="light" />
                   </a>
                   <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                    <FacebookLogo size={22} weight="light" />
+                    <FacebookLogoIcon size={22} weight="light" />
                   </a>
                 </div>
               </div>

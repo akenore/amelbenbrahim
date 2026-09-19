@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/metadata";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, Check } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { CtaBlock } from "@/components/home/CtaBlock";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
@@ -50,9 +50,9 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         <Cta href="/contact#rendez-vous">Prendre rendez-vous</Cta>
       </PageHeader>
 
-      <div className="mx-auto max-w-[1400px] px-4 md:px-8">
-        <div className="animate-fade rounded-[2.5rem] bg-ink/[0.03] p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(2.5rem-0.5rem)] md:aspect-[21/9]">
+      <div className="mx-auto max-w-350 px-4 md:px-8">
+        <div className="animate-fade rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
+          <div className="relative aspect-4/3 overflow-hidden rounded-4xl md:aspect-21/9">
             <Parallax className="absolute inset-0" distance={80} zoom>
               <Picture photo={t.image} fill preload sizes="100vw" className="object-cover" />
             </Parallax>
@@ -60,7 +60,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </div>
 
-      <section aria-labelledby="principe" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+      <section aria-labelledby="principe" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-7">
             <h2 id="principe" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -73,14 +73,14 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
             </div>
           </Reveal>
           <Reveal delay={0.1} blur={false} className="lg:col-span-5">
-            <div className="rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line">
-              <div className="rounded-[calc(2rem-0.375rem)] bg-elevated p-8 md:p-10">
+            <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+              <div className="rounded-[1.625rem] bg-elevated p-8 md:p-10">
                 <h2 className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">Indiqué pour</h2>
                 <ul className="mt-6 space-y-4">
                   {t.forWhom.map((item) => (
                     <li key={item} className="flex gap-4 leading-relaxed">
                       <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold-soft text-gold-ink">
-                        <Check size={12} weight="bold" />
+                        <CheckIcon size={12} weight="bold" />
                       </span>
                       {item}
                     </li>
@@ -93,7 +93,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
       </section>
 
       <section aria-labelledby="deroulement" className="bg-sunken">
-        <div className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
           <Reveal>
             <h2 id="deroulement" className="font-display text-4xl leading-[1.08] md:text-5xl">
               Comment se déroule le traitement
@@ -114,7 +114,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="avantages" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+      <section aria-labelledby="avantages" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
         <Reveal>
           <h2 id="avantages" className="font-display text-4xl leading-[1.08] md:text-5xl">
             Pourquoi le choisir
@@ -132,11 +132,11 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="quotidien" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="quotidien" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal blur={false} className="lg:col-span-5">
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+              <div className="relative aspect-4/5 overflow-hidden rounded-[1.75rem]">
                 <Parallax className="absolute inset-0" distance={60} zoom>
                   <Picture photo={t.secondary} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
                 </Parallax>
@@ -162,7 +162,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="questions" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="questions" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
             <h2 id="questions" className="font-display text-4xl leading-[1.08] md:text-5xl">
@@ -175,7 +175,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
         </div>
       </section>
 
-      <section aria-labelledby="autres" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-32">
+      <section aria-labelledby="autres" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-32">
         <h2 id="autres" className="text-[11px] uppercase tracking-[0.22em] text-ink-muted">
           Autres traitements
         </h2>
@@ -187,7 +187,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
                 className="group inline-flex items-center gap-2 rounded-full px-5 py-3 ring-1 ring-line-strong transition-colors duration-500 ease-luxe hover:bg-gold-soft hover:ring-gold"
               >
                 {o.name}
-                <ArrowUpRight size={14} weight="light" className="transition-transform duration-500 ease-luxe group-hover:-translate-y-px group-hover:translate-x-0.5" />
+                <ArrowUpRightIcon size={14} weight="light" className="transition-transform duration-500 ease-luxe group-hover:-translate-y-px group-hover:translate-x-0.5" />
               </Link>
             </li>
           ))}

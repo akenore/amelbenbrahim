@@ -8,7 +8,7 @@ import { credentials } from "@/lib/site";
 export function DoctorFeature() {
   return (
     <section aria-labelledby="docteur-titre" className="bg-sunken">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 px-4 py-24 md:px-8 md:py-36 lg:grid-cols-12 lg:gap-10">
+      <div className="mx-auto grid max-w-350 grid-cols-1 gap-14 px-4 py-24 md:px-8 md:py-36 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">
             <Reveal>
@@ -20,7 +20,7 @@ export function DoctorFeature() {
                 <br />
                 Ben Brahim
               </h2>
-              <p className="mt-7 max-w-[34rem] text-lg leading-relaxed text-ink-soft">
+              <p className="mt-7 max-w-136 text-lg leading-relaxed text-ink-soft">
                 Formée à Monastir puis attachée aux Hôpitaux de Paris, elle allie rigueur clinique, outils numériques et
                 sens du détail esthétique. Chaque patient est suivi personnellement, du premier bilan à la contention.
               </p>
@@ -36,8 +36,8 @@ export function DoctorFeature() {
 
         <div className="lg:col-span-7">
           <Reveal blur={false}>
-            <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-              <div className="relative aspect-[3/2] overflow-hidden rounded-[calc(2.25rem-0.5rem)]">
+            <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+              <div className="relative aspect-3/2 overflow-hidden rounded-[1.75rem]">
                 <Parallax className="absolute inset-0" distance={50} zoom>
                   <Image
                     src={photos.team.src}

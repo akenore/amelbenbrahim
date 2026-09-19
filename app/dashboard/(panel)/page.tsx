@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, NotePencil, Phone, Plus, ShieldWarning } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, NotePencilIcon, PhoneIcon, PlusIcon, ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { getOverview } from "@/lib/admin";
 import { can } from "@/lib/auth/roles";
@@ -43,7 +43,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
     <div className="mx-auto max-w-6xl">
       {sp.acces === "refuse" && (
         <p role="alert" className="mb-8 flex items-center gap-3 rounded-2xl bg-danger/10 px-5 py-4 text-[14px] text-danger">
-          <ShieldWarning size={20} weight="light" /> Cette section n’est pas accessible avec votre rôle.
+          <ShieldWarningIcon size={20} weight="light" /> Cette section n’est pas accessible avec votre rôle.
         </p>
       )}
 
@@ -61,7 +61,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
           >
             Nouvel article
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-btn-icon">
-              <Plus size={16} weight="light" />
+              <PlusIcon size={16} weight="light" />
             </span>
           </Link>
         )}
@@ -72,7 +72,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
           <Link
             key={t.label}
             href={t.href}
-            className={`group rounded-[1.5rem] p-6 ring-1 transition-colors duration-300 ${
+            className={`group rounded-3xl p-6 ring-1 transition-colors duration-300 ${
               "accent" in t && t.accent ? "bg-btn text-btn-ink ring-transparent" : "bg-elevated ring-line hover:ring-gold"
             }`}
           >
@@ -114,7 +114,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
                       </p>
                     </div>
                     <a href={`tel:${r.phone}`} aria-label={`Appeler ${r.name}`} className={roundBtn}>
-                      <Phone size={16} weight="light" />
+                      <PhoneIcon size={16} weight="light" />
                     </a>
                   </li>
                 ))}
@@ -147,7 +147,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
                     </div>
                   </div>
                   <Link href={`/dashboard/articles/${p.id}`} aria-label={`Modifier ${p.title}`} className={roundBtn}>
-                    <NotePencil size={16} weight="light" />
+                    <NotePencilIcon size={16} weight="light" />
                   </Link>
                 </li>
               ))}
@@ -157,7 +157,7 @@ export default async function OverviewPage({ searchParams }: PageProps<"/dashboa
       </div>
 
       <a href="/" target="_blank" className="mt-10 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-ink">
-        Voir le site <ArrowUpRight size={14} weight="light" />
+        Voir le site <ArrowUpRightIcon size={14} weight="light" />
       </a>
     </div>
   );

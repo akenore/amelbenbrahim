@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
-import { ArrowsClockwise, Prohibit, Trash, UserCheck, WarningCircle } from "@phosphor-icons/react";
+import { ArrowsClockwiseIcon, ProhibitIcon, TrashIcon, UserCheckIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import { deleteUser, resetUserPassword, updateUser, type TeamFormState } from "@/app/dashboard/team-actions";
 import { Avatar } from "@/components/dashboard/Avatar";
 import { SecretNotice } from "@/components/dashboard/team/SecretNotice";
@@ -41,7 +41,7 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
   }
 
   return (
-    <li className={`rounded-[1.5rem] bg-elevated p-5 ring-1 ring-line transition-opacity md:p-6 ${pending ? "opacity-60" : ""}`}>
+    <li className={`rounded-3xl bg-elevated p-5 ring-1 ring-line transition-opacity md:p-6 ${pending ? "opacity-60" : ""}`}>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
         <div className="flex min-w-0 flex-1 items-center gap-4">
           <Avatar name={member.name} muted={!member.active} />
@@ -50,10 +50,10 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
               <span className="truncate text-[16px]">{member.name}</span>
               {isSelf && <span className="rounded-full bg-gold-soft px-2 py-0.5 text-[11px] text-gold-ink">Vous</span>}
               {!member.active && (
-                <span className="rounded-full bg-ink/[0.06] px-2 py-0.5 text-[11px] text-ink-muted">Désactivé</span>
+                <span className="rounded-full bg-ink/6 px-2 py-0.5 text-[11px] text-ink-muted">Désactivé</span>
               )}
               {member.active && member.mustChangePassword && (
-                <span className="rounded-full bg-ink/[0.06] px-2 py-0.5 text-[11px] text-ink-muted">Mot de passe temporaire</span>
+                <span className="rounded-full bg-ink/6 px-2 py-0.5 text-[11px] text-ink-muted">Mot de passe temporaire</span>
               )}
             </p>
             <p className="truncate text-[13px] text-ink-muted">
@@ -93,7 +93,7 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
                     if (!window.confirm(`Générer un nouveau mot de passe pour ${member.name} ? Ses sessions ouvertes seront fermées.`)) e.preventDefault();
                   }}
                 >
-                  <ArrowsClockwise size={17} weight="light" />
+                  <ArrowsClockwiseIcon size={17} weight="light" />
                 </button>
               </form>
               <button
@@ -104,17 +104,17 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
                 title={member.active ? "Désactiver le compte" : "Réactiver le compte"}
                 aria-label={member.active ? `Désactiver le compte de ${member.name}` : `Réactiver le compte de ${member.name}`}
               >
-                {member.active ? <Prohibit size={17} weight="light" /> : <UserCheck size={17} weight="light" />}
+                {member.active ? <ProhibitIcon size={17} weight="light" /> : <UserCheckIcon size={17} weight="light" />}
               </button>
               <button
                 type="button"
                 disabled={pending}
                 onClick={remove}
-                className={`${iconBtn} hover:!bg-danger/10 hover:!text-danger hover:!ring-danger`}
+                className={`${iconBtn} hover:bg-danger/10! hover:text-danger! hover:ring-danger!`}
                 title="Supprimer le compte"
                 aria-label={`Supprimer le compte de ${member.name}`}
               >
-                <Trash size={17} weight="light" />
+                <TrashIcon size={17} weight="light" />
               </button>
             </>
           )}
@@ -123,7 +123,7 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
 
       {error && (
         <p role="alert" className="mt-4 flex items-center gap-2 text-[14px] text-danger">
-          <WarningCircle size={16} weight="light" /> {error}
+          <WarningCircleIcon size={16} weight="light" /> {error}
         </p>
       )}
       {resetState.status === "error" && resetState.message && <p className="mt-4 text-[14px] text-danger">{resetState.message}</p>}

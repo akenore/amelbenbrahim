@@ -1,4 +1,4 @@
-import { Crosshair, Cube, Eye, Scan } from "@phosphor-icons/react/dist/ssr";
+import { CrosshairIcon, CubeIcon, EyeIcon, ScanIcon } from "@phosphor-icons/react/dist/ssr";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
 import { Picture } from "@/components/ui/Picture";
@@ -6,15 +6,15 @@ import { stock } from "@/lib/images";
 
 // VERIFY with the practice: the optical impression claim assumes an intraoral scanner.
 const features = [
-  { title: "Empreinte optique", text: "Une caméra enregistre vos dents en 3D, le plus souvent sans pâte d’empreinte.", Icon: Scan },
-  { title: "Planification 3D", text: "Chaque déplacement est programmé et contrôlé avant le début du traitement.", Icon: Cube },
-  { title: "Résultat visualisé", text: "Vous découvrez l’objectif avant de vous engager, notamment pour les aligneurs.", Icon: Eye },
-  { title: "Suivi mesuré", text: "Photographies et contrôles réguliers pour vérifier chaque étape.", Icon: Crosshair },
+  { title: "Empreinte optique", text: "Une caméra enregistre vos dents en 3D, le plus souvent sans pâte d’empreinte.", Icon: ScanIcon },
+  { title: "Planification 3D", text: "Chaque déplacement est programmé et contrôlé avant le début du traitement.", Icon: CubeIcon },
+  { title: "Résultat visualisé", text: "Vous découvrez l’objectif avant de vous engager, notamment pour les aligneurs.", Icon: EyeIcon },
+  { title: "Suivi mesuré", text: "Photographies et contrôles réguliers pour vérifier chaque étape.", Icon: CrosshairIcon },
 ];
 
 export function DigitalSection() {
   return (
-    <section aria-labelledby="numerique-titre" className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-36">
+    <section aria-labelledby="numerique-titre" className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-36">
       <Reveal className="max-w-3xl">
         <h2 id="numerique-titre" className="font-display text-4xl leading-[1.08] md:text-6xl">
           L’orthodontie à l’ère <em className="text-gold-ink">numérique</em>
@@ -26,8 +26,8 @@ export function DigitalSection() {
       </Reveal>
 
       <Reveal blur={false} className="mt-14 md:mt-20">
-        <div className="rounded-[2.5rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(2.5rem-0.5rem)] md:aspect-[21/9]">
+        <div className="rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line">
+          <div className="relative aspect-4/3 overflow-hidden rounded-4xl md:aspect-21/9">
             <Parallax className="absolute inset-0" distance={90} zoom>
               <Picture photo={stock.scanner} fill sizes="100vw" className="object-cover" />
             </Parallax>

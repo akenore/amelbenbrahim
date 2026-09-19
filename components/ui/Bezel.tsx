@@ -9,9 +9,9 @@ export function Bezel({
   innerClassName?: string;
 }) {
   return (
-    <div className={`rounded-[2rem] bg-ink/[0.03] p-1.5 ring-1 ring-line ${className}`}>
+    <div className={`rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line ${className}`}>
       <div
-        className={`relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] shadow-[inset_0_1px_1px_rgb(255_255_255/0.12)] ${innerClassName}`}
+        className={`relative h-full overflow-hidden rounded-[1.625rem] shadow-[inset_0_1px_1px_rgb(255_255_255/0.12)] ${innerClassName}`}
       >
         {children}
       </div>

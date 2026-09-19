@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { Reveal } from "@/components/motion/Reveal";
 import { Picture } from "@/components/ui/Picture";
 import { stock, type Photo } from "@/lib/images";
@@ -85,12 +85,12 @@ export function AgeProfiles() {
   }
 
   return (
-    <section aria-labelledby="ages-titre" className="mx-auto max-w-[1400px] px-4 pb-24 md:px-8 md:pb-36">
+    <section aria-labelledby="ages-titre" className="mx-auto max-w-350 px-4 pb-24 md:px-8 md:pb-36">
       <Reveal className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <h2 id="ages-titre" className="font-display max-w-2xl text-4xl leading-[1.08] md:text-6xl">
           Un accompagnement à chaque âge
         </h2>
-        <div role="tablist" aria-label="Profils de patients" className="flex gap-1 self-start rounded-full bg-ink/[0.04] p-1 ring-1 ring-line md:self-auto">
+        <div role="tablist" aria-label="Profils de patients" className="flex gap-1 self-start rounded-full bg-ink/4 p-1 ring-1 ring-line md:self-auto">
           {profiles.map((p, i) => (
             <button
               key={p.key}
@@ -124,8 +124,8 @@ export function AgeProfiles() {
 
       <div className="mt-12 grid grid-cols-1 gap-10 md:mt-16 lg:grid-cols-12 lg:gap-16">
         <Reveal blur={false} className="lg:col-span-6">
-          <div className="rounded-[2.25rem] bg-ink/[0.03] p-2 ring-1 ring-line">
-            <div className="relative aspect-[5/4] overflow-hidden rounded-[calc(2.25rem-0.5rem)] lg:aspect-square">
+          <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
+            <div className="relative aspect-5/4 overflow-hidden rounded-[1.75rem] lg:aspect-square">
               {profiles.map((p, i) => (
                 <div
                   key={p.key}
@@ -170,7 +170,7 @@ export function AgeProfiles() {
                     className="group inline-flex items-center gap-2 rounded-full px-5 py-3 text-[14.5px] ring-1 ring-line-strong transition-colors duration-500 ease-luxe hover:bg-gold-soft hover:ring-gold"
                   >
                     {l.label}
-                    <ArrowUpRight size={14} weight="light" className="transition-transform duration-500 ease-luxe group-hover:-translate-y-px group-hover:translate-x-0.5" />
+                    <ArrowUpRightIcon size={14} weight="light" className="transition-transform duration-500 ease-luxe group-hover:-translate-y-px group-hover:translate-x-0.5" />
                   </Link>
                 ))}
               </div>

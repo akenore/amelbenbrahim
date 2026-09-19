@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowSquareOut, Newspaper, SignOut, SquaresFour, Tray, UsersThree } from "@phosphor-icons/react";
+import { ArrowSquareOutIcon, NewspaperIcon, SignOutIcon, SquaresFourIcon, TrayIcon, UsersThreeIcon } from "@phosphor-icons/react";
 import { logout } from "@/app/dashboard/actions";
 import { Monogram } from "@/components/brand/Monogram";
 import { Avatar } from "@/components/dashboard/Avatar";
@@ -10,11 +10,11 @@ import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { can, roles, type Area } from "@/lib/auth/roles";
 import type { TeamMember } from "@/lib/data/types";
 
-const links: { href: string; label: string; Icon: typeof SquaresFour; exact?: boolean; area?: Area }[] = [
-  { href: "/dashboard", label: "Vue d’ensemble", Icon: SquaresFour, exact: true },
-  { href: "/dashboard/articles", label: "Articles", Icon: Newspaper, area: "posts" },
-  { href: "/dashboard/demandes", label: "Demandes de RDV", Icon: Tray, area: "requests" },
-  { href: "/dashboard/utilisateurs", label: "Utilisateurs", Icon: UsersThree, area: "users" },
+const links: { href: string; label: string; Icon: typeof SquaresFourIcon; exact?: boolean; area?: Area }[] = [
+  { href: "/dashboard", label: "Vue d’ensemble", Icon: SquaresFourIcon, exact: true },
+  { href: "/dashboard/articles", label: "Articles", Icon: NewspaperIcon, area: "posts" },
+  { href: "/dashboard/demandes", label: "Demandes de RDV", Icon: TrayIcon, area: "requests" },
+  { href: "/dashboard/utilisateurs", label: "Utilisateurs", Icon: UsersThreeIcon, area: "users" },
 ];
 
 export function Sidebar({ user, newRequests }: { user: TeamMember; newRequests: number }) {
@@ -23,7 +23,7 @@ export function Sidebar({ user, newRequests }: { user: TeamMember; newRequests: 
   const visible = links.filter((l) => !l.area || can(user.role, l.area));
 
   return (
-    <aside className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-xl lg:h-[100dvh] lg:w-72 lg:shrink-0 lg:border-b-0 lg:border-r">
+    <aside className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-xl lg:h-dvh lg:w-72 lg:shrink-0 lg:border-b-0 lg:border-r">
       <div className="flex h-full items-center gap-2 px-4 py-3 lg:flex-col lg:items-stretch lg:px-5 lg:py-7">
         <Link href="/dashboard" className="flex items-center gap-3 lg:px-2">
           <Monogram strokeWidth={30} className="h-7 w-auto text-gold" />
@@ -81,7 +81,7 @@ export function Sidebar({ user, newRequests }: { user: TeamMember; newRequests: 
             target="_blank"
             className="hidden items-center gap-3 rounded-full px-3 py-2.5 text-[14.5px] text-ink-soft hover:bg-gold-soft hover:text-ink sm:flex lg:px-4"
           >
-            <ArrowSquareOut size={20} weight="light" />
+            <ArrowSquareOutIcon size={20} weight="light" />
             <span className="hidden lg:inline">Voir le site</span>
           </a>
           <form action={logout}>
@@ -90,7 +90,7 @@ export function Sidebar({ user, newRequests }: { user: TeamMember; newRequests: 
               title="Déconnexion"
               className="flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-[14.5px] text-ink-soft hover:bg-gold-soft hover:text-ink lg:px-4"
             >
-              <SignOut size={20} weight="light" />
+              <SignOutIcon size={20} weight="light" />
               <span className="hidden lg:inline">Déconnexion</span>
             </button>
           </form>

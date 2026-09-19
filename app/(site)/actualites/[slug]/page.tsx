@@ -43,7 +43,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
   return (
     <>
       <article>
-        <header className="mx-auto max-w-[1400px] px-4 pb-12 pt-32 md:px-8 md:pt-40">
+        <header className="mx-auto max-w-350 px-4 pb-12 pt-32 md:px-8 md:pt-40">
           <Breadcrumbs
             items={[
               { name: "Actualités", href: "/actualites" },
@@ -75,16 +75,16 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
         </header>
 
         {post.cover && (
-          <div className="mx-auto max-w-[1400px] px-4 md:px-8">
-            <div className="animate-fade rounded-[2.5rem] bg-ink/[0.03] p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(2.5rem-0.5rem)] md:aspect-[21/9]">
+          <div className="mx-auto max-w-350 px-4 md:px-8">
+            <div className="animate-fade rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
+              <div className="relative aspect-4/3 overflow-hidden rounded-4xl md:aspect-21/9">
                 <Image src={post.cover.src} alt={post.cover.alt} fill preload sizes="100vw" className="object-cover" />
               </div>
             </div>
           </div>
         )}
 
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
+        <div className="mx-auto grid max-w-350 grid-cols-1 gap-10 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
           <aside className="lg:col-span-2 lg:col-start-2">
             <div className="lg:sticky lg:top-32">
               <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-ink-muted">Partager</p>
@@ -99,7 +99,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
 
       {related.length > 0 && (
         <section aria-labelledby="a-lire" className="border-t border-line bg-sunken">
-          <div className="mx-auto max-w-[1400px] px-4 py-24 md:px-8 md:py-32">
+          <div className="mx-auto max-w-350 px-4 py-24 md:px-8 md:py-32">
             <h2 id="a-lire" className="font-display text-4xl leading-[1.08] md:text-5xl">
               À lire aussi
             </h2>

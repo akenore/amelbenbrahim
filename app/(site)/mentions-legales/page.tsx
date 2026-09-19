@@ -13,7 +13,7 @@ export default function LegalPage() {
   return (
     <>
       <PageHeader crumbs={[{ name: "Mentions légales", href: "/mentions-legales" }]} title="Mentions légales" />
-      <section className="mx-auto max-w-[1400px] px-4 pb-32 md:px-8">
+      <section className="mx-auto max-w-350 px-4 pb-32 md:px-8">
         <div className="prose-article max-w-[68ch]">
           <h2>Éditeur du site</h2>
           <p>

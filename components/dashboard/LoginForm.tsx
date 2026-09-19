@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { ArrowRight, WarningCircle } from "@phosphor-icons/react";
+import { ArrowRightIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import { login, type LoginState } from "@/app/dashboard/actions";
 
 const field =
@@ -25,7 +25,7 @@ export function LoginForm() {
       </div>
       {state.error && (
         <p role="alert" className="flex items-start gap-2 text-[14px] text-danger">
-          <WarningCircle size={18} weight="light" className="mt-0.5 shrink-0" /> {state.error}
+          <WarningCircleIcon size={18} weight="light" className="mt-0.5 shrink-0" /> {state.error}
         </p>
       )}
       <button
@@ -35,7 +35,7 @@ export function LoginForm() {
       >
         {pending ? "Connexion…" : "Se connecter"}
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-btn-icon transition-transform duration-500 ease-luxe group-hover:translate-x-0.5">
-          <ArrowRight size={16} weight="light" />
+          <ArrowRightIcon size={16} weight="light" />
         </span>
       </button>
     </form>

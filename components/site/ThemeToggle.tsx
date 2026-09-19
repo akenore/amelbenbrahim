@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Moon, Sun } from "@phosphor-icons/react";
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 
 type Theme = "light" | "dark";
 
@@ -40,7 +40,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
       className={`flex h-10 w-10 items-center justify-center rounded-full text-ink-soft transition-colors duration-500 ease-luxe hover:bg-gold-soft hover:text-gold-ink ${className}`}
     >
-      {theme === "dark" ? <Sun size={18} weight="light" /> : <Moon size={18} weight="light" />}
+      {theme === "dark" ? <SunIcon size={18} weight="light" /> : <MoonIcon size={18} weight="light" />}
     </button>
   );
 }

@@ -68,7 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="grain min-h-[100dvh] bg-bg text-ink">
+      <body className="grain min-h-dvh bg-bg text-ink">
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
