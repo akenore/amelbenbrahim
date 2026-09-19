@@ -103,7 +103,7 @@ function PinnedJourney() {
   return (
     <section ref={wrapper} aria-labelledby="parcours-titre" className="relative" style={{ height: `calc(100dvh + ${distance}px)` }}>
       <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
-        <motion.ul ref={track} style={{ x }} className="flex items-stretch gap-6 pl-8 will-change-transform xl:pl-[max(2rem,calc((100vw-1400px)/2+2rem))]">
+        <motion.ul ref={track} style={{ x }} className="flex items-stretch gap-6 pl-8 will-change-transform xl:pl-[max(2rem,calc((100vw_-_1400px)_/_2_+_2rem))]">
           <li className="flex shrink-0 items-center pr-16">
             <Intro />
           </li>
