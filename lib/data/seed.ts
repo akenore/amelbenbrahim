@@ -1,7 +1,8 @@
+import { stockFiles, type StockFile } from "@/lib/data/stock-files";
 import type { Database, MediaImage, Post } from "@/lib/data/types";
-import { stock, type Photo } from "@/lib/images";
 
-const cover = (photo: Photo): MediaImage => ({ src: String(photo.src), alt: photo.alt, width: 2400, height: 1600 });
+// Stored as stable public paths (not build-hashed URLs) so saved posts never break.
+const cover = (file: StockFile, alt: string): MediaImage => ({ ...stockFiles[file], alt });
 
 // Starter content so the news section is never empty on a fresh install.
 // Everything here can be edited or deleted from the dashboard.
@@ -138,7 +139,7 @@ Certains déplacements dentaires se réalisent très bien avec des gouttières. 
 
 Lors de la consultation, nous présentons les options possibles pour votre cas, avec leurs avantages, leurs contraintes et un devis détaillé. Vous choisissez en toute connaissance de cause.`,
     category: "conseils",
-    cover: cover(stock.bracesModels),
+    cover: cover("braces-models", "Modèles dentaires avec attaches céramique et attaches métalliques"),
     status: "published",
     featured: false,
     publishedAt: "2026-09-16T09:00:00.000Z",
@@ -180,7 +181,7 @@ Appelez rapidement : sans contention, les dents peuvent se déplacer en quelques
 
 Gardez toujours un peu de cire orthodontique sur vous : c’est le meilleur allié des premiers jours.`,
     category: "conseils",
-    cover: cover(stock.bracesSmile),
+    cover: cover("braces-smile", "Sourire avec un appareil orthodontique fixe"),
     status: "published",
     featured: false,
     publishedAt: "2026-07-22T09:00:00.000Z",
@@ -218,7 +219,7 @@ Limitez les boissons sucrées ou acides entre les repas : sous un appareil, le s
 
 Un brossage minutieux, avec une brossette autour des attaches, évite les taches et les caries. Un petit kit de brossage dans le sac facilite les choses au travail ou à l’école.`,
     category: "conseils",
-    cover: cover(stock.apple),
+    cover: cover("apple", "Pomme coupée en fines tranches"),
     status: "published",
     featured: false,
     publishedAt: "2026-07-08T09:00:00.000Z",
@@ -254,7 +255,7 @@ Chez l’adulte, l’orthodontie s’inscrit souvent dans un projet plus global.
 
 Comme à tout âge, une **contention** permet de conserver le résultat dans la durée. Elle est discrète et fait partie intégrante du traitement.`,
     category: "conseils",
-    cover: cover(stock.adultSmile),
+    cover: cover("adult-smile", "Gros plan sur un sourire aligné"),
     status: "published",
     featured: false,
     publishedAt: "2026-06-24T09:00:00.000Z",

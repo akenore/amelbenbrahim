@@ -19,7 +19,20 @@ export function PostMeta({ post, className = "", compact = false }: { post: Post
   );
 }
 
-export function PostCover({ post, sizes, className = "" }: { post: Post; sizes: string; className?: string }) {
+/** `urgency`: "high" for the likely LCP image, "eager" for other above-the-fold covers. */
+type Urgency = "high" | "eager" | "lazy";
+
+export function PostCover({
+  post,
+  sizes,
+  className = "",
+  urgency = "lazy",
+}: {
+  post: Post;
+  sizes: string;
+  className?: string;
+  urgency?: Urgency;
+}) {
   return (
     <div className={`relative overflow-hidden rounded-[1.625rem] bg-sunken ${className}`}>
       {post.cover ? (
@@ -28,6 +41,8 @@ export function PostCover({ post, sizes, className = "" }: { post: Post; sizes: 
           alt={post.cover.alt}
           fill
           sizes={sizes}
+          loading={urgency === "lazy" ? "lazy" : "eager"}
+          fetchPriority={urgency === "high" ? "high" : undefined}
           className="object-cover transition-transform duration-[1.4s] ease-luxe group-hover:scale-[1.04]"
         />
       ) : (
@@ -37,13 +52,14 @@ export function PostCover({ post, sizes, className = "" }: { post: Post; sizes: 
   );
 }
 
-export function PostCard({ post, priority = false }: { post: Post; priority?: boolean }) {
+export function PostCard({ post, priority = false, urgency }: { post: Post; priority?: boolean; urgency?: Urgency }) {
   return (
     <article className="group">
       <Link href={`/actualites/${post.slug}`} className="block">
         <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
           <PostCover
             post={post}
+            urgency={urgency}
             sizes={priority ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
             className={priority ? "aspect-4/3 md:aspect-video" : "aspect-4/3"}
           />

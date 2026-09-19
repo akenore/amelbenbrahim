@@ -23,7 +23,7 @@ export function Parallax({ children, className, distance = 80, zoom = false }: P
   return (
     <div ref={ref} className={className}>
       <motion.div
-        className="h-full w-full will-change-transform"
+        className="relative h-full w-full will-change-transform"
         style={reduce ? undefined : { y, scale: zoom ? scale : 1 }}
       >
         {children}

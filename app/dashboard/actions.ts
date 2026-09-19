@@ -104,8 +104,8 @@ export type SavePostState = {
 
 const coverSchema = z
   .object({
-    // Uploaded media, practice photos or illustrative Unsplash photos.
-    src: z.string().regex(/^\/(media|img)\/[\w.-]+$|^https:\/\/images\.unsplash\.com\/photo-[\w-]+(\?[\w=&%.-]*)?$/),
+    // Uploaded media (/media), practice photos (/img) or local stock copies (/img/stock).
+    src: z.string().regex(/^\/(media\/|img\/(stock\/)?)[\w-]+(\.[\w-]+)*$/),
     alt: z.string().max(200),
     width: z.number().int().positive(),
     height: z.number().int().positive(),

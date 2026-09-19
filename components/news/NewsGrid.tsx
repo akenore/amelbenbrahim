@@ -65,7 +65,7 @@ export function NewsGrid({ posts }: { posts: Post[] }) {
               transition={{ duration: 0.6, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
               className={i === 0 && filter === "all" ? "md:col-span-2 lg:col-span-2" : undefined}
             >
-              <PostCard post={post} priority={i === 0 && filter === "all"} />
+              <PostCard post={post} priority={i === 0 && filter === "all"} urgency={i === 0 ? "high" : i < 3 ? "eager" : "lazy"} />
             </motion.li>
           ))}
         </AnimatePresence>

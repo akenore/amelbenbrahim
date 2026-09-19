@@ -15,9 +15,7 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [70, 80, 90],
     formats: ["image/avif", "image/webp"],
-    // Illustrative photography (Unsplash license). Practice photos stay local.
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com", pathname: "/photo-**" }],
-    // Keep optimized copies for a month so a slow or unreachable source rarely matters.
+    // All images are served from this origin; keep optimized copies for a month.
     minimumCacheTTL: 2678400,
   },
   experimental: {

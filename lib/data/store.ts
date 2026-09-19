@@ -2,6 +2,7 @@ import "server-only";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { seedDatabase } from "@/lib/data/seed";
+import { localStockFor } from "@/lib/data/stock-files";
 import type { Database } from "@/lib/data/types";
 
 // A small JSON document store. It fits a single-practice site (a few hundred
@@ -20,6 +21,11 @@ export async function readDatabase(): Promise<Database> {
     const raw = await readFile(DB_FILE, "utf8");
     const db = JSON.parse(raw) as Database;
     db.users ??= []; // databases created before team accounts existed
+    for (const post of db.posts) {
+      // Covers saved while the stock photos were served from Unsplash.
+      const local = post.cover && localStockFor(post.cover.src);
+      if (post.cover && local) post.cover = { ...post.cover, src: local.src, width: local.width, height: local.height };
+    }
     return db;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return seedDatabase();
