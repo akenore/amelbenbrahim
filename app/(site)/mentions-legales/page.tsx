@@ -38,7 +38,9 @@ export default function LegalPage() {
           <p>
             Les informations transmises via le formulaire de rendez-vous (nom, téléphone, e-mail, message) sont utilisées
             uniquement par le cabinet pour vous recontacter au sujet de votre demande. Elles ne sont ni cédées ni vendues
-            à des tiers et sont conservées pendant la durée nécessaire au traitement de la demande.
+            à des tiers et sont conservées pendant la durée nécessaire au traitement de la demande. Pour qu’elle soit
+            traitée rapidement, l’équipe du cabinet est prévenue de chaque nouvelle demande par une notification
+            WhatsApp (nom, téléphone, motif et disponibilités), envoyée via le service WhatsApp Business de Meta.
           </p>
           <p>
             Conformément à la loi organique n° 2004-63 du 27 juillet 2004 portant sur la protection des données à

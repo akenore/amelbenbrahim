@@ -8,15 +8,8 @@ import { PostCard, PostMeta } from "@/components/news/PostCard";
 import { ShareLinks } from "@/components/news/ShareLinks";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/site/PageHeader";
-import { getPublishedPost, getPublishedPosts, getRelatedPosts } from "@/lib/posts";
+import { getPublishedPost, getRelatedPosts } from "@/lib/posts";
 import { absolute, articleSchema, breadcrumbs } from "@/lib/seo";
-
-export const revalidate = 3600;
-
-export async function generateStaticParams() {
-  const posts = await getPublishedPosts();
-  return posts.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: PageProps<"/actualites/[slug]">): Promise<Metadata> {
   const { slug } = await params;

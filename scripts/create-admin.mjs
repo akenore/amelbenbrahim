@@ -1,16 +1,26 @@
 // Recovery tool: create an administrator or reset an existing account's password.
-// Usage (on the server, from the project folder):
-//   node scripts/create-admin.mjs <email> "<Nom affiché>" [mot-de-passe]
+// Usage (on the server, in the app container, or locally with DATABASE_URL set):
+//   bun scripts/create-admin.mjs <email> "<Nom affiché>" [mot-de-passe]
 // Without a password, a temporary one is generated and printed.
-import { randomBytes, randomInt, randomUUID, scryptSync } from "node:crypto";
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import path from "node:path";
+import { randomBytes, randomInt, scryptSync } from "node:crypto";
+import postgres from "postgres";
+
+try {
+  process.loadEnvFile(".env.local");
+} catch {
+  // No .env.local (production: variables come from the environment).
+}
 
 const [emailArg, nameArg, passwordArg] = process.argv.slice(2);
 if (!emailArg || !emailArg.includes("@")) {
-  console.error('Usage: node scripts/create-admin.mjs <email> "<Nom affiché>" [mot-de-passe]');
+  console.error('Usage: bun scripts/create-admin.mjs <email> "<Nom affiché>" [mot-de-passe]');
   process.exit(1);
 }
+if (!process.env.DATABASE_URL) {
+  console.error("DATABASE_URL est manquante.");
+  process.exit(1);
+}
+
 const email = emailArg.trim().toLowerCase();
 const alphabet = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const password = passwordArg ?? Array.from({ length: 14 }, () => alphabet[randomInt(alphabet.length)]).join("");
@@ -24,43 +34,25 @@ const salt = randomBytes(16);
 const hash = scryptSync(password.normalize("NFKC"), salt, 64, { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 });
 const passwordHash = `scrypt$16384$8$1$${salt.toString("base64url")}$${hash.toString("base64url")}`;
 
-const dataDir = path.resolve(process.env.DATA_DIR ?? path.join(process.cwd(), ".data"));
-const file = path.join(dataDir, "db.json");
-let db;
+const sql = postgres(process.env.DATABASE_URL, { max: 1, onnotice: () => undefined });
 try {
-  db = JSON.parse(readFileSync(file, "utf8"));
-} catch {
-  console.error(`Base introuvable (${file}). Lancez le site une première fois ou vérifiez DATA_DIR.`);
-  process.exit(1);
+  const [row] = await sql`
+    insert into users (name, email, role, password_hash, active, must_change_password)
+    values (${nameArg || email}, ${email}, 'admin', ${passwordHash}, true, ${!passwordArg})
+    on conflict (email) do update set
+      password_hash = excluded.password_hash,
+      role = 'admin',
+      active = true,
+      must_change_password = excluded.must_change_password,
+      session_version = users.session_version + 1,
+      name = coalesce(${nameArg ?? null}, users.name)
+    returning (xmax = 0) as created`;
+  console.log(`${row.created ? "Administrateur créé" : "Compte réinitialisé"} : ${email}`);
+  if (!passwordArg) console.log(`Mot de passe temporaire : ${password}`);
+} catch (error) {
+  if (error.code === "42P01") console.error("Tables absentes : démarrez le site une première fois pour créer la base.");
+  else console.error(error.message);
+  process.exitCode = 1;
+} finally {
+  await sql.end();
 }
-db.users ??= [];
-
-const existing = db.users.find((u) => u.email === email);
-if (existing) {
-  existing.passwordHash = passwordHash;
-  existing.role = "admin";
-  existing.active = true;
-  existing.mustChangePassword = !passwordArg;
-  existing.sessionVersion = (existing.sessionVersion ?? 0) + 1;
-  if (nameArg) existing.name = nameArg;
-} else {
-  db.users.push({
-    id: randomUUID(),
-    name: nameArg || email,
-    email,
-    role: "admin",
-    passwordHash,
-    active: true,
-    sessionVersion: 1,
-    mustChangePassword: !passwordArg,
-    createdAt: new Date().toISOString(),
-    lastLoginAt: null,
-  });
-}
-
-mkdirSync(dataDir, { recursive: true });
-const tmp = `${file}.${process.pid}.tmp`;
-writeFileSync(tmp, JSON.stringify(db, null, 2));
-renameSync(tmp, file);
-console.log(`${existing ? "Compte réinitialisé" : "Administrateur créé"} : ${email}`);
-if (!passwordArg) console.log(`Mot de passe temporaire : ${password}`);

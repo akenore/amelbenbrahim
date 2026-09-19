@@ -4,7 +4,8 @@ import { site } from "@/lib/site";
 import { photoUrl } from "@/lib/images";
 import { treatments } from "@/lib/treatments";
 
-export const revalidate = 3600;
+// Lists the articles currently in the database.
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPublishedPosts();

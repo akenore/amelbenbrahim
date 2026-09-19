@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { ShieldWarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { Sidebar } from "@/components/dashboard/Sidebar";
-import { getOverview } from "@/lib/admin";
+import { countNewRequests } from "@/lib/admin";
 import { can } from "@/lib/auth/roles";
 import { requireUser } from "@/lib/auth/session";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
-  const newRequests = can(user.role, "requests") ? (await getOverview()).newRequests : 0;
+  const newRequests = can(user.role, "requests") ? await countNewRequests() : 0;
   return (
     <div className="lg:flex">
       <Sidebar user={user} newRequests={newRequests} />

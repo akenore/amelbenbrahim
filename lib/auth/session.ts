@@ -2,23 +2,15 @@ import "server-only";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 import { can, type Area } from "@/lib/auth/roles";
 import { SESSION_COOKIE, SESSION_MAX_AGE, createToken, readToken } from "@/lib/auth/token";
-import { readDatabase } from "@/lib/data/store";
+import { getDb } from "@/lib/db";
+import { toTeamMember } from "@/lib/db/mappers";
+import { users } from "@/lib/db/schema";
 import type { AdminUser, TeamMember } from "@/lib/data/types";
 
-export function toTeamMember(user: AdminUser): TeamMember {
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    active: user.active,
-    mustChangePassword: user.mustChangePassword,
-    createdAt: user.createdAt,
-    lastLoginAt: user.lastLoginAt,
-  };
-}
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function startSession(user: Pick<AdminUser, "id" | "sessionVersion">) {
   const store = await cookies();
@@ -40,9 +32,8 @@ export async function endSession() {
 export const getCurrentUser = cache(async (): Promise<TeamMember | null> => {
   const store = await cookies();
   const payload = readToken(store.get(SESSION_COOKIE)?.value);
-  if (!payload) return null;
-  const db = await readDatabase();
-  const user = db.users.find((u) => u.id === payload.sub);
+  if (!payload || !UUID.test(payload.sub)) return null;
+  const [user] = await getDb().select().from(users).where(eq(users.id, payload.sub)).limit(1);
   if (!user || !user.active || user.sessionVersion !== payload.ver) return null;
   return toTeamMember(user);
 });

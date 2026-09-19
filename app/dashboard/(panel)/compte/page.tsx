@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Avatar } from "@/components/dashboard/Avatar";
-import { PasswordForm, ProfileForm } from "@/components/dashboard/team/AccountForms";
-import { roles } from "@/lib/auth/roles";
+import { AlertsForm, PasswordForm, ProfileForm } from "@/components/dashboard/team/AccountForms";
+import { can, roles } from "@/lib/auth/roles";
 import { requireUser } from "@/lib/auth/session";
+import { whatsappConfig } from "@/lib/notify/whatsapp";
 
 export const metadata: Metadata = { title: "Mon compte" };
 
@@ -21,6 +22,7 @@ export default async function AccountPage() {
       </header>
       <div className="mt-10 space-y-6">
         <ProfileForm user={user} />
+        {can(user.role, "requests") && <AlertsForm user={user} ready={whatsappConfig() !== null} />}
         <PasswordForm />
       </div>
     </div>

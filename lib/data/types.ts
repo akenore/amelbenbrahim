@@ -54,6 +54,17 @@ export type AppointmentRequest = {
   preferredTime: string;
   message: string;
   status: "new" | "handled";
+  handledAt: string | null;
+  /** Name of the team member who marked the request as handled. */
+  handledBy: string | null;
+};
+
+/** WhatsApp alert sent (or attempted) for an appointment request. */
+export type RequestAlert = {
+  recipientName: string;
+  status: "sent" | "failed";
+  error: string | null;
+  createdAt: string;
 };
 
 export type AdminUser = {
@@ -68,14 +79,11 @@ export type AdminUser = {
   mustChangePassword: boolean;
   createdAt: string;
   lastLoginAt: string | null;
+  /** International number, digits only (e.g. 21698123456). */
+  whatsapp: string | null;
+  /** Receives a WhatsApp alert for each new appointment request. */
+  notifyWhatsapp: boolean;
 };
 
 /** User data safe to pass to the dashboard UI. */
 export type TeamMember = Omit<AdminUser, "passwordHash" | "sessionVersion">;
-
-export type Database = {
-  version: 1;
-  posts: Post[];
-  requests: AppointmentRequest[];
-  users: AdminUser[];
-};

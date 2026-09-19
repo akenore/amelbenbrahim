@@ -1,18 +1,21 @@
 "use server";
 
-import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORD_MIN, generatePassword, hashPassword, verifyPassword } from "@/lib/auth/password";
 import { roles, type Role } from "@/lib/auth/roles";
 import { requireUser, startSession } from "@/lib/auth/session";
-import { mutateDatabase } from "@/lib/data/store";
-import type { AdminUser, Database } from "@/lib/data/types";
+import { getDb, pgCode, type Tx } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { sendTestAlert } from "@/lib/notify/whatsapp";
+import { formatWhatsapp, normalizeWhatsapp } from "@/lib/phone";
+import { rateLimit } from "@/lib/rate-limit";
 
 export type TeamFormState = {
   status: "idle" | "success" | "error";
   message?: string;
-  errors?: Partial<Record<"name" | "email" | "password" | "current" | "confirm", string>>;
+  errors?: Partial<Record<"name" | "email" | "password" | "current" | "confirm" | "whatsapp", string>>;
   /** Shown once to the administrator after creating a user or resetting a password. */
   secret?: { email: string; password: string };
   nonce?: number;
@@ -27,8 +30,16 @@ function refresh() {
   revalidatePath("/dashboard", "layout");
 }
 
-function activeAdmins(db: Database) {
-  return db.users.filter((u) => u.active && u.role === "admin");
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Locks the administrator rows, so two admins cannot demote each other at the same time. */
+async function activeAdminCount(tx: Tx) {
+  const rows = await tx
+    .select({ id: users.id })
+    .from(users)
+    .where(and(eq(users.role, "admin"), eq(users.active, true)))
+    .for("update");
+  return rows.length;
 }
 
 function fieldErrors(error: z.ZodError): TeamFormState["errors"] {
@@ -63,24 +74,12 @@ export async function createUser(_prev: TeamFormState, formData: FormData): Prom
   }
   const passwordHash = await hashPassword(password);
 
-  const created = await mutateDatabase((db) => {
-    if (db.users.some((u) => u.email === email)) return false;
-    const user: AdminUser = {
-      id: randomUUID(),
-      name,
-      email,
-      role,
-      passwordHash,
-      active: true,
-      sessionVersion: 1,
-      mustChangePassword: true,
-      createdAt: new Date().toISOString(),
-      lastLoginAt: null,
-    };
-    db.users.push(user);
-    return true;
-  });
-  if (!created) return { status: "error", errors: { email: "Un compte utilise déjà cette adresse." } };
+  try {
+    await getDb().insert(users).values({ name, email, role, passwordHash, mustChangePassword: true });
+  } catch (error) {
+    if (pgCode(error) !== "23505") throw error;
+    return { status: "error", errors: { email: "Un compte utilise déjà cette adresse." } };
+  }
 
   refresh();
   return {
@@ -99,8 +98,11 @@ export async function updateUser(formData: FormData): Promise<UpdateResult> {
   const role = formData.get("role") as Role | null;
   const active = formData.get("active");
 
-  const result = await mutateDatabase<UpdateResult>((db) => {
-    const user = db.users.find((u) => u.id === id);
+  if (!UUID.test(id)) return { ok: false, error: "Compte introuvable." };
+
+  const result = await getDb().transaction(async (tx): Promise<UpdateResult> => {
+    const admins = await activeAdminCount(tx);
+    const [user] = await tx.select().from(users).where(eq(users.id, id)).for("update");
     if (!user) return { ok: false, error: "Compte introuvable." };
     const nextRole = role && roleKeys.includes(role) ? role : user.role;
     const nextActive = active === null ? user.active : active === "true";
@@ -108,12 +110,21 @@ export async function updateUser(formData: FormData): Promise<UpdateResult> {
       return { ok: false, error: "Vous ne pouvez pas retirer vos propres droits d’administrateur." };
     }
     const losesAdmin = user.role === "admin" && user.active && (nextRole !== "admin" || !nextActive);
-    if (losesAdmin && activeAdmins(db).length <= 1) {
+    if (losesAdmin && admins <= 1) {
       return { ok: false, error: "Le cabinet doit garder au moins un administrateur actif." };
     }
-    if (nextActive !== user.active || nextRole !== user.role) user.sessionVersion += 1;
-    user.role = nextRole;
-    user.active = nextActive;
+    const changed = nextActive !== user.active || nextRole !== user.role;
+    await tx
+      .update(users)
+      .set({
+        role: nextRole,
+        active: nextActive,
+        // Signs the user out everywhere when their access changes.
+        ...(changed ? { sessionVersion: sql`${users.sessionVersion} + 1` } : null),
+        // Patient data alerts follow access to the requests.
+        ...(nextRole === "editor" ? { notifyWhatsapp: false } : null),
+      })
+      .where(eq(users.id, id));
     return { ok: true };
   });
   refresh();
@@ -126,14 +137,14 @@ export async function resetUserPassword(_prev: TeamFormState, formData: FormData
   if (id === me.id) return { status: "error", message: "Changez votre propre mot de passe depuis « Mon compte »." };
   const password = generatePassword();
   const passwordHash = await hashPassword(password);
-  const email = await mutateDatabase((db) => {
-    const user = db.users.find((u) => u.id === id);
-    if (!user) return null;
-    user.passwordHash = passwordHash;
-    user.mustChangePassword = true;
-    user.sessionVersion += 1; // signs the user out everywhere
-    return user.email;
-  });
+  if (!UUID.test(id)) return { status: "error", message: "Compte introuvable." };
+  const [updated] = await getDb()
+    .update(users)
+    // A new session version signs the user out everywhere.
+    .set({ passwordHash, mustChangePassword: true, sessionVersion: sql`${users.sessionVersion} + 1` })
+    .where(eq(users.id, id))
+    .returning({ email: users.email });
+  const email = updated?.email;
   if (!email) return { status: "error", message: "Compte introuvable." };
   refresh();
   return { status: "success", secret: { email, password }, nonce: Date.now() };
@@ -143,13 +154,15 @@ export async function deleteUser(formData: FormData): Promise<UpdateResult> {
   const me = await requireUser("users");
   const id = String(formData.get("id") ?? "");
   if (id === me.id) return { ok: false, error: "Vous ne pouvez pas supprimer votre propre compte." };
-  const result = await mutateDatabase<UpdateResult>((db) => {
-    const user = db.users.find((u) => u.id === id);
+  if (!UUID.test(id)) return { ok: false, error: "Compte introuvable." };
+  const result = await getDb().transaction(async (tx): Promise<UpdateResult> => {
+    const admins = await activeAdminCount(tx);
+    const [user] = await tx.select().from(users).where(eq(users.id, id)).for("update");
     if (!user) return { ok: false, error: "Compte introuvable." };
-    if (user.role === "admin" && user.active && activeAdmins(db).length <= 1) {
+    if (user.role === "admin" && user.active && admins <= 1) {
       return { ok: false, error: "Le cabinet doit garder au moins un administrateur actif." };
     }
-    db.users = db.users.filter((u) => u.id !== id);
+    await tx.delete(users).where(eq(users.id, id));
     return { ok: true };
   });
   refresh();
@@ -167,14 +180,13 @@ export async function updateProfile(_prev: TeamFormState, formData: FormData): P
     .safeParse({ name: formData.get("name"), email: String(formData.get("email") ?? "") });
   if (!parsed.success) return { status: "error", message: "Vérifiez les champs indiqués.", errors: fieldErrors(parsed.error) };
 
-  const ok = await mutateDatabase((db) => {
-    if (db.users.some((u) => u.email === parsed.data.email && u.id !== me.id)) return false;
-    const user = db.users.find((u) => u.id === me.id);
-    if (!user) return false;
-    user.name = parsed.data.name;
-    user.email = parsed.data.email;
-    return true;
-  });
+  let ok = true;
+  try {
+    await getDb().update(users).set({ name: parsed.data.name, email: parsed.data.email }).where(eq(users.id, me.id));
+  } catch (error) {
+    if (pgCode(error) !== "23505") throw error;
+    ok = false;
+  }
   if (!ok) return { status: "error", errors: { email: "Un autre compte utilise déjà cette adresse." } };
   refresh();
   return { status: "success", message: "Profil mis à jour.", nonce: Date.now() };
@@ -191,14 +203,17 @@ export async function changePassword(_prev: TeamFormState, formData: FormData): 
   if (next !== confirm) return { status: "error", errors: { confirm: "Les deux mots de passe ne correspondent pas." } };
 
   const passwordHash = await hashPassword(next);
-  const outcome = await mutateDatabase(async (db) => {
-    const user = db.users.find((u) => u.id === me.id);
+  const outcome = await getDb().transaction(async (tx) => {
+    const [user] = await tx.select().from(users).where(eq(users.id, me.id)).for("update");
     if (!user) return "missing" as const;
     if (!(await verifyPassword(current, user.passwordHash))) return "wrong" as const;
-    user.passwordHash = passwordHash;
-    user.mustChangePassword = false;
-    user.sessionVersion += 1; // other devices are signed out
-    return { id: user.id, sessionVersion: user.sessionVersion };
+    const [updated] = await tx
+      .update(users)
+      // Other devices are signed out.
+      .set({ passwordHash, mustChangePassword: false, sessionVersion: sql`${users.sessionVersion} + 1` })
+      .where(eq(users.id, me.id))
+      .returning({ id: users.id, sessionVersion: users.sessionVersion });
+    return updated;
   });
   if (outcome === "missing") return { status: "error", message: "Compte introuvable." };
   if (outcome === "wrong") return { status: "error", errors: { current: "Mot de passe actuel incorrect." } };
@@ -206,4 +221,40 @@ export async function changePassword(_prev: TeamFormState, formData: FormData): 
   await startSession(outcome); // keep this device signed in
   refresh();
   return { status: "success", message: "Mot de passe modifié. Vos autres appareils ont été déconnectés.", nonce: Date.now() };
+}
+
+/* ------------------------------------------------------------------ */
+/* Members who handle appointment requests: WhatsApp alerts            */
+/* ------------------------------------------------------------------ */
+
+export async function updateAlerts(_prev: TeamFormState, formData: FormData): Promise<TeamFormState> {
+  const me = await requireUser("requests");
+  const raw = String(formData.get("whatsapp") ?? "").trim();
+  const notify = formData.get("notify") === "on";
+  const whatsapp = raw ? normalizeWhatsapp(raw) : null;
+  if (raw && !whatsapp) {
+    return { status: "error", errors: { whatsapp: "Numéro invalide. Exemples : 98 123 456 ou +33 6 12 34 56 78." } };
+  }
+  if (notify && !whatsapp) return { status: "error", errors: { whatsapp: "Indiquez le numéro qui recevra les alertes." } };
+
+  await getDb().update(users).set({ whatsapp, notifyWhatsapp: notify }).where(eq(users.id, me.id));
+  refresh();
+  return {
+    status: "success",
+    message: notify ? "Alertes WhatsApp activées." : "Préférences enregistrées : aucune alerte ne vous sera envoyée.",
+    nonce: Date.now(),
+  };
+}
+
+export async function sendWhatsappTest(): Promise<{ ok: boolean; message: string }> {
+  const me = await requireUser("requests");
+  if (!rateLimit(`whatsapp-test:${me.id}`, 5, 60 * 60 * 1000)) {
+    return { ok: false, message: "Trop de messages de test. Réessayez dans une heure." };
+  }
+  const [row] = await getDb().select({ whatsapp: users.whatsapp }).from(users).where(eq(users.id, me.id)).limit(1);
+  if (!row?.whatsapp) return { ok: false, message: "Enregistrez d’abord votre numéro WhatsApp." };
+  const result = await sendTestAlert({ id: me.id, name: me.name, whatsapp: row.whatsapp });
+  return result.ok
+    ? { ok: true, message: `Message de test envoyé au ${formatWhatsapp(row.whatsapp)}.` }
+    : { ok: false, message: `L’envoi a échoué : ${result.error}` };
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
-import { CheckCircleIcon } from "@phosphor-icons/react";
-import { changePassword, updateProfile, type TeamFormState } from "@/app/dashboard/team-actions";
+import { useActionState, useState, useTransition } from "react";
+import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react";
+import { changePassword, sendWhatsappTest, updateAlerts, updateProfile, type TeamFormState } from "@/app/dashboard/team-actions";
 import { PASSWORD_MIN } from "@/lib/auth/policy";
 import type { TeamMember } from "@/lib/data/types";
+import { formatWhatsapp } from "@/lib/phone";
 
 const field =
   "w-full rounded-2xl bg-bg px-4 py-3 text-[15px] ring-1 ring-line-strong transition-shadow focus:outline-none focus:ring-2 focus:ring-gold-ink aria-invalid:ring-danger";
@@ -86,6 +87,84 @@ export function PasswordForm() {
         <button type="submit" disabled={pending} className="rounded-full bg-btn px-6 py-3 text-[14px] text-btn-ink disabled:opacity-50">
           {pending ? "Modification…" : "Changer le mot de passe"}
         </button>
+      </div>
+    </form>
+  );
+}
+
+export function AlertsForm({ user, ready }: { user: TeamMember; ready: boolean }) {
+  const [state, action, pending] = useActionState<TeamFormState, FormData>(updateAlerts, { status: "idle" });
+  const [test, setTest] = useState<{ ok: boolean; message: string } | null>(null);
+  const [testing, startTest] = useTransition();
+  const e = state.errors ?? {};
+
+  return (
+    <form action={action} id="alertes" className={`${panel} scroll-mt-24`}>
+      <h2 className="font-display text-2xl">Alertes WhatsApp</h2>
+      <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-ink-muted">
+        Recevez un message à chaque nouvelle demande de rendez-vous, sans avoir à garder l’espace cabinet ouvert. Le
+        message indique le nom du patient, son téléphone et ses disponibilités.
+      </p>
+      {!ready && (
+        <p className="mt-5 rounded-2xl bg-gold-soft px-4 py-3 text-[13px] leading-relaxed text-gold-ink ring-1 ring-gold/30">
+          Vous pouvez déjà enregistrer votre numéro : les alertes partiront dès que le compte WhatsApp Business du
+          cabinet sera relié au site.
+        </p>
+      )}
+      <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 md:items-start">
+        <Field
+          id="al-whatsapp"
+          name="whatsapp"
+          type="tel"
+          inputMode="tel"
+          label="Numéro WhatsApp"
+          defaultValue={user.whatsapp ? formatWhatsapp(user.whatsapp) : ""}
+          placeholder="98 123 456"
+          autoComplete="tel"
+          error={e.whatsapp}
+          hint="8 chiffres pour un numéro tunisien, sinon l’indicatif du pays (+33…)."
+        />
+        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl bg-bg px-4 py-3 ring-1 ring-line-strong md:mt-7">
+          <span className="text-[15px]">Recevoir les alertes</span>
+          <input type="checkbox" name="notify" defaultChecked={user.notifyWhatsapp} className="peer sr-only" />
+          <span
+            aria-hidden
+            className="relative h-7 w-12 shrink-0 rounded-full bg-ink/15 transition-colors duration-300 after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-300 peer-checked:bg-gold peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-gold-ink"
+          />
+        </label>
+      </div>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+        {test ? (
+          <p role={test.ok ? "status" : "alert"} className={`flex items-center gap-2 text-[14px] ${test.ok ? "text-success" : "text-danger"}`}>
+            {test.ok ? <CheckCircleIcon size={18} weight="light" /> : <WarningCircleIcon size={18} weight="light" />} {test.message}
+          </p>
+        ) : (
+          <Feedback state={state} />
+        )}
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={!ready || !user.whatsapp || testing}
+            title={!user.whatsapp ? "Enregistrez d’abord votre numéro" : undefined}
+            onClick={() =>
+              startTest(async () => {
+                setTest(null);
+                setTest(await sendWhatsappTest());
+              })
+            }
+            className="rounded-full px-5 py-3 text-[14px] ring-1 ring-line-strong transition-colors hover:bg-gold-soft hover:ring-gold disabled:opacity-50 disabled:hover:bg-transparent"
+          >
+            {testing ? "Envoi…" : "Envoyer un test"}
+          </button>
+          <button
+            type="submit"
+            disabled={pending}
+            onClick={() => setTest(null)}
+            className="rounded-full bg-btn px-6 py-3 text-[14px] text-btn-ink disabled:opacity-50"
+          >
+            {pending ? "Enregistrement…" : "Enregistrer"}
+          </button>
+        </div>
       </div>
     </form>
   );

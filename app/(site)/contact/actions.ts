@@ -1,9 +1,12 @@
 "use server";
 
-import { randomUUID } from "node:crypto";
+import { after } from "next/server";
 import { z } from "zod";
-import { mutateDatabase } from "@/lib/data/store";
 import { patientTypes, type PatientType } from "@/lib/data/types";
+import { getDb } from "@/lib/db";
+import { toRequest } from "@/lib/db/mappers";
+import { appointmentRequests } from "@/lib/db/schema";
+import { notifyNewRequest } from "@/lib/notify/whatsapp";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 export type AppointmentState = {
@@ -58,20 +61,24 @@ export async function requestAppointment(_prev: AppointmentState, formData: Form
   }
 
   const { name, phone, email, patient, treatment, preferredTime, message } = parsed.data;
-  await mutateDatabase((db) => {
-    db.requests.unshift({
-      id: randomUUID(),
-      createdAt: new Date().toISOString(),
-      status: "new",
-      name,
-      phone,
-      email,
-      patient,
-      treatment,
-      preferredTime,
-      message,
-    });
-  });
+  let saved;
+  try {
+    [saved] = await getDb()
+      .insert(appointmentRequests)
+      .values({ name, phone, email, patient, treatment, preferredTime, message })
+      .returning();
+  } catch (error) {
+    console.error("[rendez-vous]", error);
+    return {
+      status: "error",
+      message: "Votre demande n’a pas pu être enregistrée. Merci de réessayer ou de nous appeler directement.",
+      values: raw,
+    };
+  }
+
+  // The visitor gets the confirmation right away; the team alert is sent afterwards.
+  const request = toRequest(saved);
+  after(() => notifyNewRequest(request));
 
   return { status: "success" };
 }

@@ -52,6 +52,9 @@ function MemberRow({ member, isSelf }: { member: TeamMember; isSelf: boolean }) 
               {!member.active && (
                 <span className="rounded-full bg-ink/6 px-2 py-0.5 text-[11px] text-ink-muted">Désactivé</span>
               )}
+              {member.active && member.notifyWhatsapp && member.whatsapp && (
+                <span className="rounded-full bg-gold-soft px-2 py-0.5 text-[11px] text-gold-ink">Alertes WhatsApp</span>
+              )}
               {member.active && member.mustChangePassword && (
                 <span className="rounded-full bg-ink/6 px-2 py-0.5 text-[11px] text-ink-muted">Mot de passe temporaire</span>
               )}

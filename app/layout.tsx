@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bodoni_Moda, Jost } from "next/font/google";
+import { headers } from "next/headers";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -60,13 +61,18 @@ export const viewport: Viewport = {
   ],
 };
 
+// Every page renders per request: the Content Security Policy nonce (proxy.ts) changes each
+// time, and articles are read from the database, which is not reachable during `next build`.
+export const dynamic = "force-dynamic";
+
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="fr" className={`${bodoni.variable} ${jost.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="grain min-h-dvh bg-bg text-ink">
         <MotionProvider>{children}</MotionProvider>

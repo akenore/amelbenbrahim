@@ -1,19 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowCounterClockwiseIcon, CheckCircleIcon, EnvelopeSimpleIcon, PhoneIcon, TrashIcon, WhatsappLogoIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowCounterClockwiseIcon,
+  BellRingingIcon,
+  BellSlashIcon,
+  CheckCircleIcon,
+  EnvelopeSimpleIcon,
+  PhoneIcon,
+  TrashIcon,
+  WarningCircleIcon,
+  WhatsappLogoIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { deleteRequest, setRequestStatus } from "@/app/dashboard/actions";
 import { ConfirmSubmit, PendingSubmit } from "@/components/dashboard/ui";
-import { getRequests } from "@/lib/admin";
+import { REQUESTS_PAGE_SIZE, getRequestCounts, getRequests, type RequestWithAlerts } from "@/lib/admin";
 import { requireUser } from "@/lib/auth/session";
 import { patientTypes } from "@/lib/data/types";
 import { formatDateTime } from "@/lib/format";
+import { alertRecipients, whatsappConfig } from "@/lib/notify/whatsapp";
 
 export const metadata: Metadata = { title: "Demandes de rendez-vous" };
 
 const tabs = {
-  nouvelles: { label: "À traiter", status: "new" },
-  traitees: { label: "Traitées", status: "handled" },
-  toutes: { label: "Toutes", status: null },
+  nouvelles: { label: "À traiter", status: "new", count: "new" },
+  traitees: { label: "Traitées", status: "handled", count: "handled" },
+  toutes: { label: "Toutes", status: null, count: "all" },
 } as const;
 
 type TabKey = keyof typeof tabs;
@@ -31,12 +42,15 @@ const chip =
   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[14px] ring-1 ring-line-strong transition-colors hover:bg-gold-soft hover:ring-gold";
 
 export default async function RequestsPage({ searchParams }: PageProps<"/dashboard/demandes">) {
-  await requireUser("requests");
+  const me = await requireUser("requests");
   const sp = await searchParams;
   const key = (typeof sp.onglet === "string" && sp.onglet in tabs ? sp.onglet : "nouvelles") as TabKey;
-  const all = await getRequests();
-  const status = tabs[key].status;
-  const requests = status ? all.filter((r) => r.status === status) : all;
+  const [counts, requests, recipients] = await Promise.all([
+    getRequestCounts(),
+    getRequests(tabs[key].status),
+    alertRecipients(),
+  ]);
+  const alertsReady = whatsappConfig() !== null;
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -45,9 +59,11 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
         <p className="mt-2 text-ink-muted">Envoyées depuis le formulaire de la page Contact.</p>
       </header>
 
+      <AlertsBanner ready={alertsReady} recipients={recipients.map((r) => r.name)} isAdmin={me.role === "admin"} />
+
       <nav aria-label="Filtrer les demandes" className="mt-8 flex flex-wrap gap-2">
         {(Object.keys(tabs) as TabKey[]).map((k) => {
-          const count = tabs[k].status ? all.filter((r) => r.status === tabs[k].status).length : all.length;
+          const count = counts[tabs[k].count];
           return (
             <Link
               key={k}
@@ -76,7 +92,15 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="font-display truncate text-2xl">{r.name}</p>
-                  <p className="mt-1 text-[13px] text-ink-muted">Reçue le {formatDateTime(r.createdAt)}</p>
+                  <p className="mt-1 text-[13px] text-ink-muted">
+                    Reçue le {formatDateTime(r.createdAt)}
+                    {r.status === "handled" && r.handledBy && r.handledAt && (
+                      <>
+                        {" "}
+                        · traitée par {r.handledBy} le {formatDateTime(r.handledAt)}
+                      </>
+                    )}
+                  </p>
                 </div>
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-[12px] ring-1 ${
@@ -111,6 +135,8 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
                   </div>
                 )}
               </dl>
+
+              <AlertStatus request={r} />
 
               <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-5">
                 <a href={`tel:${r.phone}`} className={chip}>
@@ -155,6 +181,73 @@ export default async function RequestsPage({ searchParams }: PageProps<"/dashboa
             </li>
           ))}
         </ul>
+      )}
+
+      {requests.length === REQUESTS_PAGE_SIZE && (
+        <p className="mt-6 text-center text-[13px] text-ink-muted">
+          Seules les {REQUESTS_PAGE_SIZE} demandes les plus récentes sont affichées.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function AlertsBanner({ ready, recipients, isAdmin }: { ready: boolean; recipients: string[]; isAdmin: boolean }) {
+  const box = "mt-6 flex items-start gap-3 rounded-2xl px-5 py-4 text-[14px] leading-relaxed ring-1";
+  if (!ready) {
+    return (
+      <p className={`${box} bg-ink/3 text-ink-soft ring-line`}>
+        <BellSlashIcon size={20} weight="light" className="mt-0.5 shrink-0" />
+        <span>
+          Alertes WhatsApp inactives : le serveur n’a pas encore les accès WhatsApp Business.
+          {isAdmin && " Renseignez WHATSAPP_TOKEN et WHATSAPP_PHONE_NUMBER_ID (voir le README)."}
+        </span>
+      </p>
+    );
+  }
+  if (recipients.length === 0) {
+    return (
+      <p className={`${box} bg-gold-soft text-gold-ink ring-gold/30`}>
+        <BellSlashIcon size={20} weight="light" className="mt-0.5 shrink-0" />
+        <span>
+          Personne ne reçoit encore d’alerte WhatsApp pour les nouvelles demandes.{" "}
+          <Link href="/dashboard/compte#alertes" className="underline underline-offset-4">
+            Activer les alertes
+          </Link>
+        </span>
+      </p>
+    );
+  }
+  return (
+    <p className={`${box} bg-ink/3 text-ink-soft ring-line`}>
+      <BellRingingIcon size={20} weight="light" className="mt-0.5 shrink-0 text-gold-ink" />
+      <span>
+        Chaque nouvelle demande est signalée sur WhatsApp à {recipients.join(", ")}.{" "}
+        <Link href="/dashboard/compte#alertes" className="underline underline-offset-4">
+          Mes alertes
+        </Link>
+      </span>
+    </p>
+  );
+}
+
+function AlertStatus({ request }: { request: RequestWithAlerts }) {
+  if (request.alerts.length === 0) return null;
+  const sent = request.alerts.filter((a) => a.status === "sent");
+  const failed = request.alerts.filter((a) => a.status === "failed");
+  return (
+    <div className="mt-5 space-y-1 text-[13px]">
+      {sent.length > 0 && (
+        <p className="flex items-center gap-2 text-ink-muted">
+          <WhatsappLogoIcon size={16} weight="light" className="shrink-0" />
+          Alerte envoyée à {sent.map((a) => a.recipientName).join(", ")}
+        </p>
+      )}
+      {failed.length > 0 && (
+        <p className="flex items-center gap-2 text-danger" title={failed.map((a) => a.error).filter(Boolean).join(" · ")}>
+          <WarningCircleIcon size={16} weight="light" className="shrink-0" />
+          Alerte non remise à {failed.map((a) => a.recipientName).join(", ")}
+        </p>
       )}
     </div>
   );

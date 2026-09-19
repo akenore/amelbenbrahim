@@ -6,8 +6,6 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { getPublishedPosts } from "@/lib/posts";
 import { breadcrumbs } from "@/lib/seo";
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = pageMeta({
   title: "Actualités et conseils en orthodontie",
   description:

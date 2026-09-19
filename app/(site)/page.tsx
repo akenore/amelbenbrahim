@@ -16,8 +16,6 @@ import { homeFaq } from "@/lib/faq";
 import { faqSchema } from "@/lib/seo";
 
 // News is refreshed on demand from the dashboard; this is a safety net.
-export const revalidate = 3600;
-
 export const metadata: Metadata = pageMeta({
   title: "Dr. Amel Ben Brahim | Orthodontiste à Nabeul, aligneurs invisibles",
   absoluteTitle: true,

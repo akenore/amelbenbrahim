@@ -1,23 +1,24 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { UPLOADS_DIR } from "@/lib/data/store";
+import { eq } from "drizzle-orm";
+import { getDb } from "@/lib/db";
+import { media } from "@/lib/db/schema";
 
-const types: Record<string, string> = { ".webp": "image/webp", ".jpg": "image/jpeg", ".png": "image/png" };
-
-// Serves images uploaded from the dashboard (files added at runtime are not
-// served from /public). Names are generated server-side and never reused.
+// Serves images uploaded from the dashboard (stored in PostgreSQL, not in /public).
+// Names are generated server-side and never reused, so responses are immutable.
 export async function GET(_req: Request, ctx: RouteContext<"/media/[file]">) {
   const { file } = await ctx.params;
   if (!/^[a-z0-9-]+\.(webp|jpg|png)$/.test(file)) return new Response("Not found", { status: 404 });
-  try {
-    const data = await readFile(path.join(UPLOADS_DIR, file));
-    return new Response(new Uint8Array(data), {
-      headers: {
-        "Content-Type": types[path.extname(file)],
-        "Cache-Control": "public, max-age=31536000, immutable",
-      },
-    });
-  } catch {
-    return new Response("Not found", { status: 404 });
-  }
+  const [image] = await getDb()
+    .select({ mime: media.mime, data: media.data })
+    .from(media)
+    .where(eq(media.id, file))
+    .limit(1);
+  if (!image) return new Response("Not found", { status: 404 });
+  return new Response(new Uint8Array(image.data), {
+    headers: {
+      "Content-Type": image.mime,
+      "Content-Length": String(image.data.byteLength),
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "Content-Disposition": "inline",
+    },
+  });
 }

@@ -1,5 +1,5 @@
 import { stockFiles, type StockFile } from "@/lib/data/stock-files";
-import type { Database, MediaImage, Post } from "@/lib/data/types";
+import type { MediaImage, Post } from "@/lib/data/types";
 
 // Stored as stable public paths (not build-hashed URLs) so saved posts never break.
 const cover = (file: StockFile, alt: string): MediaImage => ({ ...stockFiles[file], alt });
@@ -7,7 +7,7 @@ const cover = (file: StockFile, alt: string): MediaImage => ({ ...stockFiles[fil
 // Starter content so the news section is never empty on a fresh install.
 // Everything here can be edited or deleted from the dashboard.
 
-const seedPosts: Post[] = [
+export const seedPosts: Post[] = [
   {
     id: "seed-aligneurs",
     slug: "aligneurs-invisibles-sont-ils-faits-pour-vous",
@@ -287,6 +287,3 @@ Ce rendez-vous mondial réunit tous les cinq ans les orthodontistes du monde ent
   },
 ];
 
-export function seedDatabase(): Database {
-  return { version: 1, posts: structuredClone(seedPosts), requests: [], users: [] };
-}
