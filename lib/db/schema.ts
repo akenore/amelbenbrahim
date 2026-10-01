@@ -53,8 +53,8 @@ export const posts = pgTable(
   (t) => [
     uniqueIndex("posts_slug_key").on(t.slug),
     index("posts_published_idx").on(t.status, t.publishedAt.desc()),
-    // A single featured post keeps the home page composition intentional.
-    uniqueIndex("posts_single_featured").on(t.featured).where(sql`${t.featured}`),
+    // Articles shown in the home page news section.
+    index("posts_home_idx").on(t.featured, t.publishedAt.desc()),
     check("posts_category_check", sql`${t.category} in ('cabinet', 'conseils', 'congres')`),
     check("posts_status_check", sql`${t.status} in ('draft', 'published')`),
   ],

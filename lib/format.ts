@@ -50,3 +50,24 @@ export function fromTunisInput(value: string) {
   const date = new Date(`${value}:00+01:00`);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
+
+/**
+ * Teaser taken from the beginning of an article, for when the practice leaves
+ * the summary empty. Markdown marks are removed, whole sentences are kept.
+ */
+export function excerptFromMarkdown(markdown: string, max = 200) {
+  const text = markdown
+    .replace(/```[\s\S]*?```/g, " ") // code blocks
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links keep their text
+    .replace(/^\s{0,3}#{1,6}\s+.*$/gm, " ") // headings
+    .replace(/^\s{0,3}>\s?/gm, "") // quotes
+    .replace(/^\s{0,3}([-*+]|\d+\.)\s+/gm, "") // list markers
+    .replace(/[*_`~]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const stop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf(" ! "), cut.lastIndexOf(" ? "));
+  return stop > max / 2 ? cut.slice(0, stop + 1) : `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+}

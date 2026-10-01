@@ -3,12 +3,20 @@ import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/motion/Reveal";
 import { PostCover, PostMeta } from "@/components/news/PostCard";
 import { Cta } from "@/components/ui/Cta";
-import { getHomeNews } from "@/lib/posts";
+import type { Post } from "@/lib/data/types";
+import { getHomeNews, hasPublishedPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
+/**
+ * Shows the articles put « à la une » from the dashboard (three at most, newest first).
+ * Nothing chosen and articles published: the section is left out of the home page.
+ */
 export async function NewsSection() {
   const posts = await getHomeNews(3);
+  if (posts.length === 0 && (await hasPublishedPosts())) return null;
+
   const [lead, ...rest] = posts;
+  const alone = Boolean(lead) && rest.length === 0;
 
   return (
     <section aria-labelledby="actualites-titre" className="bg-sunken">
@@ -38,48 +46,74 @@ export async function NewsSection() {
           </Reveal>
         ) : (
           <div className="mt-14 grid grid-cols-1 gap-10 md:mt-20 lg:grid-cols-12 lg:gap-12">
-            <Reveal className="lg:col-span-7" blur={false}>
-              <article className="group">
-                <Link href={`/actualites/${lead.slug}`} className="block">
-                  <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
-                    <PostCover post={lead} sizes="(min-width: 1024px) 55vw, 100vw" className="aspect-16/11" />
-                  </div>
-                  <div className="px-2 pt-7">
-                    <PostMeta post={lead} />
-                    <h3 className="font-display mt-4 text-3xl leading-[1.12] md:text-[2.6rem]">{lead.title}</h3>
-                    <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-soft">{lead.excerpt}</p>
-                  </div>
-                </Link>
-              </article>
+            <Reveal className={alone ? "lg:col-span-8 lg:col-start-3" : "lg:col-span-7"} blur={false}>
+              <Lead post={lead} alone={alone} />
             </Reveal>
 
-            <div className="flex flex-col gap-10 lg:col-span-5">
-              {rest.map((post, i) => (
-                <Reveal key={post.id} delay={0.1 + i * 0.08} blur={false}>
-                  <article className="group">
-                    <Link href={`/actualites/${post.slug}`} className="grid grid-cols-[120px_1fr] gap-5 sm:grid-cols-[180px_1fr]">
-                      <div className="rounded-[1.4rem] bg-ink/3 p-1 ring-1 ring-line">
-                        <PostCover post={post} sizes="180px" className="aspect-square rounded-[1.15rem]!" />
-                      </div>
-                      <div className="self-center">
-                        <PostMeta post={post} compact />
-                        <h3 className="font-display mt-2 text-xl leading-snug md:text-2xl">{post.title}</h3>
-                      </div>
-                    </Link>
-                  </article>
-                </Reveal>
-              ))}
-              <Link
-                href="/actualites"
-                className="group mt-auto inline-flex items-center gap-3 self-start border-b border-line-strong pb-1 text-ink transition-colors duration-500 hover:border-gold"
-              >
-                Toutes les actualités
-                <ArrowRightIcon size={16} weight="light" className="transition-transform duration-500 ease-luxe group-hover:translate-x-1" />
-              </Link>
-            </div>
+            {alone ? (
+              <div className="flex justify-center lg:col-span-8 lg:col-start-3">
+                <AllNewsLink />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-10 lg:col-span-5">
+                {rest.map((post, i) => (
+                  <Reveal key={post.id} delay={0.1 + i * 0.08} blur={false}>
+                    <Secondary post={post} />
+                  </Reveal>
+                ))}
+                <div className="mt-auto">
+                  <AllNewsLink />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
     </section>
+  );
+}
+
+function Lead({ post, alone }: { post: Post; alone: boolean }) {
+  return (
+    <article className="group">
+      <Link href={`/actualites/${post.slug}`} className="block">
+        <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+          <PostCover post={post} sizes={alone ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"} className="aspect-16/11" />
+        </div>
+        <div className="px-2 pt-7">
+          <PostMeta post={post} />
+          <h3 className="font-display mt-4 text-3xl leading-[1.12] md:text-[2.6rem]">{post.title}</h3>
+          <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-soft">{post.excerpt}</p>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function Secondary({ post }: { post: Post }) {
+  return (
+    <article className="group">
+      <Link href={`/actualites/${post.slug}`} className="grid grid-cols-[120px_1fr] gap-5 sm:grid-cols-[180px_1fr]">
+        <div className="rounded-[1.4rem] bg-ink/3 p-1 ring-1 ring-line">
+          <PostCover post={post} sizes="180px" className="aspect-square rounded-[1.15rem]!" />
+        </div>
+        <div className="self-center">
+          <PostMeta post={post} compact />
+          <h3 className="font-display mt-2 text-xl leading-snug md:text-2xl">{post.title}</h3>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function AllNewsLink() {
+  return (
+    <Link
+      href="/actualites"
+      className="group inline-flex items-center gap-3 self-start border-b border-line-strong pb-1 text-ink transition-colors duration-500 hover:border-gold"
+    >
+      Toutes les actualités
+      <ArrowRightIcon size={16} weight="light" className="transition-transform duration-500 ease-luxe group-hover:translate-x-1" />
+    </Link>
   );
 }

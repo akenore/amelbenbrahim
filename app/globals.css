@@ -294,6 +294,22 @@
   background: var(--line-strong);
 }
 
+/* Dashboard editor (Tiptap): the text area uses .prose-article, so it looks like the article. */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ink-muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.ProseMirror .ProseMirror-selectednode {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: 2px;
+}
+.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

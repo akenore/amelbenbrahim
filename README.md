@@ -31,7 +31,9 @@ Au démarrage, le serveur applique les migrations de la base. Sur une base vide,
 
 ## Espace cabinet
 
-- **Articles** : rédaction en Markdown avec barre d'outils et aperçu, image de couverture (glisser-déposer, optimisée en WebP), catégorie, mise à la une, date de publication (une date future programme l'article), titre et description SEO avec aperçu Google.
+- **Articles** : éditeur visuel (gras, titres, listes, citations, liens, images par glisser-déposer) — le texte est enregistré en Markdown, les anciens articles restent lisibles ; image de couverture (optimisée en WebP), catégorie, date de publication (une date future programme l'article), titre et description SEO avec aperçu Google.
+  - **Résumé** : facultatif. Laissé vide, il reprend les premières phrases de l'article. Il s'affiche sous le titre dans la liste des actualités et sur l'accueil.
+  - **À la une** : décide des articles affichés dans la section « Actualités » de la page d'accueil (3 au maximum, du plus récent au plus ancien). Aucun article à la une : la section n'apparaît pas.
 - **Demandes de RDV** : les demandes du formulaire de contact, avec appel, WhatsApp, e-mail, statut « traitée » (et par qui), état de l'alerte WhatsApp envoyée à l'équipe.
 - **Utilisateurs** (administrateurs) : ajouter un membre, choisir son rôle, réinitialiser son mot de passe, le désactiver ou le supprimer. Le mot de passe temporaire s'affiche une seule fois ; la personne le remplace dans « Mon compte ».
 - **Mon compte** : nom, e-mail et mot de passe de chaque membre ; pour ceux qui traitent les demandes, numéro WhatsApp, activation des alertes et message de test.

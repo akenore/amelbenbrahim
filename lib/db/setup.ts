@@ -69,19 +69,8 @@ function postRow(post: Post): typeof schema.posts.$inferInsert {
   };
 }
 
-/** Only one post may be featured (unique index): keep the first. */
-function singleFeatured(rows: (typeof schema.posts.$inferInsert)[]) {
-  let seen = false;
-  return rows.map((row) => {
-    if (!row.featured) return row;
-    if (seen) return { ...row, featured: false };
-    seen = true;
-    return row;
-  });
-}
-
 async function seed(db: SetupDb) {
-  await db.insert(schema.posts).values(singleFeatured(seedPosts.map(postRow))).onConflictDoNothing();
+  await db.insert(schema.posts).values(seedPosts.map(postRow)).onConflictDoNothing();
   return `Base initialisée avec ${seedPosts.length} articles de départ.`;
 }
 
@@ -138,7 +127,7 @@ async function importLegacyStore(db: SetupDb, file: string) {
         .onConflictDoNothing();
     }
     if (posts.length) {
-      await tx.insert(schema.posts).values(singleFeatured(posts.map(postRow))).onConflictDoNothing();
+      await tx.insert(schema.posts).values(posts.map(postRow)).onConflictDoNothing();
     }
     if (requests.length) {
       await tx

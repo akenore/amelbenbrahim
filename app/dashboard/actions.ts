@@ -12,7 +12,7 @@ import { endSession, requireUser, startSession } from "@/lib/auth/session";
 import { postCategories, type MediaImage, type PostCategory } from "@/lib/data/types";
 import { getDb, pgCode, type Tx } from "@/lib/db";
 import { appointmentRequests, media, posts, users } from "@/lib/db/schema";
-import { fromTunisInput, slugify } from "@/lib/format";
+import { excerptFromMarkdown, fromTunisInput, slugify } from "@/lib/format";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -116,8 +116,9 @@ const postSchema = z.object({
   id: z.string().max(64),
   title: z.string().trim().min(3, "Le titre doit contenir au moins 3 caractères.").max(160, "Titre trop long (160 caractères max)."),
   slug: z.string().trim().max(90),
-  excerpt: z.string().trim().min(20, "Rédigez un résumé d’au moins 20 caractères.").max(320, "Résumé trop long (320 caractères max)."),
-  content: z.string().trim().min(40, "Le contenu de l’article est trop court."),
+  excerpt: z.string().trim().max(320, "Résumé trop long (320 caractères max)."),
+  // Forms submit CRLF line breaks; Markdown is stored with plain newlines.
+  content: z.string().transform((v) => v.replace(/\r\n/g, "\n").trim()).pipe(z.string().min(40, "Le contenu de l’article est trop court.")),
   category: z.enum(Object.keys(postCategories) as [PostCategory, ...PostCategory[]]),
   status: z.enum(["draft", "published"]),
   featured: z.boolean(),
@@ -210,14 +211,11 @@ export async function savePost(_prev: SavePostState, formData: FormData): Promis
       const [existing] = isNew ? [] : await tx.select().from(posts).where(eq(posts.id, id)).for("update");
       if (!isNew && !existing) return null;
       const slug = await uniqueSlug(tx, data.slug || data.title, id);
-      if (data.featured) {
-        // A single featured post keeps the home page composition intentional.
-        await tx.update(posts).set({ featured: false }).where(and(eq(posts.featured, true), ne(posts.id, id)));
-      }
       const values = {
         slug,
         title: data.title,
-        excerpt: data.excerpt,
+        // Left empty, the summary (news list, home page, Google) comes from the article itself.
+        excerpt: data.excerpt || excerptFromMarkdown(data.content),
         content: data.content,
         category: data.category,
         cover,

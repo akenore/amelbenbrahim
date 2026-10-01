@@ -6,21 +6,12 @@ import Link from "next/link";
 import {
   ArrowLeftIcon,
   ArrowUpRightIcon,
-  ImageSquareIcon,
-  LinkSimpleIcon,
-  ListBulletsIcon,
-  ListNumbersIcon,
-  QuotesIcon,
-  TextBIcon,
-  TextHTwoIcon,
-  TextHThreeIcon,
-  TextItalicIcon,
   UploadSimpleIcon,
   WarningCircleIcon,
   XIcon,
 } from "@phosphor-icons/react";
 import { savePost, uploadImage, type SavePostState } from "@/app/dashboard/actions";
-import { Markdown } from "@/components/news/Markdown";
+import { RichTextEditor } from "@/components/dashboard/RichTextEditor";
 import { postCategories, type MediaImage, type Post, type PostCategory } from "@/lib/data/types";
 import { slugify, toTunisInput } from "@/lib/format";
 import { site } from "@/lib/site";
@@ -34,23 +25,6 @@ function Counter({ value, max }: { value: number; max: number }) {
   return <span className={`text-[12px] ${value > max ? "text-danger" : "text-ink-muted"}`}>{value}/{max}</span>;
 }
 
-type Tool = { label: string; Icon: typeof TextBIcon } & (
-  | { kind: "wrap"; before: string; after: string; placeholder: string }
-  | { kind: "prefix"; prefix: string; placeholder: string; numbered?: boolean }
-  | { kind: "link" }
-);
-
-const TOOLS: Tool[] = [
-  { label: "Gras", Icon: TextBIcon, kind: "wrap", before: "**", after: "**", placeholder: "texte en gras" },
-  { label: "Italique", Icon: TextItalicIcon, kind: "wrap", before: "*", after: "*", placeholder: "texte en italique" },
-  { label: "Titre de section", Icon: TextHTwoIcon, kind: "prefix", prefix: "## ", placeholder: "Titre de section" },
-  { label: "Sous-titre", Icon: TextHThreeIcon, kind: "prefix", prefix: "### ", placeholder: "Sous-titre" },
-  { label: "Liste à puces", Icon: ListBulletsIcon, kind: "prefix", prefix: "- ", placeholder: "Élément" },
-  { label: "Liste numérotée", Icon: ListNumbersIcon, kind: "prefix", prefix: "", placeholder: "Élément", numbered: true },
-  { label: "Citation", Icon: QuotesIcon, kind: "prefix", prefix: "> ", placeholder: "Citation" },
-  { label: "Lien", Icon: LinkSimpleIcon, kind: "link" },
-];
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return <p className="mt-1.5 text-[13px] text-danger">{message}</p>;
@@ -59,7 +33,6 @@ function FieldError({ message }: { message?: string }) {
 export function PostEditor({ post, created }: { post: Post | null; created?: boolean }) {
   const [state, formAction, saving] = useActionState<SavePostState, FormData>(savePost, { status: "idle" });
   const formRef = useRef<HTMLFormElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [title, setTitle] = useState(post?.title ?? "");
   const [slug, setSlug] = useState(post?.slug ?? "");
@@ -72,12 +45,11 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
   const [cover, setCover] = useState<MediaImage | null>(post?.cover ?? null);
   const [seoTitle, setSeoTitle] = useState(post?.seoTitle ?? "");
   const [seoDescription, setSeoDescription] = useState(post?.seoDescription ?? "");
-  const [tab, setTab] = useState<"write" | "preview">("write");
   const [dirty, setDirty] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [uploadingCover, startCoverUpload] = useTransition();
-  const [uploadingInline, startInlineUpload] = useTransition();
+  const [uploadingInline, setUploadingInline] = useState(false);
 
   const isPublished = post?.status === "published";
   const effectiveSlug = slugTouched ? slug : slugify(title);
@@ -108,50 +80,6 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
     setDirty(true);
   };
 
-  /* ---------------- Markdown toolbar ---------------- */
-
-  function apply(transform: (selected: string) => { text: string; select?: [number, number] }) {
-    const el = textareaRef.current;
-    if (!el) return;
-    const { selectionStart: start, selectionEnd: end, value } = el;
-    const { text, select } = transform(value.slice(start, end));
-    const next = value.slice(0, start) + text + value.slice(end);
-    setContent(next);
-    setDirty(true);
-    requestAnimationFrame(() => {
-      el.focus();
-      const [s, e] = select ?? [text.length, text.length];
-      el.setSelectionRange(start + s, start + e);
-    });
-  }
-
-  const wrap = (before: string, after: string, placeholder: string) =>
-    apply((sel) => {
-      const inner = sel || placeholder;
-      return { text: `${before}${inner}${after}`, select: [before.length, before.length + inner.length] };
-    });
-
-  const prefixLines = (prefix: (i: number) => string, placeholder: string) =>
-    apply((sel) => {
-      const lines = (sel || placeholder).split("\n");
-      const text = lines.map((l, i) => `${prefix(i)}${l}`).join("\n");
-      return { text: `\n${text}\n`, select: [1, text.length + 1] };
-    });
-
-  function runTool(tool: Tool) {
-    switch (tool.kind) {
-      case "wrap":
-        return wrap(tool.before, tool.after, tool.placeholder);
-      case "prefix":
-        return prefixLines(tool.numbered ? (i) => `${i + 1}. ` : () => tool.prefix, tool.placeholder);
-      case "link":
-        return apply((sel) => {
-          const text = `[${sel || "texte du lien"}](https://)`;
-          return { text, select: [text.length - 9, text.length - 1] };
-        });
-    }
-  }
-
   /* ---------------- Uploads ---------------- */
 
   function upload(file: File, onDone: (image: MediaImage) => void, start: typeof startCoverUpload) {
@@ -177,13 +105,20 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
     );
   }
 
-  function onInlineFile(file?: File | null) {
-    if (!file) return;
-    upload(
-      file,
-      (image) => apply(() => ({ text: `\n![Description de l’image](${image.src})\n`, select: [3, 25] })),
-      startInlineUpload,
-    );
+  /** Used by the editor for images added with the button, by drag and drop or pasted. */
+  async function uploadInline(file: File) {
+    setUploadError(null);
+    setUploadingInline(true);
+    const data = new FormData();
+    data.append("file", file);
+    const res = await uploadImage(data);
+    setUploadingInline(false);
+    if (!res.ok) {
+      setUploadError(res.error);
+      return null;
+    }
+    setDirty(true);
+    return res.image;
   }
 
   const googleTitle = seoTitle || title || "Titre de l’article";
@@ -297,7 +232,7 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
           <div className="mt-8">
             <div className="flex items-baseline justify-between">
               <label htmlFor="excerpt" className={label}>
-                Résumé (affiché dans les listes et sur Google)
+                Résumé (facultatif)
               </label>
               <Counter value={excerpt.length} max={320} />
             </div>
@@ -308,85 +243,21 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
               value={excerpt}
               onChange={(e) => touch(setExcerpt)(e.target.value)}
               className={`${field} mt-2 resize-y`}
-              placeholder="Deux ou trois phrases qui donnent envie de lire l’article."
+              placeholder="Laissez vide : les premières phrases de l’article seront reprises."
             />
+            <p className="mt-1.5 text-[12px] text-ink-muted">
+              Court texte affiché sous le titre dans la liste des actualités et sur la page d’accueil.
+            </p>
             <FieldError message={errors.excerpt} />
           </div>
 
-          <div className="mt-8 overflow-hidden rounded-3xl bg-elevated ring-1 ring-line">
-            <div className="flex flex-wrap items-center gap-1 border-b border-line px-3 py-2">
-              <div role="tablist" aria-label="Mode d’édition" className="mr-2 flex rounded-full bg-sunken p-1">
-                {(["write", "preview"] as const).map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === t}
-                    onClick={() => setTab(t)}
-                    className={`rounded-full px-3.5 py-1.5 text-[13px] transition-colors ${tab === t ? "bg-elevated text-ink shadow-sm" : "text-ink-muted"}`}
-                  >
-                    {t === "write" ? "Écrire" : "Aperçu"}
-                  </button>
-                ))}
-              </div>
-              {tab === "write" &&
-                TOOLS.map((tool) => (
-                  <button
-                    key={tool.label}
-                    type="button"
-                    onClick={() => runTool(tool)}
-                    title={tool.label}
-                    aria-label={tool.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg text-ink-soft hover:bg-gold-soft hover:text-ink"
-                  >
-                    <tool.Icon size={18} weight="light" />
-                  </button>
-                ))}
-              {tab === "write" && (
-                <label
-                  title="Insérer une image"
-                  className="flex h-9 cursor-pointer items-center gap-2 rounded-lg px-2 text-[13px] text-ink-soft hover:bg-gold-soft hover:text-ink"
-                >
-                  <ImageSquareIcon size={18} weight="light" />
-                  <span className="hidden sm:inline">{uploadingInline ? "Envoi…" : "Image"}</span>
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/avif"
-                    className="sr-only"
-                    onChange={(e) => {
-                      onInlineFile(e.target.files?.[0]);
-                      e.target.value = "";
-                    }}
-                  />
-                </label>
-              )}
-            </div>
-
-            <label htmlFor="content" className="sr-only">
-              Contenu
-            </label>
-            <textarea
-              ref={textareaRef}
-              id="content"
-              name="content"
-              value={content}
-              onChange={(e) => touch(setContent)(e.target.value)}
-              placeholder={"Rédigez votre article ici.\n\n## Un titre de section\n\nUn paragraphe, une **mise en valeur**, une liste :\n- premier point\n- second point"}
-              className={`min-h-130 w-full resize-y bg-transparent p-6 font-mono text-[14.5px] leading-7 focus:outline-none ${tab === "write" ? "block" : "hidden"}`}
-            />
-            {tab === "preview" && (
-              <div className="min-h-130 p-6 md:p-10">
-                {content.trim() ? (
-                  <Markdown>{content}</Markdown>
-                ) : (
-                  <p className="text-ink-muted">Rien à prévisualiser pour l’instant.</p>
-                )}
-              </div>
-            )}
+          <div className="mt-8">
+            <input type="hidden" name="content" value={content} />
+            <RichTextEditor value={post?.content ?? ""} onChange={touch(setContent)} onUpload={uploadInline} uploading={uploadingInline} />
           </div>
           <FieldError message={errors.content} />
           <p className="mt-3 text-[13px] text-ink-muted">
-            Astuce : utilisez les boutons de la barre d’outils ou la syntaxe Markdown. Cmd/Ctrl + S pour enregistrer.
+            Astuce : glissez une image directement dans le texte. Cmd/Ctrl + S pour enregistrer.
           </p>
         </div>
 
@@ -433,7 +304,9 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
               <label className="flex cursor-pointer items-center justify-between gap-4">
                 <span>
                   <span className="block text-[14px]">À la une</span>
-                  <span className="block text-[12px] text-ink-muted">Mis en avant sur la page d’accueil</span>
+                  <span className="block text-[12px] text-ink-muted">
+                    Affiché dans les actualités de la page d’accueil (3 articles maximum, du plus récent au plus ancien)
+                  </span>
                 </span>
                 <input
                   type="checkbox"

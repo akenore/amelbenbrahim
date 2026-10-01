@@ -23,15 +23,21 @@ export const getPublishedPost = cache(async (slug: string) => {
   return row ? toPost(row) : null;
 });
 
-/** Home page news: the featured post first, then the most recent. */
+/** Home page news: the articles put « à la une » from the dashboard, most recent first. */
 export async function getHomeNews(limit = 3) {
   const rows = await getDb()
     .select()
     .from(posts)
-    .where(isLive())
-    .orderBy(desc(posts.featured), desc(posts.publishedAt))
+    .where(and(isLive(), eq(posts.featured, true)))
+    .orderBy(desc(posts.publishedAt))
     .limit(limit);
   return rows.map(toPost);
+}
+
+/** Tells apart « nothing published yet » from « nothing chosen for the home page ». */
+export async function hasPublishedPosts() {
+  const [row] = await getDb().select({ id: posts.id }).from(posts).where(isLive()).limit(1);
+  return Boolean(row);
 }
 
 /** Same category first, then the most recent. */

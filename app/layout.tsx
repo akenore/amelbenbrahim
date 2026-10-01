@@ -70,7 +70,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t===
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang="fr" className={`${bodoni.variable} ${jost.variable}`} suppressHydrationWarning>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${bodoni.variable} ${jost.variable}`} suppressHydrationWarning>
       <head>
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
