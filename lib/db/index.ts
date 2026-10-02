@@ -20,8 +20,10 @@ export function databaseUrl() {
 /** The connection opens lazily, on the first query (never during `next build`). */
 export function getDb(): Db {
   if (!state.__amelDb) {
+    // Hosting panels often keep the variable with an empty value, which must not mean "no connection".
+    const poolMax = Number.parseInt(process.env.DATABASE_POOL_MAX ?? "", 10);
     const client = postgres(databaseUrl(), {
-      max: Number(process.env.DATABASE_POOL_MAX ?? 10),
+      max: Number.isInteger(poolMax) && poolMax > 0 ? poolMax : 10,
       idle_timeout: 30,
       connect_timeout: 10,
       onnotice: () => undefined,

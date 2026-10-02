@@ -2,7 +2,7 @@ import "server-only";
 import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
@@ -128,6 +128,17 @@ async function importLegacyStore(db: SetupDb, file: string) {
     }
     if (posts.length) {
       await tx.insert(schema.posts).values(posts.map(postRow)).onConflictDoNothing();
+      // Same rule as drizzle/0001_home_selection.sql, which runs on a still empty table:
+      // the three latest published articles open the home page.
+      await tx.execute(sql`
+        update posts set featured = true
+        where (select count(*) from posts where featured) <= 1
+          and id in (
+            select id from posts
+            where status = 'published' and published_at <= now()
+            order by published_at desc
+            limit 3
+          )`);
     }
     if (requests.length) {
       await tx

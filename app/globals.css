@@ -302,6 +302,14 @@
   height: 0;
   pointer-events: none;
 }
+.ProseMirror .upload-placeholder {
+  display: inline-block;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--gold-ink);
+  padding: 0.15em 0.75em;
+  font-size: 0.8rem;
+}
 .ProseMirror .ProseMirror-selectednode {
   outline: 2px solid var(--gold-ink);
   outline-offset: 2px;

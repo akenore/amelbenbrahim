@@ -111,14 +111,21 @@ export function PostEditor({ post, created }: { post: Post | null; created?: boo
     setUploadingInline(true);
     const data = new FormData();
     data.append("file", file);
-    const res = await uploadImage(data);
-    setUploadingInline(false);
-    if (!res.ok) {
-      setUploadError(res.error);
+    try {
+      const res = await uploadImage(data);
+      if (!res.ok) {
+        setUploadError(res.error);
+        return null;
+      }
+      setDirty(true);
+      return res.image;
+    } catch (error) {
+      console.error("[image]", error);
+      setUploadError("L’envoi de l’image a échoué. Vérifiez votre connexion et réessayez.");
       return null;
+    } finally {
+      setUploadingInline(false);
     }
-    setDirty(true);
-    return res.image;
   }
 
   const googleTitle = seoTitle || title || "Titre de l’article";

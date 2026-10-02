@@ -22,6 +22,12 @@ import {
   TextItalicIcon,
   XIcon,
 } from "@phosphor-icons/react";
+import {
+  UploadPlaceholder,
+  addUploadPlaceholder,
+  removeUploadPlaceholder,
+  uploadPlaceholderPosition,
+} from "@/components/dashboard/upload-placeholder";
 import type { MediaImage } from "@/lib/data/types";
 import { htmlToMarkdown, markdownToHtml } from "@/lib/markdown";
 
@@ -56,29 +62,67 @@ export function RichTextEditor({
         link: { openOnClick: false, autolink: true, defaultProtocol: "https" },
       }),
       Image.configure({ HTMLAttributes: { loading: "lazy", decoding: "async" } }),
+      UploadPlaceholder,
       Placeholder.configure({
         placeholder: "Rédigez votre article ici. Utilisez la barre d’outils pour les titres, les listes et les images.",
       }),
     ],
     content: markdownToHtml(value),
     editorProps: {
-      attributes: { class: "prose-article min-h-130 px-6 py-6 focus:outline-none md:px-10" },
-      handlePaste: (_view, event) => insertDroppedImages(event.clipboardData?.files),
-      handleDrop: (_view, event) => insertDroppedImages(event.dataTransfer?.files),
+      attributes: {
+        class: "prose-article min-h-130 px-6 py-6 focus:outline-none md:px-10",
+        "aria-label": "Contenu de l’article",
+        role: "textbox",
+        "aria-multiline": "true",
+      },
+      handlePaste: (_view, event) => uploadImages(event.clipboardData?.files),
+      handleDrop: (view, event) =>
+        // Dropped images land where they were dropped, not where the cursor was.
+        uploadImages(event.dataTransfer?.files, view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos),
     },
     onUpdate: ({ editor }) => onChange(htmlToMarkdown(editor.getHTML())),
   });
 
-  function insertDroppedImages(files: FileList | undefined) {
+  function uploadImages(files: FileList | undefined, at?: number) {
     const images = [...(files ?? [])].filter((f) => f.type.startsWith("image/"));
     if (images.length === 0) return false;
-    for (const file of images) void insertImage(file);
-    return true; // handled: the browser must not insert the file itself
+    void insertImages(images, at);
+    return true; // handled: the browser must not insert the files itself
+  }
+
+  /**
+   * The spot is marked for the whole batch: writing elsewhere while the upload runs
+   * moves the mark with the text, so the images still land where they were asked for,
+   * in order, and the author keeps their cursor.
+   */
+  async function insertImages(files: File[], at?: number) {
+    if (!editor) return;
+    const mark = crypto.randomUUID();
+    // After the selection, so an upload never replaces what the author had selected.
+    addUploadPlaceholder(editor, mark, at ?? editor.state.selection.to);
+    try {
+      for (const file of files) {
+        let image: MediaImage | null = null;
+        try {
+          image = await onUpload(file);
+        } catch (error) {
+          console.error("[image]", error);
+        }
+        const position = uploadPlaceholderPosition(editor, mark);
+        // One image failing must not stop the others.
+        if (!image || position === null || editor.isDestroyed) continue;
+        editor
+          .chain()
+          .insertContentAt(position, { type: "image", attrs: { src: image.src, alt: "" } }, { updateSelection: false })
+          .run();
+      }
+    } finally {
+      removeUploadPlaceholder(editor, mark);
+    }
   }
 
   async function insertImage(file: File) {
-    const image = await onUpload(file);
-    if (image && editor) editor.chain().focus().setImage({ src: image.src, alt: "" }).run();
+    await insertImages([file]);
   }
 
   const state = useEditorState({
