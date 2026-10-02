@@ -21,8 +21,8 @@ export function DoctorFeature() {
                 Ben Brahim
               </h2>
               <p className="mt-7 max-w-136 text-lg leading-relaxed text-ink-soft">
-                Formée à Monastir puis attachée aux Hôpitaux de Paris, elle allie rigueur clinique, outils numériques et
-                sens du détail esthétique. Chaque patient est suivi personnellement, du premier bilan à la contention.
+                Formée à Monastir puis attachée aux Hôpitaux de Paris, elle pratique l’orthodontie comme un art de
+                précision : rigueur clinique, outils numériques et sens du détail esthétique. Chaque patient est suivi personnellement, du premier bilan à la contention.
               </p>
               <div aria-hidden className="mask-signature mt-8 h-12 w-48 bg-gold" />
               <div className="mt-10">

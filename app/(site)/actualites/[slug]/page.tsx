@@ -58,7 +58,7 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
               {post.excerpt}
             </p>
             <div className="animate-rise mt-9 flex items-center justify-center gap-3" style={{ animationDelay: "0.3s" }}>
-              <Image src="/img/logo.png" alt="" width={44} height={44} className="h-11 w-11 rounded-full" />
+              <Image src="/img/logo.png" alt="Monogramme du cabinet du Dr. Amel Ben Brahim" width={44} height={44} className="h-11 w-11 rounded-full" />
               <div className="text-left text-sm leading-tight">
                 <p>Dr. Amel Ben Brahim</p>
                 <p className="text-ink-muted">Orthodontiste à Nabeul</p>

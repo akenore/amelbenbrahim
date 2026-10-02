@@ -54,24 +54,25 @@ export function PostCover({
 
 export function PostCard({ post, priority = false, urgency }: { post: Post; priority?: boolean; urgency?: Urgency }) {
   return (
-    <article className="group">
-      <Link href={`/actualites/${post.slug}`} className="block">
-        <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
-          <PostCover
-            post={post}
-            urgency={urgency}
-            sizes={priority ? "(min-width: 768px) 66vw, 92vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 92vw"}
-            className={priority ? "aspect-4/3 md:aspect-video" : "aspect-4/3"}
-          />
-        </div>
-        <div className="px-2 pt-6">
-          <PostMeta post={post} />
-          <h3 className={`font-display mt-3 leading-[1.15] ${priority ? "text-3xl md:text-4xl" : "text-2xl md:text-[1.75rem]"}`}>
+    // Only the title carries the link text; `after` makes the whole card clickable.
+    <article className="group relative">
+      <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+        <PostCover
+          post={post}
+          urgency={urgency}
+          sizes={priority ? "(min-width: 768px) 66vw, 92vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 92vw"}
+          className={priority ? "aspect-4/3 md:aspect-video" : "aspect-4/3"}
+        />
+      </div>
+      <div className="px-2 pt-6">
+        <PostMeta post={post} />
+        <h3 className={`font-display mt-3 leading-[1.15] ${priority ? "text-3xl md:text-4xl" : "text-2xl md:text-[1.75rem]"}`}>
+          <Link href={`/actualites/${post.slug}`} className="after:absolute after:inset-0 after:content-['']">
             {post.title}
-          </h3>
-          <p className="mt-3 line-clamp-3 leading-relaxed text-ink-soft">{post.excerpt}</p>
-        </div>
-      </Link>
+          </Link>
+        </h3>
+        <p className="mt-3 line-clamp-3 leading-relaxed text-ink-soft">{post.excerpt}</p>
+      </div>
     </article>
   );
 }

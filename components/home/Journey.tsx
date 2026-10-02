@@ -26,7 +26,7 @@ const steps: { title: string; text: string; Icon: Icon }[] = [
     Icon: CalendarCheckIcon,
   },
   {
-    title: "Contention",
+    title: "Contention et stabilité",
     text: "Un résultat stabilisé et des contrôles pour préserver votre sourire dans la durée.",
     Icon: ShieldCheckIcon,
   },

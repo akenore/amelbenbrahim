@@ -32,8 +32,7 @@ function Arrow({ light }: { light?: boolean }) {
 function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
   const light = tone === "photo" || tone === "noir";
   return (
-    <Link
-      href={`/traitements/${t.slug}`}
+    <div
       className={`group relative flex h-full flex-col justify-end overflow-hidden rounded-[1.625rem] p-7 md:p-9 ${
         tone === "noir" ? "bg-noir text-noir-ink" : tone === "tint" ? "bg-gold-soft" : tone === "plain" ? "bg-elevated" : "text-white"
       }`}
@@ -42,7 +41,6 @@ function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
         <>
           <Picture
             photo={photo ?? t.image}
-            alt=""
             fill
             sizes="(min-width: 1024px) 50vw, 92vw"
             className="z-0 object-cover transition-transform duration-[1.4s] ease-luxe group-hover:scale-[1.05]"
@@ -62,14 +60,19 @@ function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
 
       <div className="relative flex items-end justify-between gap-6">
         <div>
-          <h3 className="font-display text-[1.9rem] leading-[1.08] md:text-[2.3rem]">{t.name}</h3>
+          <h3 className="font-display text-[1.9rem] leading-[1.08] md:text-[2.3rem]">
+            {/* Only the name is the link text; the card stays clickable through `after`. */}
+            <Link href={`/traitements/${t.slug}`} className="after:absolute after:inset-0 after:content-['']">
+              {t.name}
+            </Link>
+          </h3>
           <p className={`mt-3 max-w-104 text-[15px] leading-relaxed ${light ? "text-white/80" : "text-ink-soft"}`}>
             {t.short}
           </p>
         </div>
         <Arrow light={light} />
       </div>
-    </Link>
+    </div>
   );
 }
 

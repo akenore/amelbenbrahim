@@ -75,33 +75,37 @@ export async function NewsSection() {
 
 function Lead({ post, alone }: { post: Post; alone: boolean }) {
   return (
-    <article className="group">
-      <Link href={`/actualites/${post.slug}`} className="block">
-        <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
-          <PostCover post={post} sizes={alone ? "(min-width: 1536px) 940px, (min-width: 1024px) 66vw, 92vw" : "(min-width: 1536px) 780px, (min-width: 1024px) 55vw, 92vw"} className="aspect-16/11" />
-        </div>
-        <div className="px-2 pt-7">
-          <PostMeta post={post} />
-          <h3 className="font-display mt-4 text-3xl leading-[1.12] md:text-[2.6rem]">{post.title}</h3>
-          <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-soft">{post.excerpt}</p>
-        </div>
-      </Link>
+    <article className="group relative">
+      <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
+        <PostCover post={post} sizes={alone ? "(min-width: 1536px) 940px, (min-width: 1024px) 66vw, 92vw" : "(min-width: 1536px) 780px, (min-width: 1024px) 55vw, 92vw"} className="aspect-16/11" />
+      </div>
+      <div className="px-2 pt-7">
+        <PostMeta post={post} />
+        <h3 className="font-display mt-4 text-3xl leading-[1.12] md:text-[2.6rem]">
+          <Link href={`/actualites/${post.slug}`} className="after:absolute after:inset-0 after:content-['']">
+            {post.title}
+          </Link>
+        </h3>
+        <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-soft">{post.excerpt}</p>
+      </div>
     </article>
   );
 }
 
 function Secondary({ post }: { post: Post }) {
   return (
-    <article className="group">
-      <Link href={`/actualites/${post.slug}`} className="grid grid-cols-[120px_1fr] gap-5 sm:grid-cols-[180px_1fr]">
-        <div className="rounded-[1.4rem] bg-ink/3 p-1 ring-1 ring-line">
-          <PostCover post={post} sizes="180px" className="aspect-square rounded-[1.15rem]!" />
-        </div>
-        <div className="self-center">
-          <PostMeta post={post} compact />
-          <h3 className="font-display mt-2 text-xl leading-snug md:text-2xl">{post.title}</h3>
-        </div>
-      </Link>
+    <article className="group relative grid grid-cols-[120px_1fr] gap-5 sm:grid-cols-[180px_1fr]">
+      <div className="rounded-[1.4rem] bg-ink/3 p-1 ring-1 ring-line">
+        <PostCover post={post} sizes="180px" className="aspect-square rounded-[1.15rem]!" />
+      </div>
+      <div className="self-center">
+        <PostMeta post={post} compact />
+        <h3 className="font-display mt-2 text-xl leading-snug md:text-2xl">
+          <Link href={`/actualites/${post.slug}`} className="after:absolute after:inset-0 after:content-['']">
+            {post.title}
+          </Link>
+        </h3>
+      </div>
     </article>
   );
 }

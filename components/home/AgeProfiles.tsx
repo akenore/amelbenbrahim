@@ -134,7 +134,7 @@ export function AgeProfiles() {
                     active === i ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
                   }`}
                 >
-                  <Picture photo={p.photo} alt={active === i ? p.photo.alt : ""} fill sizes="(min-width: 1024px) 45vw, 92vw" className="object-cover" />
+                  <Picture photo={p.photo} fill sizes="(min-width: 1024px) 45vw, 92vw" className="object-cover" />
                 </div>
               ))}
             </div>

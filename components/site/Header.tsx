@@ -53,7 +53,7 @@ export function Header() {
           }`}
         >
           <Link href="/" className="flex items-center gap-3 rounded-full pr-2" onClick={() => setOpen(false)}>
-            <Image src="/img/logo.png" alt="" width={40} height={40} className="h-10 w-10 rounded-full" preload />
+            <Image src="/img/logo.png" alt="Monogramme du cabinet du Dr. Amel Ben Brahim" width={40} height={40} className="h-10 w-10 rounded-full" preload />
             <span className="flex flex-col leading-none">
               <span className="font-display text-[17px] tracking-tight">Dr. Amel Ben Brahim</span>
               <span className="mt-1 text-[11px] uppercase tracking-[0.22em] text-ink-muted">Orthodontiste</span>
