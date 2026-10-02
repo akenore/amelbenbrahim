@@ -51,6 +51,18 @@ export function organizationGraph() {
           "Contention orthodontique",
         ].map((name) => ({ "@type": "MedicalProcedure", name })),
         knowsLanguage: ["fr", "ar"],
+        hasMap: site.mapsUrl,
+        // Lets assistants and search results point straight at the booking form.
+        potentialAction: {
+          "@type": "ReserveAction",
+          name: "Prendre rendez-vous",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${site.url}/contact#rendez-vous`,
+            actionPlatform: ["https://schema.org/DesktopWebPlatform", "https://schema.org/MobileWebPlatform"],
+          },
+          result: { "@type": "Reservation", name: "Consultation d’orthodontie" },
+        },
         sameAs: [site.social.instagram, site.social.facebook],
         founder: { "@id": ids.doctor },
         employee: { "@id": ids.doctor },

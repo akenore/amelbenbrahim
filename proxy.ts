@@ -69,7 +69,7 @@ export const config = {
     {
       // Pages and Server Actions; not static files, optimized images or uploaded media.
       source:
-        "/((?!_next/static|_next/image|media/|img/|og/|favicon.ico|icon.png|apple-icon.png|robots.txt|sitemap.xml|manifest.webmanifest).*)",
+        "/((?!_next/static|_next/image|media/|img/|og/|favicon.ico|icon.png|apple-icon.png|robots.txt|sitemap.xml|llms.txt|manifest.webmanifest).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
