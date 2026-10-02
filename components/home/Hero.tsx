@@ -47,7 +47,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="animate-fade relative lg:col-span-5" style={{ animationDelay: "0.3s" }}>
+        <div className="animate-fade-in relative lg:col-span-5">
           <div className="rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line">
             <div className="relative aspect-4/5 overflow-hidden rounded-4xl lg:aspect-auto lg:h-[min(76dvh,720px)]">
               <Parallax className="absolute inset-0" distance={60} zoom>
@@ -56,9 +56,11 @@ export function Hero() {
                   alt={photos.doctorSmile.alt}
                   fill
                   preload
+                  fetchPriority="high"
                   placeholder="blur"
                   quality={80}
-                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  // Inside the page padding: never the full viewport width.
+                  sizes="(min-width: 1024px) 40vw, 96vw"
                   className="object-cover object-[50%_20%]"
                 />
               </Parallax>

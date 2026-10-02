@@ -28,7 +28,14 @@ await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } 
   .toFile('public/brand/monogram.png');
 
 // Signature: already white on transparent, trim the empty canvas.
-await sharp('public/img/signature.png').trim().png({ compressionLevel: 9 }).toFile('public/brand/signature.png');
+// Only the alpha channel is used (CSS mask), so the colours are flattened to
+// white before encoding: lossless WebP then weighs a third of the PNG.
+const signature = await sharp('public/img/signature.png').trim().toBuffer({ resolveWithObject: true });
+const signatureAlpha = await sharp(signature.data).extractChannel('alpha').toBuffer();
+await sharp({ create: { width: signature.info.width, height: signature.info.height, channels: 3, background: '#ffffff' } })
+  .joinChannel(signatureAlpha)
+  .webp({ lossless: true, effort: 6 })
+  .toFile('public/brand/signature.webp');
 
 console.log('brand assets written to public/brand/');
 

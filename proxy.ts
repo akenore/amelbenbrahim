@@ -55,6 +55,11 @@ export function proxy(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  if (!pathname.startsWith("/dashboard")) {
+    // Pages are rendered per request, but `no-store` also disables the browser's
+    // back/forward cache, which makes going back slow. `no-cache` still revalidates.
+    response.headers.set("Cache-Control", "private, no-cache, must-revalidate");
+  }
   if (noIndex()) response.headers.set("X-Robots-Tag", "noindex, nofollow");
   return response;
 }

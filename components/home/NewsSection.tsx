@@ -78,7 +78,7 @@ function Lead({ post, alone }: { post: Post; alone: boolean }) {
     <article className="group">
       <Link href={`/actualites/${post.slug}`} className="block">
         <div className="rounded-4xl bg-ink/3 p-1.5 ring-1 ring-line">
-          <PostCover post={post} sizes={alone ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"} className="aspect-16/11" />
+          <PostCover post={post} sizes={alone ? "(min-width: 1536px) 940px, (min-width: 1024px) 66vw, 92vw" : "(min-width: 1536px) 780px, (min-width: 1024px) 55vw, 92vw"} className="aspect-16/11" />
         </div>
         <div className="px-2 pt-7">
           <PostMeta post={post} />

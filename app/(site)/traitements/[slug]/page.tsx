@@ -51,10 +51,10 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
       </PageHeader>
 
       <div className="mx-auto max-w-350 px-4 md:px-8">
-        <div className="animate-fade rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
+        <div className="animate-fade-in rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line">
           <div className="relative aspect-4/3 overflow-hidden rounded-4xl md:aspect-21/9">
             <Parallax className="absolute inset-0" distance={80} zoom>
-              <Picture photo={t.image} fill preload sizes="100vw" className="object-cover" />
+              <Picture photo={t.image} fill preload fetchPriority="high" sizes="(min-width: 1440px) 1400px, 92vw" className="object-cover" />
             </Parallax>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default async function TreatmentPage({ params }: PageProps<"/traitements/
             <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
               <div className="relative aspect-4/5 overflow-hidden rounded-[1.75rem]">
                 <Parallax className="absolute inset-0" distance={60} zoom>
-                  <Picture photo={t.secondary} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+                  <Picture photo={t.secondary} fill sizes="(min-width: 1024px) 40vw, 92vw" className="object-cover" />
                 </Parallax>
               </div>
             </div>

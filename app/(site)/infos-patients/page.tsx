@@ -78,7 +78,7 @@ export default function PatientInfoPage() {
             <div className="rounded-[2.25rem] bg-ink/3 p-1.5 ring-1 ring-line">
               <div className="overflow-hidden rounded-[1.875rem] bg-elevated">
                 <div className="relative aspect-16/10">
-                  <Picture photo={visitPhoto} fill sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover" />
+                  <Picture photo={visitPhoto} fill sizes="(min-width: 1024px) 35vw, 92vw" className="object-cover" />
                 </div>
                 <div className="p-7 md:p-9">
                   <h3 className="text-xs uppercase tracking-[0.22em] text-ink-muted">À apporter</h3>
@@ -114,7 +114,7 @@ export default function PatientInfoPage() {
                   >
                     {card.photo && (
                       <>
-                        <Picture photo={card.photo} fill sizes="(min-width: 1024px) 40vw, 100vw" className="-z-10 object-cover" />
+                        <Picture photo={card.photo} fill sizes="(min-width: 1024px) 40vw, 92vw" className="-z-10 object-cover" />
                         <div className="absolute inset-0 -z-10 bg-linear-to-t from-black/80 via-black/40 to-black/5" />
                       </>
                     )}
@@ -218,7 +218,7 @@ export default function PatientInfoPage() {
               </ul>
               <div className="relative mt-8 aspect-21/9 overflow-hidden rounded-2xl">
                 <Parallax className="absolute inset-0" distance={40} zoom>
-                  <Picture photo={photos.lounge} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[50%_40%]" />
+                  <Picture photo={photos.lounge} fill sizes="(min-width: 1024px) 50vw, 92vw" className="object-cover object-[50%_40%]" />
                 </Parallax>
               </div>
             </Reveal>

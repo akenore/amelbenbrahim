@@ -40,7 +40,7 @@ export default function TreatmentsPage() {
                   className="group relative grid grid-cols-1 items-center gap-6 py-10 md:grid-cols-12 md:gap-8 md:py-12"
                 >
                   <div className="relative aspect-16/10 overflow-hidden rounded-3xl md:hidden">
-                    <Picture photo={t.image} alt="" fill sizes="100vw" className="object-cover" />
+                    <Picture photo={t.image} alt="" fill sizes="92vw" className="object-cover" />
                   </div>
                   <h2 className="font-display text-4xl leading-[1.05] transition-transform duration-700 ease-luxe group-hover:translate-x-2 md:col-span-6 md:text-6xl">
                     {t.name}

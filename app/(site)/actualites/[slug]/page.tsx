@@ -69,9 +69,9 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
 
         {post.cover && (
           <div className="mx-auto max-w-350 px-4 md:px-8">
-            <div className="animate-fade rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line" style={{ animationDelay: "0.3s" }}>
+            <div className="animate-fade-in rounded-[2.5rem] bg-ink/3 p-2 ring-1 ring-line">
               <div className="relative aspect-4/3 overflow-hidden rounded-4xl md:aspect-21/9">
-                <Image src={post.cover.src} alt={post.cover.alt} fill preload sizes="100vw" className="object-cover" />
+                <Image src={post.cover.src} alt={post.cover.alt} fill preload fetchPriority="high" sizes="(min-width: 1440px) 1400px, 92vw" className="object-cover" />
               </div>
             </div>
           </div>

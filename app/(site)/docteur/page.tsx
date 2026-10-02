@@ -63,7 +63,7 @@ export default function DoctorPage() {
                     fill
                     preload
                     placeholder="blur"
-                    sizes="(min-width: 768px) 40vw, 100vw"
+                    sizes="(min-width: 768px) 40vw, 92vw"
                     className="object-cover object-top"
                   />
                 </Parallax>
@@ -79,7 +79,7 @@ export default function DoctorPage() {
                     alt={photos.doctorScreen.alt}
                     fill
                     placeholder="blur"
-                    sizes="(min-width: 768px) 55vw, 100vw"
+                    sizes="(min-width: 768px) 55vw, 92vw"
                     className="object-cover"
                   />
                 </Parallax>
@@ -182,7 +182,7 @@ export default function DoctorPage() {
           <Reveal blur={false} delay={0.1} className="lg:col-span-8">
             <div className="rounded-[2.25rem] bg-ink/3 p-2 ring-1 ring-line">
               <div className="relative aspect-3/2 overflow-hidden rounded-[1.75rem]">
-                <Image src={photos.team.src} alt={photos.team.alt} fill placeholder="blur" sizes="(min-width: 1024px) 65vw, 100vw" className="object-cover" />
+                <Image src={photos.team.src} alt={photos.team.alt} fill placeholder="blur" sizes="(min-width: 1024px) 65vw, 92vw" className="object-cover" />
               </div>
             </div>
           </Reveal>

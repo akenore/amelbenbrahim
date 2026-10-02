@@ -5,17 +5,20 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { noIndex, site } from "@/lib/site";
 import "./globals.css";
 
+// French only needs the "latin" subset (it includes é à ç œ « » and the curly quotes):
+// "latin-ext" doubled the number of font files competing with the hero image.
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   style: ["normal", "italic"],
-  axes: ["opsz"],
+  // No optical-size axis: it doubled the file size, and the default optical size
+  // (the sturdier text design) is what we want for the headlines anyway.
   display: "swap",
 });
 
 const jost = Jost({
   variable: "--font-jost",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "swap",
 });
 

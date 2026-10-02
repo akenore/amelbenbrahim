@@ -8,11 +8,16 @@ const TEXT =
 
 const EMPHASIS = new Set(["fonction", "confiance", "harmonie."]);
 
+/**
+ * Dimmed words still have to be readable: 0.55 keeps them above the 3:1 contrast
+ * required at this size, in both themes. The gold words stay fully lit, because
+ * gold dimmed on the light background falls under that threshold whatever we do.
+ */
 function Word({ word, progress, range }: { word: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.35, 1]);
+  const opacity = useTransform(progress, range, [0.55, 1]);
   const emphasis = EMPHASIS.has(word);
   return (
-    <motion.span style={{ opacity }} className={emphasis ? "italic text-gold-ink" : undefined}>
+    <motion.span style={emphasis ? undefined : { opacity }} className={emphasis ? "italic text-gold-ink" : undefined}>
       {word}{" "}
     </motion.span>
   );

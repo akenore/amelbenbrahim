@@ -44,7 +44,7 @@ function Cell({ t, tone, photo }: { t: Treatment; tone: Tone; photo?: Photo }) {
             photo={photo ?? t.image}
             alt=""
             fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 50vw, 92vw"
             className="z-0 object-cover transition-transform duration-[1.4s] ease-luxe group-hover:scale-[1.05]"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />

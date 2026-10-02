@@ -103,6 +103,9 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --animate-rise: rise 1.1s var(--ease-out-expo) both;
   --animate-fade: fade 1.4s var(--ease-out-expo) both;
+  /* For the main photo of a page: it is the Largest Contentful Paint element,
+     so it must not wait a second and a half to be considered painted. */
+  --animate-fade-in: fade 0.5s var(--ease-out-expo) both;
   --animate-draw: draw 2.6s cubic-bezier(0.65, 0, 0.35, 1) both;
 
   @keyframes rise {
@@ -173,14 +176,13 @@
 @utility font-display {
   font-family: var(--font-display);
   font-weight: 500;
-  font-variation-settings: "opsz" 24;
   letter-spacing: -0.01em;
 }
 
 /* Brand marks tinted through CSS masks so they follow the theme. */
 @utility mask-signature {
-  mask: url("/brand/signature.png") center / contain no-repeat;
-  -webkit-mask: url("/brand/signature.png") center / contain no-repeat;
+  mask: url("/brand/signature.webp") center / contain no-repeat;
+  -webkit-mask: url("/brand/signature.webp") center / contain no-repeat;
 }
 
 /* Film grain on a fixed, non-interactive layer (never on scrolling content). */
@@ -224,7 +226,6 @@
 .prose-article h2 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-variation-settings: "opsz" 24;
   color: var(--ink);
   font-size: 2rem;
   line-height: 1.15;
@@ -277,7 +278,6 @@
   padding: 0.25em 0 0.25em 1.5em;
   font-family: var(--font-display);
   font-weight: 500;
-  font-variation-settings: "opsz" 24;
   font-style: italic;
   color: var(--ink);
   font-size: 1.5rem;

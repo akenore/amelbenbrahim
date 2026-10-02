@@ -60,7 +60,7 @@ export function PostCard({ post, priority = false, urgency }: { post: Post; prio
           <PostCover
             post={post}
             urgency={urgency}
-            sizes={priority ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
+            sizes={priority ? "(min-width: 768px) 66vw, 92vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 92vw"}
             className={priority ? "aspect-4/3 md:aspect-video" : "aspect-4/3"}
           />
         </div>
